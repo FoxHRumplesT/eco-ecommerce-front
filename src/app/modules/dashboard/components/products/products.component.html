@@ -1,0 +1,61 @@
+<div class="wrapper-products">
+  <div class="all-products">
+    <div class="header">
+      <h2 class="title">Productos</h2>
+      <div class="search">
+        <input type="text" id="search-input" class="input-text" placeholder="Busca tu producto">
+        <fa-icon [icon]="['fas', 'search']"></fa-icon>
+      </div>
+    </div>
+    <ul class="products">
+      <li *ngFor="let i of [].constructor(2)">
+        <div class="item">
+          <figure>
+            <fa-icon [icon]="['fas', 'gift']" [size]="'4x'"></fa-icon>
+          </figure>
+          <div class="name">Crispy Zucchini Fritters de dos mil a=la unidad</div>
+          <div class="counter">
+            <div class="button">
+              <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+            </div>
+            <div class="number">
+              1
+            </div>
+            <div class="button">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="added-products">
+    <h3 class="title">Factura</h3>
+    <ul class="items">
+      <li *ngFor="let i of [].constructor(2)">
+        <div class="item">
+          <figure>
+            <fa-icon [icon]="['fas', 'gift']" [size]="'2x'"></fa-icon>
+          </figure>
+          <div class="info">
+            <div class="name">Crispy Zucchini Fritters de dos mil a=la unidad</div>
+            <div class="values">
+              <div class="units">5/u</div>
+              <div class="price">{{ 50000 | currencyFormat }}</div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="total">
+      <div class="title">Total sin impuestos</div>
+      <div class="price">
+        <span class="text">Total</span>
+        <span class="value">{{ 45000 | currencyFormat }}</span>
+      </div>
+      <div class="create" [routerLink]="['..', 'bill']">
+        Crear factura
+      </div>
+    </div>
+  </div>
+</div>

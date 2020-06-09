@@ -1,0 +1,17 @@
+@import 'mixins'
+
+:host
+  display: block
+
+.wrapper-dashboard
+  +flex()
+  width: 100vw
+  height: 100vh
+  .sidebar
+    +flex(null, null, column)
+    width: 80px
+  .content
+    flex: 1
+    overflow-y: scroll
+    padding: 15px
+    background: var(--blue-1)

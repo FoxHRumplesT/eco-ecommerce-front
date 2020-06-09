@@ -1,0 +1,24 @@
+@import 'assets/css/variables'
+@import 'assets/css/mixins'
+@import 'assets/css/inputs'
+@import 'assets/css/breakpoints'
+
+*
+  +regular()
+  margin: 0
+  padding: 0
+  border: none
+  outline: none
+  text-decoration: none
+
+body
+  height: 100vh
+  ul
+    list-style: none
+
+.mobile
+  +for-desktop-up()
+    display: none !important
+.desktop
+  +for-phone-only()
+    display: none !important

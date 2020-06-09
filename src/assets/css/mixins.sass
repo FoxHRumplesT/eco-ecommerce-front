@@ -1,0 +1,27 @@
+=flex($alignItems: stretch, $justifyContent: flex-start, $direction: row, $flex: flex)
+  display: $flex
+  align-items: $alignItems
+  flex-direction: $direction
+  justify-content: $justifyContent
+
+=regular()
+  font-weight: 400
+  font-family: 'Poppins', sans-serif
+
+=bold()
+  font-weight: 600
+  font-family: 'Poppins', sans-serif
+
+=text-ellipsis()
+  overflow: hidden
+  white-space: nowrap
+  text-overflow: ellipsis
+
+=placeholder($color: var(--gray-1), $font-size: 16px)
+  font-size: $font-size
+  &::-webkit-input-placeholder
+    color: $color
+    overflow: hidden
+    font-size: $font-size
+  &::-moz-placeholder, &:-ms-input-placeholder, &:-moz-placeholder
+    color: $color
