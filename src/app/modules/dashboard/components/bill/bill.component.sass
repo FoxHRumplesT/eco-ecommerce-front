@@ -15,8 +15,29 @@
   .client-info
   .products-detail
     width: 100%
-    table
-      width: 100%
-      thead
+
+:host
+  ::ng-deep
+    .datatable-header
+      height: 60px !important
+      background: var(--gray-3)
+      border-radius: 16px 16px 0 0
+      .datatable-header-inner
         width: 100%
-        background: var(--gray-1)
+        height: 100%
+      .datatable-header-cell
+        +flex(center, center)
+        display: flex !important
+        border-right: 1px solid red
+        &.sort-active
+          background: red
+        &:last-child
+          border: none
+        .datatable-header-cell-template-wrap, .datatable-header-cell-wrapper, .datatable-header-cell-label
+          +flex(center, center)
+          width: 100% !important
+          height: 100% !important
+          color: var(--gray-1)
+    .datatable-body-row
+      height: 100px
+

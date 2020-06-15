@@ -3,23 +3,11 @@
 
   </div>
   <div class="products-detail">
-    <table>
-      <thead>
-        <th>Nombre</th>
-        <th>Cantidad</th>
-        <th>Valor</th>
-        <th>Total</th>
-        <th>Acciones</th>
-      </thead>
-      <tbody>
-        <tr>
-          <td>HOLA</td>
-          <td>HOLA</td>
-          <td>HOLA</td>
-          <td>HOLA</td>
-          <td>HOLA</td>
-        </tr>
-      </tbody>
-    </table>
+    <ngx-datatable
+      [rows]="rows"
+      [columns]="columns"
+      [rowHeight]="50"
+      [columnMode]="mode.force">
+    </ngx-datatable>
   </div>
 </div>

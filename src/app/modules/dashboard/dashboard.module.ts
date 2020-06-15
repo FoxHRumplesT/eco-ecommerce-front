@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard.component';
@@ -15,8 +16,6 @@ import { DashboardReducers } from './store/reducers';
 import { DashboardFacade } from './facades/dashboard.facade';
 import { DashboardServices } from './services/dashboard.services';
 
-
-
 @NgModule({
   declarations: [
     SidebarComponent,
@@ -28,6 +27,7 @@ import { DashboardServices } from './services/dashboard.services';
   imports: [
     CommonModule,
     FontAwesomeModule,
+    NgxDatatableModule,
     StoreModule.forFeature('dash', DashboardReducers),
     EffectsModule.forFeature([ DashboardEffects ]),
     DashboardRoutingModule

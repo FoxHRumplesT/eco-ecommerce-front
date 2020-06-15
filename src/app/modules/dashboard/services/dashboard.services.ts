@@ -6,7 +6,7 @@ import { Product } from '../entities/dashboard.entities';
 import { environment } from 'src/environments/environment';
 
 const api = {
-  products: (page: number) => `${environment.api.bill}/ms/e-bill/product?page=${page}`
+  products: (page: number) => `${environment.api.bill}/ms-e-bill/api/product?page=${page}`
 };
 
 @Injectable()
