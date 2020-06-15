@@ -8,12 +8,12 @@
       </div>
     </div>
     <ul class="products">
-      <li *ngFor="let i of [].constructor(2)">
+      <li *ngFor="let product of products$ | async">
         <div class="item">
           <figure>
             <fa-icon [icon]="['fas', 'gift']" [size]="'4x'"></fa-icon>
           </figure>
-          <div class="name">Crispy Zucchini Fritters de dos mil a=la unidad</div>
+          <div class="name">{{ product.name }}</div>
           <div class="counter">
             <div class="button">
               <fa-icon [icon]="['fas', 'minus']"></fa-icon>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { DashboardFacade } from '../../facades/dashboard.facade';
+import { Product } from '../../entities/dashboard.entities';
 
 @Component({
   selector: 'app-products',
@@ -15,6 +17,10 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dashboardFacade.fetchProducts(1);
+  }
+
+  get products$(): Observable<Product[]> {
+    return this.dashboardFacade.products$;
   }
 
 }

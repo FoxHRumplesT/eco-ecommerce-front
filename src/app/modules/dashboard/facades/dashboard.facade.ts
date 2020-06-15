@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { Product } from '../entities/dashboard.entities';
-import { productsSelector } from '../store/selectors';
+import { Product, Tax } from '../entities/dashboard.entities';
+import { productsSelector, taxesSelector } from '../store/selectors';
 import * as actions from '../store/actions';
 
 @Injectable()
@@ -17,7 +17,15 @@ export class DashboardFacade {
     select(productsSelector)
   );
 
+  public taxes$: Observable<Tax[]> = this.store.pipe(
+    select(taxesSelector)
+  );
+
   public fetchProducts(page: number): void {
     this.store.dispatch(actions.fetchProductsAction({ page }));
+  }
+
+  public fetchTaxes(): void {
+    this.store.dispatch(actions.fetchTaxesAction());
   }
 }

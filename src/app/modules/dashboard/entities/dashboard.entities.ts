@@ -5,3 +5,11 @@ export class Product {
   value: number;
   tax: number[];
 }
+
+export class Tax {
+  id: 4;
+  type: string;
+  name: string;
+  value: 2000;
+  percent_value: number;
+}

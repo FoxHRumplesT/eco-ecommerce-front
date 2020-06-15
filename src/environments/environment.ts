@@ -4,9 +4,7 @@
 
 export const environment = {
   production: false,
-  api: {
-    bill: 'https://blitz-dev1.azurewebsites.net'
-  }
+  api: 'https://blitz-dev1.azurewebsites.net'
 };
 
 /*

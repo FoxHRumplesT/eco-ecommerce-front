@@ -6,9 +6,12 @@
   border: none
   border-bottom: 1px solid var(--gray-2)
   &:focus
+    border-bottom: 1px solid var(--green-1)
   &.ng-invalid
     &.ng-touched
+      border-bottom: 1px solid var(--red-1)
       &:focus
+        border-bottom: 1px solid var(--green-1)
 
 .checkbox
   +flex(center)
@@ -49,3 +52,5 @@
   border-radius: 10px
   color: var(--white-1)
   background: linear-gradient(var(--green-1), var(--green-2))
+  &:disabled
+    background: var(--gray-1)

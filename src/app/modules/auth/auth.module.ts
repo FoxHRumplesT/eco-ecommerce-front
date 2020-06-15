@@ -9,6 +9,8 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { AuthReducers } from './store/reducers';
 import { AuthEffects } from './store/effects';
+import { AuthFacade } from './auth.facade';
+import { AuthServices } from './auth.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,10 @@ import { AuthEffects } from './store/effects';
     StoreModule.forFeature('auth', AuthReducers),
     EffectsModule.forFeature([ AuthEffects ]),
     AuthRoutingModule
+  ],
+  providers: [
+    AuthFacade,
+    AuthServices
   ]
 })
 export class AuthModule { }

@@ -9,14 +9,13 @@ const initialUiState: UIState = {
 
 const ui = createReducer(
   initialUiState,
-  on(actions.loginAction, (state, payload) => ({ ...state, isLoadingProduct: true })),
+  on(actions.loginAction, (state, payload) => ({ ...state, isLoadingLogin: true })),
 );
 
 const initialDataState: DataState = {} as DataState;
 
 const data = createReducer(
   initialDataState,
-  on(actions.loginSuccessAction, (state, { response }) => ({ ...state, product: response })),
 );
 
 export const AuthReducers = combineReducers({

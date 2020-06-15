@@ -5,7 +5,6 @@ export interface UIState {
 }
 
 export interface DataState {
-  products: any;
 }
 export interface State {
   ui: UIState;
