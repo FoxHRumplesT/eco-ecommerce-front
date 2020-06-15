@@ -11,6 +11,7 @@ import { AuthReducers } from './store/reducers';
 import { AuthEffects } from './store/effects';
 import { AuthFacade } from './auth.facade';
 import { AuthServices } from './auth.service';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AuthServices } from './auth.service';
   ],
   providers: [
     AuthFacade,
-    AuthServices
+    AuthServices,
+    AuthGuard
   ]
 })
 export class AuthModule { }

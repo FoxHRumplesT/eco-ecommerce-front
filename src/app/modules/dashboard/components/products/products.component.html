@@ -1,4 +1,4 @@
-<div class="wrapper-products">
+<div class="wrapper-products" *ngIf="basket$ | async as basket">
   <div class="all-products">
     <div class="header">
       <h2 class="title">Productos</h2>
@@ -9,49 +9,30 @@
     </div>
     <ul class="products">
       <li *ngFor="let product of products$ | async">
-        <div class="item">
-          <figure>
-            <fa-icon [icon]="['fas', 'gift']" [size]="'4x'"></fa-icon>
-          </figure>
-          <div class="name">{{ product.name }}</div>
-          <div class="counter">
-            <div class="button">
-              <fa-icon [icon]="['fas', 'minus']"></fa-icon>
-            </div>
-            <div class="number">
-              1
-            </div>
-            <div class="button">
-              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-            </div>
-          </div>
-        </div>
+        <app-products-card
+          [product]="product"
+          [basket]="basket"
+          (addProduct)="addProductToBasket($event)"
+          (removeProduct)="removeProductToBasket($event)">
+        </app-products-card>
       </li>
     </ul>
   </div>
   <div class="added-products">
     <h3 class="title">Factura</h3>
     <ul class="items">
-      <li *ngFor="let i of [].constructor(2)">
-        <div class="item">
-          <figure>
-            <fa-icon [icon]="['fas', 'gift']" [size]="'2x'"></fa-icon>
-          </figure>
-          <div class="info">
-            <div class="name">Crispy Zucchini Fritters de dos mil a=la unidad</div>
-            <div class="values">
-              <div class="units">5/u</div>
-              <div class="price">{{ 50000 | currencyFormat }}</div>
-            </div>
-          </div>
-        </div>
+      <li *ngFor="let product of differentProducts(basket.products)">
+        <app-products-basket-card
+          [product]="product"
+          [basket]="basket">
+        </app-products-basket-card>
       </li>
     </ul>
     <div class="total">
       <div class="title">Total sin impuestos</div>
       <div class="price">
         <span class="text">Total</span>
-        <span class="value">{{ 45000 | currencyFormat }}</span>
+        <span class="value">{{ total(basket) | currencyFormat }}</span>
       </div>
       <div class="create" [routerLink]="['..', 'bill']">
         Crear factura

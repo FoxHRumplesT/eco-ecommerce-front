@@ -13,8 +13,11 @@ import { CurrencyFormatPipe } from '../../pipes/currency-format.pipe';
 import { BillComponent } from './components/bill/bill.component';
 import { DashboardEffects } from './store/effects';
 import { DashboardReducers } from './store/reducers';
-import { DashboardFacade } from './facades/dashboard.facade';
-import { DashboardServices } from './services/dashboard.services';
+import { DashboardFacade } from './dashboard.facade';
+import { DashboardServices } from './dashboard.services';
+import { DashboardGuard } from './dashboard.guard';
+import { ProductsCardComponent } from './components/products-card/products-card.component';
+import { ProductsBasketCardComponent } from './components/products-basket-card/products-basket-card.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,9 @@ import { DashboardServices } from './services/dashboard.services';
     DashboardComponent,
     ProductsComponent,
     CurrencyFormatPipe,
-    BillComponent
+    BillComponent,
+    ProductsCardComponent,
+    ProductsBasketCardComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +39,8 @@ import { DashboardServices } from './services/dashboard.services';
   ],
   providers: [
     DashboardFacade,
-    DashboardServices
+    DashboardServices,
+    DashboardGuard
   ]
 })
 export class DashboardModule { }

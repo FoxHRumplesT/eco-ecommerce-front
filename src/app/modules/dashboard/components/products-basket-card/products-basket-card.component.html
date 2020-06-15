@@ -1,0 +1,12 @@
+<div class="wrapper-products-basket-card">
+  <figure>
+    <fa-icon [icon]="['fas', 'gift']" [size]="'2x'"></fa-icon>
+  </figure>
+  <div class="info">
+    <div class="name">{{ product.name }}</div>
+    <div class="values">
+      <div class="units">{{ quantity }}/u</div>
+      <div class="price">{{ total | currencyFormat }}</div>
+    </div>
+  </div>
+</div>

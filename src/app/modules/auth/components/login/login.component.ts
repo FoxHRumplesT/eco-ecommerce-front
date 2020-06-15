@@ -17,8 +17,8 @@ export class LoginComponent implements OnInit {
   ) {
     const { required, email } = Validators;
     this.form = new FormGroup({
-      user: new FormControl('', [required, email]),
-      password: new FormControl('', [required])
+      user: new FormControl('diegosuarezmayo@gmail.com', [required, email]),
+      password: new FormControl('diego', [required])
     });
   }
 

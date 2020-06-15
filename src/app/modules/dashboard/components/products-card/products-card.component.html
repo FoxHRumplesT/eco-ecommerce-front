@@ -1,0 +1,22 @@
+<div class="wrapper-products-card">
+  <figure>
+    <fa-icon [icon]="['fas', 'gift']" [size]="'4x'"></fa-icon>
+  </figure>
+  <div class="name">{{ product.name }}</div>
+  <ng-container *ngIf="!hasAddedProduct; else counter">
+    <div class="button add" (click)="addProductToBasket()">Agregar</div>
+  </ng-container>
+  <ng-template #counter>
+    <div class="counter">
+      <div class="button" (click)="removeProductToBasket()">
+        <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+      </div>
+      <div class="number">
+        {{ quantity }}
+      </div>
+      <div class="button" (click)="addProductToBasket()">
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+      </div>
+    </div>
+  </ng-template>
+</div>

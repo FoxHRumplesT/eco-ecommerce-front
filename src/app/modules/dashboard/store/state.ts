@@ -1,4 +1,4 @@
-import { Product, Tax } from '../entities/dashboard.entities';
+import { Product, Tax, Basket } from '../dashboard.entities';
 
 export interface UIState {
   isLoadingProducts: boolean;
@@ -8,6 +8,7 @@ export interface UIState {
 export interface DataState {
   products: Product[];
   taxes: Tax[];
+  basket: Basket;
 }
 export interface State {
   ui: UIState;

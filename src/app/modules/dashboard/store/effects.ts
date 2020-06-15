@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
 import { map, switchMap, catchError } from 'rxjs/operators';
 
 import * as actions from './actions';
-import { DashboardServices } from '../services/dashboard.services';
+import { DashboardServices } from '../dashboard.services';
+
 
 @Injectable()
 export class DashboardEffects {

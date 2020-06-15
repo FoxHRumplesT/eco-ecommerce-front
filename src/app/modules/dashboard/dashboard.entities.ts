@@ -7,9 +7,13 @@ export class Product {
 }
 
 export class Tax {
-  id: 4;
+  id: number;
   type: string;
   name: string;
-  value: 2000;
+  value: number;
   percent_value: number;
+}
+
+export class Basket {
+  products: Product[];
 }

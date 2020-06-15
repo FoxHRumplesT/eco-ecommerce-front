@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   declarations: [],
@@ -11,6 +12,7 @@ import { LoginComponent } from './components/login/login.component';
     RouterModule.forChild([
       {
         path: 'login',
+        canActivate: [AuthGuard],
         component: LoginComponent
       },
       {

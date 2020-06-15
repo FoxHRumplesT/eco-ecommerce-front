@@ -26,6 +26,7 @@
     "@ngrx/store": "^9.2.0",
     "@ngrx/store-devtools": "^9.2.0",
     "@swimlane/ngx-datatable": "^17.0.0",
+    "ngx-notification-msg": "^0.1.8",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

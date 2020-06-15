@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DashboardFacade } from './facades/dashboard.facade';
+import { DashboardFacade } from './dashboard.facade';
 
 @Component({
   selector: 'app-dashboard',

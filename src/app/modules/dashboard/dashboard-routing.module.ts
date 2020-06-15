@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ProductsComponent } from './components/products/products.component';
 import { BillComponent } from './components/bill/bill.component';
+import { DashboardGuard } from './dashboard.guard';
 
 @NgModule({
   declarations: [],
@@ -14,6 +15,7 @@ import { BillComponent } from './components/bill/bill.component';
       {
         path: '',
         component: DashboardComponent,
+        canActivate: [DashboardGuard],
         children: [
           {
             path: 'products',
@@ -22,6 +24,11 @@ import { BillComponent } from './components/bill/bill.component';
           {
             path: 'bill',
             component: BillComponent
+          },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'products'
           }
         ]
       }

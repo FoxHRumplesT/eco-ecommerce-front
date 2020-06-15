@@ -6,6 +6,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {NgxNotificationMsgModule} from 'ngx-notification-msg'
 
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +21,7 @@ import { AppInterceptor } from './app.interceptor';
     BrowserModule,
     FontAwesomeModule,
     HttpClientModule,
+    NgxNotificationMsgModule,
     StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument({
       maxAge: 50
