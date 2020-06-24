@@ -25,3 +25,10 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## docker azure
+docker image build -t e_bill .
+docker tag  e_bill zuama.azurecr.io/blitz/e-bill:0.0.1
+docker push  zuama.azurecr.io/blitz/e-bill
+## run docker azure
+docker run -p 4200:80 e_bill
