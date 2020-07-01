@@ -20,7 +20,7 @@ export class DashboardEffects {
   fetchProducts$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchProductsAction),
     switchMap(({ page }) => this.services.fetchProducts$(page).pipe(
-      map(response => ({ response: response.result, error: null })),
+      map(response => ({ response: response.results, error: null })),
       catchError(error => of({ error, response: [] })),
     )),
     map(({ response, error }) => actions.fetchProductsSuccessAction({ response }))
@@ -30,7 +30,17 @@ export class DashboardEffects {
   fetchTaxesAction$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchTaxesAction),
     switchMap(_ => this.services.fetchTaxes$().pipe(
-      map(response => ({ response: response.result, error: null })),
+      map(response => ({ response: response.results, error: null })),
+      catchError(error => of({ error, response: [] })),
+    )),
+    map(({ response, error }) => actions.fetchTaxesSuccessAction({ response }))
+  );
+
+  @Effect()
+  calculateTaxesInBasket$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.calculateTaxesInBasket),
+    switchMap(({ basket }) => this.services.calculateTaxesInBasket$(basket).pipe(
+      map(response => ({ response: response.results, error: null })),
       catchError(error => of({ error, response: [] })),
     )),
     map(({ response, error }) => actions.fetchTaxesSuccessAction({ response }))

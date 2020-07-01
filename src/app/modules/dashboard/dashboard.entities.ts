@@ -4,6 +4,8 @@ export class Product {
   url_image: string;
   value: number;
   tax: number[];
+  lot: string;
+  quantity: number;
 }
 
 export class Tax {

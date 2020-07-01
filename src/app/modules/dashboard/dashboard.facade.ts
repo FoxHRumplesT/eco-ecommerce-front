@@ -40,4 +40,8 @@ export class DashboardFacade {
   public removeProductToBasket(product: Product): void {
     this.store.dispatch(actions.removeProductToBasketAction({ product }));
   }
+
+  public calculateTaxesInBasket(basket: Basket) {
+    this.store.dispatch(actions.calculateTaxesInBasket({ basket }));
+  }
 }

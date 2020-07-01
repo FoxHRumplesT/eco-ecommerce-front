@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { Product, Tax } from './dashboard.entities';
+import { Product, Tax, Basket } from './dashboard.entities';
 
 const api = {
-  products: (page: number) => `${environment.api}/ms-e-bill/api/product?page=${page}`,
+  products: (page: number) => `${environment.api}/ms-e-bill/api/stock?page=${page}`,
   taxes: () => `${environment.api}/ms-e-bill/api/taxes`,
+  calculateTaxes: () => `${environment.api}/ms-e-bill/api/bill/calculate`,
 };
 
 @Injectable()
@@ -17,11 +18,15 @@ export class DashboardServices {
     private http: HttpClient
   ) {}
 
-  public fetchProducts$(page: number): Observable<{ isSuccess: boolean, message: string, result: Product[]}> {
-    return this.http.get<{ isSuccess: boolean, message: string, result: Product[]}>(api.products(page));
+  public fetchProducts$(page: number): Observable<{ isSuccess: boolean, message: string, results: Product[]}> {
+    return this.http.get<{ isSuccess: boolean, message: string, results: Product[]}>(api.products(page));
   }
 
-  public fetchTaxes$(): Observable<{ isSuccess: boolean, message: string, result: Tax[]}> {
-    return this.http.get<{ isSuccess: boolean, message: string, result: Tax[]}>(api.taxes());
+  public fetchTaxes$(): Observable<{ isSuccess: boolean, message: string, results: Tax[]}> {
+    return this.http.get<{ isSuccess: boolean, message: string, results: Tax[]}>(api.taxes());
+  }
+
+  public calculateTaxesInBasket$(basket: Basket): Observable<{ isSuccess: boolean, message: string, results: Tax[]}> {
+    return this.http.post<{ isSuccess: boolean, message: string, results: Tax[]}>(api.calculateTaxes(), basket);
   }
 }

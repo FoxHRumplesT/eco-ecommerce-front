@@ -1,12 +1,50 @@
-<div class="wrapper-products-basket-card">
+<div class="wrapper-products-basket-card" [ngClass]="{'collapsed': isCollapsed }">
   <figure>
-    <fa-icon [icon]="['fas', 'gift']" [size]="'2x'"></fa-icon>
+    <ng-container *ngIf="product.url_image; else noImage">
+      <img [src]="product.url_image">
+    </ng-container>
+    <ng-template #noImage>
+      <fa-icon [icon]="['fas', 'gift']" [size]="'2x'"></fa-icon>
+    </ng-template>
   </figure>
   <div class="info">
-    <div class="name">{{ product.name }}</div>
-    <div class="values">
+    <div class="name">
+      {{ product.name }}
       <div class="units">{{ quantity }}/u</div>
-      <div class="price">{{ total | currencyFormat }}</div>
+    </div>
+    <div class="values">
+      <div class="price" *ngIf="!isEditing; else inputPrice">{{ total | currencyFormat }}</div>
+      <ng-template #inputPrice>
+        <input class="input-text input-price" type="text" name="a" [value]="product.value">
+      </ng-template>
+      <div class="icons">
+        <fa-icon
+          *ngIf="!isEditing; else check"
+          [class]="'pen'"
+          [icon]="['fas', 'pen']"
+          [size]="'1x'"
+          (click)="isEditing = !isEditing">
+        </fa-icon>
+        <ng-template #check>
+          <fa-icon
+            [class]="'check'"
+            [icon]="['fas', 'check']"
+            [size]="'1x'"
+            (click)="isEditing = !isEditing">
+          </fa-icon>
+        </ng-template>
+        <fa-icon
+          [class]="'arrow'"
+          [icon]="['fas', 'chevron-down']"
+          [size]="'1x'"
+          (click)="isCollapsed = !isCollapsed">
+        </fa-icon>
+      </div>
     </div>
   </div>
+  <ul class="taxes">
+    <li *ngFor="let tax of productTaxes">
+      {{ tax.name }}
+    </li>
+  </ul>
 </div>

@@ -1,5 +1,5 @@
-<div class="wrapper-products" *ngIf="basket$ | async as basket">
-  <div class="all-products">
+<div class="wrapper-products" [ngClass]="{'step-1': stepOne, 'step-2': stepTwo}" *ngIf="basket$ | async as basket">
+  <div class="all-products" *ngIf="stepOne; else clientForm">
     <div class="header">
       <h2 class="title">Productos</h2>
       <div class="search">
@@ -12,19 +12,26 @@
         <app-products-card
           [product]="product"
           [basket]="basket"
-          (addProduct)="addProductToBasket($event)"
-          (removeProduct)="removeProductToBasket($event)">
+          (addProduct)="addRemoveProductToBasket('add', $event)"
+          (removeProduct)="addRemoveProductToBasket('remove', $event)">
         </app-products-card>
       </li>
     </ul>
   </div>
+  <ng-template #clientForm>
+    <form class="client-form">
+      <h3>Datos del cliente</h3>
+      <input type="text" class="text-input" placeholder="kajsbdkjabs">
+    </form>
+  </ng-template>
   <div class="added-products">
     <h3 class="title">Factura</h3>
     <ul class="items">
       <li *ngFor="let product of differentProducts(basket.products)">
         <app-products-basket-card
           [product]="product"
-          [basket]="basket">
+          [basket]="basket"
+          [taxes]="taxes$ | async">
         </app-products-basket-card>
       </li>
     </ul>
@@ -34,7 +41,7 @@
         <span class="text">Total</span>
         <span class="value">{{ total(basket) | currencyFormat }}</span>
       </div>
-      <div class="create" [routerLink]="['..', 'bill']">
+      <div class="create" (click)="continue(basket)">
         Crear factura
       </div>
     </div>

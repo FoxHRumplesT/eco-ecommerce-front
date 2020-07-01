@@ -31,4 +31,8 @@ export class ProductsCardComponent {
     this.removeProduct.emit(this.product);
   }
 
+  get enableAction(): boolean {
+    return this.quantity < this.product.quantity;
+  }
+
 }
