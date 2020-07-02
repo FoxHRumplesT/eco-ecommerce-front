@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { Product, Tax, Basket, Result } from './dashboard.entities';
+import { Product, Tax, Basket } from './dashboard.entities';
 
 const api = {
   products: (page: number) => `${environment.api}/ms-e-bill/api/stock?page=${page}`,
@@ -26,7 +26,7 @@ export class DashboardServices {
     return this.http.get<{ isSuccess: boolean, message: string, results: Tax[]}>(api.taxes());
   }
 
-  public calculateTaxesInBasket$(basket: Basket): Observable<{ isSuccess: boolean, message: string, result: Result}> {
-    return this.http.post<{ isSuccess: boolean, message: string, result: Result}>(api.calculateTaxes(), basket);
+  public calculateTaxesInBasket$(basket: Basket): Observable<{ isSuccess: boolean, message: string, results: Tax[]}> {
+    return this.http.post<{ isSuccess: boolean, message: string, results: Tax[]}>(api.calculateTaxes(), basket);
   }
 }
