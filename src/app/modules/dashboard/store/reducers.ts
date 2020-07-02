@@ -35,6 +35,7 @@ const data = createReducer(
     const newProducts = [ ...newBasket.products.slice(0, indexToDelete), ...newBasket.products.slice(indexToDelete+1)];
     return ({ ...state, basket: { ...newBasket, products: newProducts } });
   }),
+  on(actions.calculateTaxesInBasketSuccess, (state, { response }) => ({...state, pruebita: response }))
 );
 
 export const DashboardReducers = combineReducers({
