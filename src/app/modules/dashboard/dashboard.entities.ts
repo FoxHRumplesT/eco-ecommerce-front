@@ -19,20 +19,3 @@ export class Tax {
 export class Basket {
   products: Product[];
 }
-
-export class Result
-{
-    summary: Summary[];
-    total: number;
-}
-
-export class Summary
-{
-  productTotal: number;
-  taxTotal: number;
-  quantity: number;
-  product: Product;
-  tax: Tax;
-}
-
-

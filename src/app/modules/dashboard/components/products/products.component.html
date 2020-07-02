@@ -19,24 +19,9 @@
     </ul>
   </div>
   <ng-template #clientForm>
-    <form class="client-form" [formGroup]="formClient">
+    <form class="client-form">
       <h3>Datos del cliente</h3>
-      <input type="text" class="input-text" formControlName="document" placeholder="NIT o documento de identificación">
-      <input type="text" class="input-text" formControlName="name" placeholder="Nombres">
-      <input type="email" class="input-text" formControlName="email" placeholder="Email">
-      <input type="tel" class="input-text" formControlName="phone" placeholder="Teléfono" pattern="\d*">
-      <mat-form-field appearance="fill" style=" margin-bottom: -1.25em">
-        <mat-label>Fecha de facturación</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="billingDate" placeholder="Fecha de pago">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="fill" style=" margin-bottom: -1.25em">
-        <mat-label>Fecha de pago</mat-label>
-        <input matInput [matDatepicker]="pickerPag" formControlName="payDate" placeholder="Fecha de pago">
-        <mat-datepicker-toggle matSuffix [for]="pickerPag"></mat-datepicker-toggle>
-        <mat-datepicker #pickerPag></mat-datepicker>
-      </mat-form-field>
+      <input type="text" class="text-input" placeholder="kajsbdkjabs">
     </form>
   </ng-template>
   <div class="added-products">
