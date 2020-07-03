@@ -46,6 +46,7 @@
         <app-products-basket-card
           [product]="product"
           [basket]="basket"
+          [result]="result$ | async"
           [taxes]="taxes$ | async">
         </app-products-basket-card>
       </li>

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { Product, Tax, Basket } from './dashboard.entities';
-import { productsSelector, taxesSelector, basketSelector } from './store/selectors';
+import { Product, Tax, Basket, Summary, Result } from './dashboard.entities';
+import { productsSelector, taxesSelector, basketSelector, resultSelector } from './store/selectors';
 import * as actions from './store/actions';
 
 @Injectable()
@@ -23,6 +23,10 @@ export class DashboardFacade {
 
   public basket$: Observable<Basket> = this.store.pipe(
     select(basketSelector)
+  );
+
+  public result$: Observable<Result> = this.store.pipe(
+    select(resultSelector)
   );
 
   public fetchProducts(page: number): void {

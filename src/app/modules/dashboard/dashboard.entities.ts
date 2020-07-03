@@ -6,6 +6,8 @@ export class Product {
   tax: number[];
   lot: string;
   quantity: number;
+  code: number;
+  is_free: boolean;
 }
 
 export class Tax {

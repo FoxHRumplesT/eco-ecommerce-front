@@ -2,6 +2,7 @@ import { createReducer, on, combineReducers } from '@ngrx/store';
 
 import { DataState, UIState } from './state';
 import * as actions from './actions';
+import { Result } from '../dashboard.entities';
 
 const initialUiState: UIState = {
   isLoadingProducts: true,
@@ -17,7 +18,8 @@ const ui = createReducer(
 const initialDataState: DataState = {
   products: [],
   taxes: [],
-  basket: { products: [] }
+  basket: { products: [] },
+  result: { summary: [] }
 } as DataState;
 
 const data = createReducer(
@@ -35,7 +37,7 @@ const data = createReducer(
     const newProducts = [ ...newBasket.products.slice(0, indexToDelete), ...newBasket.products.slice(indexToDelete+1)];
     return ({ ...state, basket: { ...newBasket, products: newProducts } });
   }),
-  on(actions.calculateTaxesInBasketSuccess, (state, { response }) => ({...state, pruebita: response }))
+  on(actions.calculateTaxesInBasketSuccess, (state, { response }) => ({...state, result: response }))
 );
 
 export const DashboardReducers = combineReducers({

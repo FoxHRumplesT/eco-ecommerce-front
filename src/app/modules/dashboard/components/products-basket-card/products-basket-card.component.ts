@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
-import { Product, Basket, Tax } from '../../dashboard.entities';
+import { Product, Basket, Tax, Summary, Result } from '../../dashboard.entities';
 
 @Component({
   selector: 'app-products-basket-card',
@@ -15,6 +15,7 @@ export class ProductsBasketCardComponent {
   @Input() product: Product;
   @Input() basket: Basket;
   @Input() taxes: Tax[] = [];
+  @Input() result: Result;
 
   get quantity(): number {
     return this.basket.products.filter(product => product.id === this.product.id).length;
@@ -32,4 +33,9 @@ export class ProductsBasketCardComponent {
     return this.product.tax.map(t => this.taxes.find(_t => _t.id === t));
   }
 
+  get resultSummary(): number {
+    if (this.result.summary.length > 0) {
+      return this.result.summary[0].taxTotal;
+    }
+  }
 }

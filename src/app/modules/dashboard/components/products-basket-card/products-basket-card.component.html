@@ -11,6 +11,7 @@
     <div class="name">
       {{ product.name }}
       <div class="units">{{ quantity }}/u</div>
+      <input type="checkbox" id= "{{product.id}}" >
     </div>
     <div class="values">
       <div class="price" *ngIf="!isEditing; else inputPrice">{{ total | currencyFormat }}</div>
@@ -46,5 +47,9 @@
     <li *ngFor="let tax of productTaxes">
       {{ tax.name }}
     </li>
+    <li >
+      {{resultSummary}}
+    </li>
   </ul>
+
 </div>

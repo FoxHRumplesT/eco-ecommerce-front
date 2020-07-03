@@ -18,7 +18,7 @@ import { DashboardServices } from './dashboard.services';
 import { DashboardGuard } from './dashboard.guard';
 import { ProductsCardComponent } from './components/products-card/products-card.component';
 import { ProductsBasketCardComponent } from './components/products-basket-card/products-basket-card.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -43,7 +43,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     ReactiveFormsModule,
     MatDatepickerModule,
     MatInputModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    FormsModule
   ],
   providers: [
     DashboardFacade,
