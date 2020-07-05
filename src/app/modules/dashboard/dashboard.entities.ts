@@ -6,7 +6,7 @@ export class Product {
   tax: number[];
   lot: string;
   quantity: number;
-  code: number;
+  code: string;
   is_free: boolean;
 }
 
@@ -22,14 +22,12 @@ export class Basket {
   products: Product[];
 }
 
-export class Result
-{
-    summary: Summary[];
-    total: number;
+export class Result {
+  summary: Summary[];
+  total: number;
 }
 
-export class Summary
-{
+export class Summary {
   productTotal: number;
   taxTotal: number;
   quantity: number;
@@ -37,4 +35,10 @@ export class Summary
   tax: Tax;
 }
 
-
+export class CalculateTaxesPayload {
+  code: string;
+  quantity: number;
+  lot: string;
+  value: number;
+  is_free: boolean;
+}

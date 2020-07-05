@@ -10,8 +10,8 @@
   <div class="info">
     <div class="name">
       {{ product.name }}
-      <div class="units">{{ quantity }}/u</div>
-      <input type="checkbox" id= "{{product.id}}" >
+      <div class="units">{{ product.quantity }}/u</div>
+      <input type="checkbox" [checked]="product.is_free" (change)="onToggleIsFree()">
     </div>
     <div class="values">
       <div class="price" *ngIf="!isEditing; else inputPrice">{{ total | currencyFormat }}</div>

@@ -39,7 +39,7 @@ export class DashboardEffects {
   @Effect()
   calculateTaxesInBasket$: Observable<Action> = this.actions$.pipe(
     ofType(actions.calculateTaxesInBasket),
-    switchMap(({ basket }) => this.services.calculateTaxesInBasket$(basket).pipe(
+    switchMap(({ payload }) => this.services.calculateTaxesInBasket$(payload).pipe(
       map(response => ({ response: response.result, error: null })),
       catchError(error => of({ error, response: [] })),
     )),

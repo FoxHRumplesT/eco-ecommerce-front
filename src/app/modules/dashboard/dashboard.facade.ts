@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { Product, Tax, Basket, Summary, Result } from './dashboard.entities';
+import { Product, Tax, Basket, Result, CalculateTaxesPayload } from './dashboard.entities';
 import { productsSelector, taxesSelector, basketSelector, resultSelector } from './store/selectors';
 import * as actions from './store/actions';
 
@@ -45,7 +45,11 @@ export class DashboardFacade {
     this.store.dispatch(actions.removeProductToBasketAction({ product }));
   }
 
-  public calculateTaxesInBasket(basket: Basket) {
-    this.store.dispatch(actions.calculateTaxesInBasket({ basket }));
+  public calculateTaxesInBasket(payload: CalculateTaxesPayload[]) {
+    this.store.dispatch(actions.calculateTaxesInBasket({ payload }));
+  }
+
+  public updateProductFromBasket(product: Product): void {
+    this.store.dispatch(actions.updateProductFromBasketAction({ product }));
   }
 }

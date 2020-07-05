@@ -1,10 +1,9 @@
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result } from '../../dashboard.entities';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { newArray } from '@angular/compiler/src/util';
+import { Product, Basket, Tax, Result, CalculateTaxesPayload } from '../../dashboard.entities';
 
 @Component({
   selector: 'app-products',
@@ -67,33 +66,28 @@ export class ProductsComponent implements OnInit {
   }
 
   public addRemoveProductToBasket(type: string, product: Product): void {
-    if (type === 'add') this.dashboardFacade.addProductToBasket(product);
+    if (type === 'add') this.dashboardFacade.addProductToBasket({ ...product, quantity: 1, is_free: false });
     else if (type === 'remove') this.dashboardFacade.removeProductToBasket(product);
   }
 
   public continue(basket: Basket): void {
-    const lstProduct = new Array();
-    const newBasket = new Basket();
-    basket.products.forEach(element => {
-      if (lstProduct === undefined || !lstProduct.some(x => x.id === element.id)) {
-        const product = new Product();
-        const check = document.getElementById(element.id.toString()) as HTMLInputElement;
-        //product.id = element.id;
-        product.code = element.code;
-        product.quantity = basket.products.filter(pr => pr.id === element.id).length;
-        product.lot = element.lot;
-        product.value = element.value;
-        product.is_free = check.checked;
-        lstProduct.push(product);
-      }
-    });
-    newBasket.products = lstProduct;
     if (this.stepOne) {
       this.stepOne = !this.stepOne;
       this.stepTwo = !this.stepTwo;
-      this.dashboardFacade.calculateTaxesInBasket(newBasket);
+      const payload: CalculateTaxesPayload[] = basket.products.map(product => ({
+        code: product.code,
+        quantity: basket.products.filter(p => p.id === product.id).length,
+        lot: product.lot,
+        value: product.value,
+        is_free: product.is_free
+      }));
+      this.dashboardFacade.calculateTaxesInBasket(payload);
     } else {
-      this.dashboardFacade.calculateTaxesInBasket(basket);
+      // TODO create bill
     }
+  }
+
+  public toggleFreeProduct(product: Product): void {
+    this.dashboardFacade.updateProductFromBasket({...product, is_free: !product.is_free});
   }
 }

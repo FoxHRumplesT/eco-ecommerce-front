@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 import { Product, Basket, Tax, Summary, Result } from '../../dashboard.entities';
 
@@ -16,10 +16,7 @@ export class ProductsBasketCardComponent {
   @Input() basket: Basket;
   @Input() taxes: Tax[] = [];
   @Input() result: Result;
-
-  get quantity(): number {
-    return this.basket.products.filter(product => product.id === this.product.id).length;
-  }
+  @Output() toggleIsFree: EventEmitter<Product> = new EventEmitter();
 
   get total(): number {
     let total = 0;
@@ -37,5 +34,9 @@ export class ProductsBasketCardComponent {
     if (this.result.summary.length > 0) {
       return this.result.summary[0].taxTotal;
     }
+  }
+
+  public onToggleIsFree(): void {
+    this.toggleIsFree.emit(this.product);
   }
 }

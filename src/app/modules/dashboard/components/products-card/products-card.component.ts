@@ -20,7 +20,7 @@ export class ProductsCardComponent {
   }
 
   get quantity(): number {
-    return this.basket.products.filter(product => product.id === this.product.id).length;
+    return this.basket.products.find(product => product.id === this.product.id).quantity;
   }
 
   public addProductToBasket(): void {
@@ -31,8 +31,12 @@ export class ProductsCardComponent {
     this.removeProduct.emit(this.product);
   }
 
-  get enableAction(): boolean {
+  get enableAddAction(): boolean {
     return this.quantity < this.product.quantity;
+  }
+
+  get enableRemoveAction(): boolean {
+    return this.quantity <= this.product.quantity;
   }
 
 }
