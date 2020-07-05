@@ -1,0 +1,94 @@
+@import 'mixins'
+
+:host
+  display: block
+  width: 100%
+  height: 100%
+
+.wrapper-products
+  +flex()
+  width: 100%
+  height: 100%
+  border-radius: 16px
+  background: var(--white-1)
+  box-shadow: 0px 8px 32px rgba(51, 38, 174, 0.08)
+  &.step-2
+    .added-products
+      width: 100%
+  .all-products
+    width: 100%
+    height: 100%
+    overflow: hidden
+    .header
+      +flex(center, space-between)
+      .title
+        +bold()
+        text-align: center
+        margin: 20px 0 20px 10px
+      .search
+        +flex(center)
+        width: 50%
+        margin: 0 10px 0 0
+        color: var(--green-1)
+    .products
+      +flex()
+      height: calc(100% - 2rem - 40px)
+      flex-wrap: wrap
+      overflow-y: scroll
+      li
+        +flex(center, center)
+        width: 235px
+        height: 350px
+  .client-form
+    padding: 20px
+    .input-text
+      margin-bottom: 10px
+
+  .added-products
+    +flex(null, null, column)
+    width: 33%
+    margin: 0 0 0 auto
+    background: var(--blue-1)
+    border-radius: 0 16px 16px 0
+    .title
+      +bold()
+      margin: 20px 0
+      text-align: center
+      color: var(--green-1)
+    .items
+      flex: 1
+      overflow-y: scroll
+      li
+        +flex()
+
+
+  .create
+    +flex(center, center)
+    height: 40px
+    margin: 10px
+    cursor: pointer
+    border-radius: 16px
+    color: var(--white-1)
+    background-color: var(--yellow-1)
+    &:disabled
+      background: var(--gray-1)
+      cursor: not-allowed
+
+  .new-product
+    padding: 15px
+    font-size: 25px
+    color: var(--green-1)
+    cursor: pointer
+
+  .btn-close
+    align-self: flex-end
+    color: var(--red-1)
+    font-size: 20px
+    cursor: pointer
+
+
+
+
+
+
+

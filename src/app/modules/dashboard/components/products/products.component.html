@@ -12,6 +12,7 @@
         <app-products-card
           [product]="product"
           [basket]="basket"
+          [isBasket]= true
           (addProduct)="addRemoveProductToBasket('add', $event)"
           (removeProduct)="addRemoveProductToBasket('remove', $event)">
         </app-products-card>

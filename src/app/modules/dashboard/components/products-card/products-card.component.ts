@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { Product, Basket } from '../../dashboard.entities';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-products-card',
@@ -12,11 +14,14 @@ export class ProductsCardComponent {
 
   @Input() product: Product;
   @Input() basket: Basket;
+  @Input() isBasket: boolean;
   @Output() addProduct: EventEmitter<Product> = new EventEmitter();
   @Output() removeProduct: EventEmitter<Product> = new EventEmitter();
 
+  constructor(public dialog: MatDialog) { }
   get hasAddedProduct(): boolean {
-    return this.basket.products.some(product => this.product.id === product.id);
+    if (this.basket !== undefined)
+      return this.basket.products.some(product => this.product.id === product.id);
   }
 
   get quantity(): number {
@@ -37,6 +42,34 @@ export class ProductsCardComponent {
 
   get enableRemoveAction(): boolean {
     return this.quantity <= this.product.quantity;
+  }
+
+  public updateProduct() {
+
+  }
+
+  public deleteProduct() {
+
+  }
+
+  public openDialog(option: string): void {
+    let titleValue: string;
+    let messageValue: string;
+    if (option === 'delete') {
+      titleValue = '!ALERTA¡',
+      messageValue = '¿Estás  seguro de eliminar el registro?';
+    }
+    const dialogRef = this.dialog.open(ModalComponent, {
+      width: '250px',
+      disableClose: true,
+      data: { title: titleValue, message: messageValue }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && option === 'delete') {
+        this.deleteProduct();
+      }
+    });
   }
 
 }

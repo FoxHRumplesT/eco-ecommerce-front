@@ -1,0 +1,37 @@
+<div class="wrapper-products">
+  <div class="all-products">
+    <div class="header">
+      <h2 class="title">Productos
+        <fa-icon [icon]="['fas', 'plus-circle']" class="new-product" (click)="showNewProduct = true"></fa-icon>
+      </h2>
+      <div class="search">
+        <input type="text" id="search-input" class="input-text" placeholder="Busca tu producto">
+        <fa-icon [icon]="['fas', 'search']"></fa-icon>
+      </div>
+    </div>
+    <ul class="products">
+      <li *ngFor="let product of products$ | async">
+        <app-products-card
+          [product]="product"
+          [isBasket]= false>
+        </app-products-card>
+      </li>
+    </ul>
+  </div>
+  <div class="added-products" *ngIf="showNewProduct">
+    <fa-icon [icon]="['fas', 'window-close']" class="btn-close" (click)="showNewProduct = false"></fa-icon>
+    <h3 class="title">Nuevo producto</h3>
+      <form class="client-form" [formGroup]="formProduct">
+      <input type="number" class="input-text" formControlName="code" placeholder="Código">
+      <input type="text" class="input-text" formControlName="name" placeholder="Nombre">
+      <input type="number" class="input-text" formControlName="value" placeholder="Valor unitario">
+      <input type="number" class="input-text" formControlName="iva" placeholder="Iva">
+      <input type="number" class="input-text" formControlName="quantity" placeholder="Cantidad">
+      <input type="text" class="input-text" formControlName="taxType" placeholder="Tipo de impuesto">
+      <input type="number" class="input-text" formControlName="taxValue" placeholder="Valor impuesto">
+    </form>
+      <button class="create" (click)="createProduct()" [disabled]="formProduct.invalid">
+        Crear
+      </button>
+  </div>
+</div>

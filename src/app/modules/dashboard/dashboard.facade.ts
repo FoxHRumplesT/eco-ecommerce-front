@@ -45,8 +45,8 @@ export class DashboardFacade {
     this.store.dispatch(actions.removeProductToBasketAction({ product }));
   }
 
-  public calculateTaxesInBasket(payload: CalculateTaxesPayload[]) {
-    this.store.dispatch(actions.calculateTaxesInBasket({ payload }));
+  public calculateTaxesInBasket(basket: Basket) {
+    this.store.dispatch(actions.calculateTaxesInBasket({ basket }));
   }
 
   public updateProductFromBasket(product: Product): void {

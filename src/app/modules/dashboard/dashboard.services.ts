@@ -26,7 +26,7 @@ export class DashboardServices {
     return this.http.get<{ isSuccess: boolean, message: string, results: Tax[]}>(api.taxes());
   }
 
-  public calculateTaxesInBasket$(payload: CalculateTaxesPayload[]): Observable<{ isSuccess: boolean, message: string, result: Result}> {
-    return this.http.post<{ isSuccess: boolean, message: string, result: Result}>(api.calculateTaxes(), payload);
+  public calculateTaxesInBasket$(basket: Basket): Observable<{ isSuccess: boolean, message: string, result: Result}> {
+    return this.http.post<{ isSuccess: boolean, message: string, result: Result}>(api.calculateTaxes(), basket);
   }
 }

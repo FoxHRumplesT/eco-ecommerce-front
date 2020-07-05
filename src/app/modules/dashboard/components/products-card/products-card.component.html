@@ -6,9 +6,17 @@
     </ng-template>
   </figure>
   <div class="name">{{ product.name }}</div>
-  <ng-container *ngIf="!hasAddedProduct; else counter">
-    <div class="button add" (click)="addProductToBasket()">Agregar</div>
+  <ng-container *ngIf="isBasket; else options">
+    <ng-container *ngIf="!hasAddedProduct; else counter">
+      <div class="button add" (click)="addProductToBasket()">Agregar</div>
+    </ng-container>
   </ng-container>
+  <ng-template #options>
+      <div class="grid-container">
+      <div class="button edit" (click)="updateProduct()">Editar</div>
+      <div class="button delete" (click)="openDialog('delete')">Borrar</div>
+      </div>
+  </ng-template>
   <ng-template #counter>
     <div class="counter">
       <button class="button" [disabled]="!enableRemoveAction" (click)="removeProductToBasket()">
