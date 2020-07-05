@@ -19,9 +19,22 @@
     </ul>
   </div>
   <ng-template #clientForm>
-    <form class="client-form">
+    <form class="client-form" [formGroup]="formClient">
       <h3>Datos del cliente</h3>
-      <input type="text" class="text-input" placeholder="kajsbdkjabs">
+      <input type="text" class="input-text" formControlName="document" placeholder="NIT o documento de identificación">
+      <input type="text" class="input-text" formControlName="name" placeholder="Nombres">
+      <input type="email" class="input-text" formControlName="email" placeholder="Email">
+      <input type="tel" class="input-text" formControlName="phone" placeholder="Teléfono" pattern="\d*">
+      <mat-form-field [floatLabel]="'never'">
+        <input matInput [matDatepicker]="picker" formControlName="billingDate" placeholder="Fecha de compra">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field [floatLabel]="'never'">
+        <input matInput [matDatepicker]="pickerPag" formControlName="payDate"  placeholder="Fecha de pago">
+        <mat-datepicker-toggle matSuffix [for]="pickerPag"></mat-datepicker-toggle>
+        <mat-datepicker #pickerPag></mat-datepicker>
+      </mat-form-field>
     </form>
   </ng-template>
   <div class="added-products">
@@ -31,7 +44,9 @@
         <app-products-basket-card
           [product]="product"
           [basket]="basket"
-          [taxes]="taxes$ | async">
+          [result]="result$ | async"
+          [taxes]="taxes$ | async"
+          (toggleIsFree)="toggleFreeProduct($event)">
         </app-products-basket-card>
       </li>
     </ul>

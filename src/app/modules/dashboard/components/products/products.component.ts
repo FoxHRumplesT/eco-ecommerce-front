@@ -1,8 +1,9 @@
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result, CalculateTaxesPayload } from '../../dashboard.entities';
 
 @Component({
   selector: 'app-products',
@@ -14,9 +15,21 @@ export class ProductsComponent implements OnInit {
   public stepOne = true;
   public stepTwo = false;
 
+  public formClient: FormGroup;
+
   constructor(
     private dashboardFacade: DashboardFacade
-  ) { }
+  ) {
+    const { required, email, minLength, maxLength } = Validators;
+    this.formClient = new FormGroup({
+      document: new FormControl('', [required]),
+      name: new FormControl('', [required]),
+      email: new FormControl('', [required, email]),
+      phone: new FormControl('', [required, minLength(7), maxLength(10)]),
+      billingDate: new FormControl('', [required]),
+      payDate: new FormControl('', [required])
+    });
+  }
 
   ngOnInit(): void {
     this.dashboardFacade.fetchProducts(1);
@@ -34,6 +47,10 @@ export class ProductsComponent implements OnInit {
     return this.dashboardFacade.taxes$;
   }
 
+  get result$(): Observable<Result> {
+    return this.dashboardFacade.result$;
+  }
+
   public differentProducts(products: Product[]): Product[] {
     return products.filter((product, index, self) =>
       index === self.findIndex((t) => t.id === product.id)
@@ -49,7 +66,7 @@ export class ProductsComponent implements OnInit {
   }
 
   public addRemoveProductToBasket(type: string, product: Product): void {
-    if (type === 'add') this.dashboardFacade.addProductToBasket(product);
+    if (type === 'add') this.dashboardFacade.addProductToBasket({ ...product, quantity: 1, is_free: false });
     else if (type === 'remove') this.dashboardFacade.removeProductToBasket(product);
   }
 
@@ -57,9 +74,20 @@ export class ProductsComponent implements OnInit {
     if (this.stepOne) {
       this.stepOne = !this.stepOne;
       this.stepTwo = !this.stepTwo;
+      const payload: CalculateTaxesPayload[] = basket.products.map(product => ({
+        code: product.code,
+        quantity: basket.products.filter(p => p.id === product.id).length,
+        lot: product.lot,
+        value: product.value,
+        is_free: product.is_free
+      }));
+      this.dashboardFacade.calculateTaxesInBasket(payload);
     } else {
-      this.dashboardFacade.calculateTaxesInBasket(basket);
+      // TODO create bill
     }
   }
 
+  public toggleFreeProduct(product: Product): void {
+    this.dashboardFacade.updateProductFromBasket({...product, is_free: !product.is_free});
+  }
 }

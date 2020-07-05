@@ -22,3 +22,41 @@ body
 .desktop
   +for-phone-only()
     display: none !important
+
+.mat-form-field
+  width: 100%
+  margin-bottom: 10px
+  &.mat-focused
+    .mat-form-field-wrapper
+      .mat-form-field-underline
+        .mat-form-field-ripple
+          background: var(--green-1)
+  &.ng-touched
+    &.ng-invalid
+      .mat-form-field-wrapper
+        .mat-form-field-underline
+          .mat-form-field-ripple
+            background: var(--red-1)
+      &.mat-focused
+        .mat-form-field-wrapper
+          .mat-form-field-underline
+            .mat-form-field-ripple
+              background: var(--green-1)
+  .mat-form-field-wrapper
+    .mat-form-field-flex
+      .mat-form-field-infix
+        border: none
+        .mat-form-field-label-wrapper
+          .mat-form-field-label
+            font-size: 16px
+            color: var(--gray-1)
+      .mat-form-field-suffix
+        .mat-datepicker-toggle
+          .mat-icon-button
+            color: var(--gray-1)
+    .mat-form-field-underline
+      .mat-form-field-ripple
+        opacity: 1
+        height: 1px
+        transform: scale(1)
+        background: var(--gray-1)
