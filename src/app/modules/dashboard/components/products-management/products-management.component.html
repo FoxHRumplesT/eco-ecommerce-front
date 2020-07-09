@@ -11,9 +11,7 @@
     </div>
     <ul class="products">
       <li *ngFor="let product of products$ | async">
-        <app-products-card
-          [product]="product"
-          [isBasket]= false>
+        <app-products-card [product]="product" [isBasket]=false>
         </app-products-card>
       </li>
     </ul>
@@ -21,34 +19,41 @@
   <div class="added-products" *ngIf="showNewProduct">
     <fa-icon [icon]="['fas', 'window-close']" class="btn-close" (click)="showNewProduct = false"></fa-icon>
     <h3 class="title">Nuevo producto</h3>
+    <ng-container *ngIf="!showProductForm; else product">
     <form class="product-form" [formGroup]="formImage">
-      <label class="titleGray">Imagen</label>
-      <input type="file" formControlName="image">
+      <div class="grid-image">
+        <div class="title-column"><label class="titleGray">Imagen</label></div>
+        <div class="image-column"><input #file type="file" accept='image/*' (change)="preview(file.files)"
+            formControlName="image" class="input-file"></div>
+      </div>
+      <span *ngIf="message !== ''" class="message-image-invalid">{{message}}</span>
+      <img [src]="imgURL" class="image-preview" *ngIf="imgURL" >
     </form>
-      <button class="create" (click)="showProductForm = true" [disabled]="formImage.invalid">
-        Continuar
-      </button>
-      <ng-container  *ngIf="showProductForm">
-      <form class="product-form " [formGroup]="formProduct">
-      <input type="number" class="input-text" formControlName="code" placeholder="Código">
-      <input type="text" class="input-text" formControlName="name" placeholder="Nombre">
-      <input type="number" class="input-text" formControlName="value" placeholder="Valor unitario">
-      <mat-form-field appearance="fill">
-        <mat-label>Iva</mat-label>
-        <mat-select [formControl]="taxes" multiple>
-          <mat-select-trigger>
-            {{taxes.value ? taxes.value[0] : ''}}
-            <span *ngIf="taxes.value?.length > 1">
-              (+{{taxes.value.length - 1}} {{taxes.value?.length === 2 ? 'otro' : 'otros'}})
-            </span>
-          </mat-select-trigger>
-          <mat-option *ngFor="let tax of taxes$ | async" [value]="tax.id">{{tax.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
-    <button class="create" (click)="createProduct()" [disabled]="formProduct.invalid || taxes.value?.length < 1">
-      Crear
+    <button class="create" (click)="showProductForm = true" [disabled]="formImage.invalid || message !== ''">
+      Continuar
     </button>
-    </ng-container>
+  </ng-container>
+    <ng-template #product>
+      <form class="product-form " [formGroup]="formProduct">
+        <input type="number" class="input-text" formControlName="code" placeholder="Código">
+        <input type="text" class="input-text" formControlName="name" placeholder="Nombre">
+        <input type="number" class="input-text" formControlName="value" placeholder="Valor unitario">
+        <mat-form-field appearance="fill">
+          <mat-label>Iva</mat-label>
+          <mat-select [formControl]="taxes" multiple>
+            <mat-select-trigger>
+              {{taxes.value ? taxes.value[0] : ''}}
+              <span *ngIf="taxes.value?.length > 1">
+                (+{{taxes.value.length - 1}} {{taxes.value?.length === 2 ? 'otro' : 'otros'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let tax of taxes$ | async" [value]="tax.id">{{tax.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+      <button class="create" (click)="createProduct()" [disabled]="formProduct.invalid || taxes.value?.length < 1">
+        Crear
+      </button>
+    </ng-template>
   </div>
 </div>

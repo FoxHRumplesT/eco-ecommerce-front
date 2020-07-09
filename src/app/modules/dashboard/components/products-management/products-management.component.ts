@@ -11,19 +11,19 @@ import { Product, Basket, Tax, Result, CalculateTaxesPayload } from '../../dashb
 })
 export class ProductsManagementComponent implements OnInit {
 
-  public stepOne = true;
-  public stepTwo = false;
   public showNewProduct: boolean;
-  public showProductForm: boolean;
-
+  public showProductForm = false;
   public formProduct: FormGroup;
   public formImage: FormGroup;
+  public message: string;
+  public imagePath;
   taxes = new FormControl();
+  imgURL: any;
 
   constructor(
     private dashboardFacade: DashboardFacade
   ) {
-    const { required} = Validators;
+    const { required } = Validators;
     this.formProduct = new FormGroup({
       code: new FormControl('', [required]),
       name: new FormControl('', [required]),
@@ -51,6 +51,23 @@ export class ProductsManagementComponent implements OnInit {
     if (this.formProduct.invalid)
       return;
     this.showNewProduct = false;
+  }
+
+  preview(files) {
+    this.message = '';
+    if (files.length === 0)
+      return;
+    const mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.message = 'Solamente se permite imagenes';
+      return;
+    }
+    const reader = new FileReader();
+    this.imagePath = files;
+    reader.readAsDataURL(files[0]);
+    reader.onload = (_event) => {
+      this.imgURL = reader.result;
+    };
   }
 
 }

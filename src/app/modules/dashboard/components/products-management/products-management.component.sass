@@ -93,6 +93,28 @@
 .titleGray
   color: var(--gray-1)
 
+.grid-image
+    display: grid
+    grid-template-columns: auto auto
+    grid-template-rows: 1fr
+    gap: 1px 1px
+    grid-template-areas: "title-column image-column"
 
+.title-column
+  grid-area: title-column
+  align-self: center
+
+.image-column
+  grid-area: image-column
+  padding-left: 5px
+
+.image-preview
+  height: "200"
+  width: 100%
+  padding-top: 10px
+
+.message-image-invalid
+  font-size: 12px
+  color: red
 
 
