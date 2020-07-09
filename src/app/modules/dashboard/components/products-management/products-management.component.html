@@ -17,7 +17,7 @@
     </ul>
   </div>
   <div class="added-products" *ngIf="showNewProduct">
-    <fa-icon [icon]="['fas', 'window-close']" class="btn-close" (click)="showNewProduct = false"></fa-icon>
+    <fa-icon [icon]="['fas', 'window-close']" class="btn-close" (click)="closeNewProduct()"></fa-icon>
     <h3 class="title">Nuevo producto</h3>
     <ng-container *ngIf="!showProductForm; else product">
     <form class="product-form" [formGroup]="formImage">

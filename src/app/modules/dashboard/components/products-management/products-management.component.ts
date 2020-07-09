@@ -27,8 +27,7 @@ export class ProductsManagementComponent implements OnInit {
     this.formProduct = new FormGroup({
       code: new FormControl('', [required]),
       name: new FormControl('', [required]),
-      value: new FormControl('', [required]),
-      taxes: new FormControl(this.taxes, [required])
+      value: new FormControl('', [required])
     });
     this.formImage = new FormGroup({
       image: new FormControl('', [required])
@@ -50,7 +49,16 @@ export class ProductsManagementComponent implements OnInit {
   public createProduct() {
     if (this.formProduct.invalid)
       return;
-    this.showNewProduct = false;
+    this.closeNewProduct();
+  }
+
+  public closeNewProduct() {
+      this.showNewProduct = false;
+      this.formProduct.reset();
+      this.taxes.reset();
+      this.showProductForm = false;
+      this.imgURL = null;
+      this.formImage.reset();
   }
 
   preview(files) {
