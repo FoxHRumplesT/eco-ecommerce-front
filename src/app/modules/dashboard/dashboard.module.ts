@@ -25,6 +25,8 @@ import { ProductsBasketCardComponent } from './components/products-basket-card/p
 import { ProductsManagementComponent } from './components/products-management/products-management.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     ProductsCardComponent,
     ProductsBasketCardComponent,
     ProductsManagementComponent,
-    ModalComponent,
+    ModalComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatNativeDateModule,
     FormsModule,
     DashboardRoutingModule,
-    MatDialogModule
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
     DashboardFacade,

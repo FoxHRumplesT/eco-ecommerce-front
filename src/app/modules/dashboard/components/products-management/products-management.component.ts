@@ -14,8 +14,11 @@ export class ProductsManagementComponent implements OnInit {
   public stepOne = true;
   public stepTwo = false;
   public showNewProduct: boolean;
+  public showProductForm: boolean;
 
   public formProduct: FormGroup;
+  public formImage: FormGroup;
+  taxes = new FormControl();
 
   constructor(
     private dashboardFacade: DashboardFacade
@@ -25,10 +28,10 @@ export class ProductsManagementComponent implements OnInit {
       code: new FormControl('', [required]),
       name: new FormControl('', [required]),
       value: new FormControl('', [required]),
-      iva: new FormControl('', [required]),
-      quantity: new FormControl('', [required]),
-      taxType: new FormControl('', [required]),
-      taxValue: new FormControl('', [required])
+      taxes: new FormControl(this.taxes, [required])
+    });
+    this.formImage = new FormGroup({
+      image: new FormControl('', [required])
     });
   }
 
@@ -38,6 +41,10 @@ export class ProductsManagementComponent implements OnInit {
 
   get products$(): Observable<Product[]> {
     return this.dashboardFacade.products$;
+  }
+
+  get taxes$(): Observable<Tax[]> {
+    return this.dashboardFacade.taxes$;
   }
 
   public createProduct() {

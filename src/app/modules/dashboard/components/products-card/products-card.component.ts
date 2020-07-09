@@ -56,7 +56,7 @@ export class ProductsCardComponent {
     let titleValue: string;
     let messageValue: string;
     if (option === 'delete') {
-      titleValue = '!ALERTA¡',
+      titleValue = '¡ALERTA!',
       messageValue = '¿Estás  seguro de eliminar el registro?';
     }
     const dialogRef = this.dialog.open(ModalComponent, {
