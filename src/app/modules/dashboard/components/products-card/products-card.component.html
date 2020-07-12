@@ -13,8 +13,8 @@
   </ng-container>
   <ng-template #options>
       <div class="grid-container">
-      <div class="button edit" (click)="updateProduct()">Editar</div>
-      <div class="button delete" (click)="openDialog('delete')">Borrar</div>
+      <div class="button edit" (click)="updateProductEmit()">Editar</div>
+      <div class="button delete" (click)="openDialog('delete', product)">Borrar</div>
       </div>
   </ng-template>
   <ng-template #counter>

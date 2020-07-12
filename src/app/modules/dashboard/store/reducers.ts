@@ -68,7 +68,13 @@ const data = createReducer(
     }
     return ({ ...state, basket: newBasket });
   }),
-  on(actions.calculateTaxesInBasketSuccess, (state, { response }) => ({...state, result: response }))
+  on(actions.calculateTaxesInBasketSuccess, (state, { response }) => ({...state, result: response })),
+
+  on(actions.createProductSuccess, (state, { response }) => ({...state, result: response })),
+
+  on(actions.updateProductSuccess, (state, { response }) => ({...state, result: response })),
+
+  on(actions.deleteProductSuccess, (state, { response }) => ({...state, result: response }))
 );
 
 export const DashboardReducers = combineReducers({

@@ -52,4 +52,20 @@ export class DashboardFacade {
   public updateProductFromBasket(product: Product): void {
     this.store.dispatch(actions.updateProductFromBasketAction({ product }));
   }
+
+  public createProduct(product: Product): void {
+    this.store.dispatch(actions.createProductAction({ product }));
+  }
+
+  public updateProduct(product: Product): void {
+    this.store.dispatch(actions.updateProductAction({ product }));
+  }
+
+  public deleteProduct(product: Product): void {
+    this.store.dispatch(actions.deleteProductAction({ product }));
+  }
+
+  public loadImage(image: FormData): void {
+    this.store.dispatch(actions.loadImageAction({ image }));
+  }
 }

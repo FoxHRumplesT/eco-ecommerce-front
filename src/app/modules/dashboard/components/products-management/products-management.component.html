@@ -11,7 +11,10 @@
     </div>
     <ul class="products">
       <li *ngFor="let product of products$ | async">
-        <app-products-card [product]="product" [isBasket]=false>
+        <app-products-card
+        [product]="product"
+        [isBasket]=false
+        (updateProduct)="updateProductForm($event)">
         </app-products-card>
       </li>
     </ul>
@@ -29,7 +32,7 @@
       <span *ngIf="message !== ''" class="message-image-invalid">{{message}}</span>
       <img [src]="imgURL" class="image-preview" *ngIf="imgURL" >
     </form>
-    <button class="create" (click)="showProductForm = true" [disabled]="formImage.invalid || message !== ''">
+    <button class="create" (click)="loadImage()" [disabled]="formImage.invalid || message !== ''">
       Continuar
     </button>
   </ng-container>

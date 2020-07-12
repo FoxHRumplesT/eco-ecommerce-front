@@ -3,6 +3,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 import { Product, Basket } from '../../dashboard.entities';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../modal/modal.component';
+import { DashboardFacade } from '../../dashboard.facade';
 
 @Component({
   selector: 'app-products-card',
@@ -17,8 +18,10 @@ export class ProductsCardComponent {
   @Input() isBasket: boolean;
   @Output() addProduct: EventEmitter<Product> = new EventEmitter();
   @Output() removeProduct: EventEmitter<Product> = new EventEmitter();
+  @Output() updateProduct: EventEmitter<Product> = new EventEmitter();
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+              private dashboardFacade: DashboardFacade) { }
   get hasAddedProduct(): boolean {
     if (this.basket !== undefined)
       return this.basket.products.some(product => this.product.id === product.id);
@@ -44,20 +47,20 @@ export class ProductsCardComponent {
     return this.quantity <= this.product.quantity;
   }
 
-  public updateProduct() {
-
+  public updateProductEmit(): void {
+    this.updateProduct.emit(this.product);
   }
 
-  public deleteProduct() {
-
+  public deleteProduct(product: Product) {
+    this.dashboardFacade.deleteProduct(product);
   }
 
-  public openDialog(option: string): void {
+  public openDialog(option: string, product: Product): void {
     let titleValue: string;
     let messageValue: string;
     if (option === 'delete') {
       titleValue = '¡ALERTA!',
-      messageValue = '¿Estás  seguro de eliminar el registro?';
+      messageValue = '¿Estás  seguro de eliminar el registro ' + product.name + '?';
     }
     const dialogRef = this.dialog.open(ModalComponent, {
       width: '250px',
@@ -67,7 +70,7 @@ export class ProductsCardComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined && option === 'delete') {
-        this.deleteProduct();
+        this.deleteProduct(product);
       }
     });
   }

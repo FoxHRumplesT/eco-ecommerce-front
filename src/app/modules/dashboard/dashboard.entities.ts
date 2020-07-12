@@ -8,6 +8,7 @@ export class Product {
   quantity: number;
   code: string;
   is_free: boolean;
+  url: string;
 }
 
 export class Tax {

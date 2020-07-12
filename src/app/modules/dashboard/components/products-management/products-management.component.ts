@@ -16,10 +16,9 @@ export class ProductsManagementComponent implements OnInit {
   public formProduct: FormGroup;
   public formImage: FormGroup;
   public message: string;
-  public imagePath;
   taxes = new FormControl();
   imgURL: any;
-
+  prueba = 'https://zuama.blob.core.windows.net/dev/lider-sin-azucar.png';
   constructor(
     private dashboardFacade: DashboardFacade
   ) {
@@ -36,6 +35,7 @@ export class ProductsManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.dashboardFacade.fetchProducts(1);
+    this.formImage.valueChanges.subscribe(console.log);
   }
 
   get products$(): Observable<Product[]> {
@@ -49,7 +49,35 @@ export class ProductsManagementComponent implements OnInit {
   public createProduct() {
     if (this.formProduct.invalid)
       return;
+    const product = new Product();
+    product.code =  this.formProduct.controls.code.value;
+    product.url = 'https://zuama.blob.core.windows.net/dev/lider-sin-azucar.png';
+    product.tax = this.taxes.value;
+    product.value = this.formProduct.controls.value.value;
+    product.name = this.formProduct.controls.name.value;
+    this.dashboardFacade.createProduct(product);
     this.closeNewProduct();
+  }
+
+  public loadImage() {
+    const uploadData = new FormData();
+    uploadData.append('file', this.formImage.get('image').value);
+    uploadData.append('path', 'dev');
+    this.dashboardFacade.loadImage(uploadData);
+  }
+
+  public updateProductForm(product: Product): void {
+    this.showNewProduct = true;
+    this.formImage.controls.image.setValue('');
+    this.formProduct.controls.code.setValue (product.code);
+    this.formProduct.controls.name.setValue (product.name);
+    this.formProduct.controls.value.setValue (product.value);
+    this.taxes.setValue(product.tax);
+    this.imgURL = product.url_image;
+  }
+
+  public updateProduct(product: Product) {
+    this.dashboardFacade.updateProduct(product);
   }
 
   public closeNewProduct() {
@@ -71,7 +99,6 @@ export class ProductsManagementComponent implements OnInit {
       return;
     }
     const reader = new FileReader();
-    this.imagePath = files;
     reader.readAsDataURL(files[0]);
     reader.onload = (_event) => {
       this.imgURL = reader.result;
