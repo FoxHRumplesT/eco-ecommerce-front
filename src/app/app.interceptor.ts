@@ -13,11 +13,11 @@ export class AppInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = sessionStorage.getItem('t');
     const type = req.url.includes('files') ? `multipart/form-data` : `application/json`;
-    const headers = req.headers
+    let headers = req.headers
       .append('x-application-id', `${this.applicationId}`)
       .append('Accept', `*/*`)
-      .append('Content-Type', type)
       .append('Authorization', `${token}`);
+    headers = req.url.includes('files') ? headers : headers.append('Content-Type', 'application/json');
 
     const newReq = req.clone({ headers });
     return next.handle(newReq);

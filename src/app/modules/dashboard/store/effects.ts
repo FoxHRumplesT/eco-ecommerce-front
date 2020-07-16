@@ -42,6 +42,16 @@ export class DashboardEffects {
   );
 
   @Effect()
+  fetchProductsInStock$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.fetchProductsInStockAction),
+    switchMap(({ page }) => this.services.fetchProductsInStock$(page).pipe(
+      map(response => ({ response: response.results, error: null })),
+      catchError(error => of({ error, response: [] })),
+    )),
+    map(({ response, error }) => actions.fetchProductsInStockSuccessAction({ response }))
+  );
+
+  @Effect()
   fetchTaxesAction$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchTaxesAction),
     switchMap(_ => this.services.fetchTaxes$().pipe(
@@ -64,11 +74,20 @@ export class DashboardEffects {
   @Effect()
   createProduct$: Observable<Action> = this.actions$.pipe(
     ofType(actions.createProductAction),
+    switchMap(({ product, formDataToUploadImage }) => this.services.uploadImage$(formDataToUploadImage).pipe(
+      map(response => ({ product: { ...product, urlImage: response.message}, error: null })),
+      catchError(error => of({ error, product: {...product, urlImage: ''} })),
+    )),
     switchMap(({ product }) => this.services.createProduct$(product).pipe(
       map(response => ({ response: response.message, error: null })),
-      catchError(error => of({ error, response: [] })),
+      catchError(error => of({ error, response: null })),
     )),
-    map(({ response, error }) => actions.createProductSuccess({ response }))
+    concatMap(({ response, error }) => !error ? [
+      actions.notificationAction({ msg: 'Producto creado!', status: NgxNotificationStatusMsg.SUCCESS}),
+      actions.fetchProductsAction({ page: 1 })
+    ] : [
+      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE}),
+    ])
   );
 
   @Effect()
@@ -88,24 +107,13 @@ export class DashboardEffects {
       map(response => ({ response: response.message, error: null })),
       catchError(error => of({ error, response: [] })),
     )),
-    concatMap(({ response, error }) =>
-    error === null ? [actions.deleteProductSuccess({ response }), actions.notificationAction({
-      msg: 'OK',
-      status: NgxNotificationStatusMsg.SUCCESS
-    })] : [actions.deleteProductError(), actions.notificationAction({
-      msg: 'Fail',
-      status: NgxNotificationStatusMsg.FAILURE
-    })])
+    concatMap(({ response, error }) => !error ? [
+        actions.deleteProductSuccess({ response }),
+        actions.notificationAction({ msg: 'Producto eliminado', status: NgxNotificationStatusMsg.SUCCESS })
+      ] : [
+        actions.deleteProductError(),
+        actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
+      ]
+    )
   );
-
-  @Effect()
-  loadImage$: Observable<Action> = this.actions$.pipe(
-    ofType(actions.loadImageAction),
-    switchMap(({ image }) => this.services.loadImage$(image).pipe(
-      map(response => ({ response: response.message, error: null })),
-      catchError(error => of({ error, response: [] })),
-    )),
-    map(({ response, error }) => actions.updateProductSuccess({ response }))
-  );
-
 }

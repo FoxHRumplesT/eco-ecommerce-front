@@ -39,13 +39,6 @@
         +flex(center, center)
         width: 235px
         height: 350px
-  .product-form
-    margin: 0 10px
-    border-radius: 10px
-    padding: 20px
-    background: white
-    .input-text
-      margin-bottom: 10px
 
   .added-products
     +flex(null, null, column)
@@ -53,29 +46,46 @@
     margin: 0 0 0 auto
     background: var(--blue-1)
     border-radius: 0 16px 16px 0
+    .close
+      +flex(center, flex-end)
+      padding: 10px 10px 0 0
+      .close-button
+        +flex(center, center)
+        width: 26px
+        height: 26px
+        cursor: pointer
+        border-radius: 50%
+        background-color: var(--red-1)
+        .close-icon
+          color: var(--white-1)
     .title
       +bold()
       margin: 20px 0
       text-align: center
       color: var(--green-1)
+    .product-form
+      margin: 0 10px
+      border-radius: 10px
+      padding: 20px
+      background: white
+      .input-text
+        margin-bottom: 10px
+    .create
+      +flex(center, center)
+      height: 40px
+      margin: 10px
+      cursor: pointer
+      border-radius: 16px
+      color: var(--white-1)
+      background-color: var(--yellow-1)
+      &:disabled
+        background: var(--gray-1)
+        cursor: not-allowed
     .items
       flex: 1
       overflow-y: scroll
       li
         +flex()
-
-
-  .create
-    +flex(center, center)
-    height: 40px
-    margin: 10px
-    cursor: pointer
-    border-radius: 16px
-    color: var(--white-1)
-    background-color: var(--yellow-1)
-    &:disabled
-      background: var(--gray-1)
-      cursor: not-allowed
 
   .new-product
     padding: 15px

@@ -25,6 +25,7 @@ const initialDataState: DataState = {
 const data = createReducer(
   initialDataState,
   on(actions.fetchProductsSuccessAction, (state, { response }) => ({ ...state, products: response })),
+  on(actions.fetchProductsInStockSuccessAction, (state, { response }) => ({ ...state, products: response })),
   on(actions.fetchTaxesSuccessAction, (state, { response }) => ({ ...state, taxes: response })),
   on(actions.addProductToBasketAction, (state, { product }) => {
     const newBasket = { ...state.basket };

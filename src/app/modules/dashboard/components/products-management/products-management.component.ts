@@ -1,41 +1,47 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
+import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result, CalculateTaxesPayload } from '../../dashboard.entities';
+import { Product, Tax } from '../../dashboard.entities';
+import { ModalComponent } from '../modal/modal.component';
+
 @Component({
   selector: 'app-products-management',
   templateUrl: './products-management.component.html',
   styleUrls: ['./products-management.component.sass']
 })
-export class ProductsManagementComponent implements OnInit {
+export class ProductsManagementComponent implements OnInit, OnDestroy {
 
-  public showNewProduct: boolean;
   public showProductForm = false;
+  public showProductImageStep = true;
   public formProduct: FormGroup;
-  public formImage: FormGroup;
-  public message: string;
-  taxes = new FormControl();
-  imgURL: any;
-  prueba = 'https://zuama.blob.core.windows.net/dev/lider-sin-azucar.png';
+  public uploadedImage: File;
+  public previewImageURL: string | ArrayBuffer;
+  private isEditingProduct = false;
+  private subscriptions: Subscription[] = [];
+
   constructor(
-    private dashboardFacade: DashboardFacade
+    private dashboardFacade: DashboardFacade,
+    public dialog: MatDialog
   ) {
     const { required } = Validators;
     this.formProduct = new FormGroup({
       code: new FormControl('', [required]),
       name: new FormControl('', [required]),
-      value: new FormControl('', [required])
-    });
-    this.formImage = new FormGroup({
-      image: new FormControl('', [required])
+      value: new FormControl('', [required]),
+      taxes: new FormControl([], [required])
     });
   }
 
   ngOnInit(): void {
     this.dashboardFacade.fetchProducts(1);
-    this.formImage.valueChanges.subscribe(console.log);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   get products$(): Observable<Product[]> {
@@ -46,63 +52,65 @@ export class ProductsManagementComponent implements OnInit {
     return this.dashboardFacade.taxes$;
   }
 
-  public createProduct() {
-    if (this.formProduct.invalid)
-      return;
-    const product = new Product();
-    product.code =  this.formProduct.controls.code.value;
-    product.url = 'https://zuama.blob.core.windows.net/dev/lider-sin-azucar.png';
-    product.tax = this.taxes.value;
-    product.value = this.formProduct.controls.value.value;
-    product.name = this.formProduct.controls.name.value;
-    this.dashboardFacade.createProduct(product);
-    this.closeNewProduct();
-  }
+  public setImagePreview(files: FileList): void {
+    if (!files.length) return;
 
-  public loadImage() {
-    const uploadData = new FormData();
-    uploadData.append('file', this.formImage.get('image').value);
-    uploadData.append('path', 'dev');
-    this.dashboardFacade.loadImage(uploadData);
-  }
-
-  public updateProductForm(product: Product): void {
-    this.showNewProduct = true;
-    this.formImage.controls.image.setValue('');
-    this.formProduct.controls.code.setValue (product.code);
-    this.formProduct.controls.name.setValue (product.name);
-    this.formProduct.controls.value.setValue (product.value);
-    this.taxes.setValue(product.tax);
-    this.imgURL = product.url_image;
-  }
-
-  public updateProduct(product: Product) {
-    this.dashboardFacade.updateProduct(product);
-  }
-
-  public closeNewProduct() {
-      this.showNewProduct = false;
-      this.formProduct.reset();
-      this.taxes.reset();
-      this.showProductForm = false;
-      this.imgURL = null;
-      this.formImage.reset();
-  }
-
-  preview(files) {
-    this.message = '';
-    if (files.length === 0)
-      return;
     const mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      this.message = 'Solamente se permite imagenes';
+    if (!mimeType.match(/image\/*/)) {
+      this.dashboardFacade.sendMessage('El archivo debe ser una imagen', NgxNotificationStatusMsg.FAILURE);
       return;
     }
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
     reader.onload = (_event) => {
-      this.imgURL = reader.result;
+      this.previewImageURL = reader.result;
     };
+    this.uploadedImage = files.item(0);
+  }
+
+  public goToProductInfoStep() {
+    this.showProductImageStep = !this.showProductImageStep;
+  }
+
+  public createOrEditProduct() {
+    if (!this.isEditingProduct) {
+      const formData = new FormData();
+      formData.append('file', this.uploadedImage);
+      formData.append('path', 'dev');
+      this.dashboardFacade.createProduct(this.formProduct.value, formData);
+    } else {
+      this.dashboardFacade.updateProduct({
+        ...this.formProduct.value, urlImage: this.previewImageURL
+      });
+      this.isEditingProduct = false;
+    }
+    this.closeNewProduct();
+  }
+
+  public setProductToEdit({ code, name, value, url_image}: Product): void {
+    this.showProductForm = true;
+    this.isEditingProduct = true;
+    this.formProduct.setValue({ taxes: [1, 2], code, name, value });
+    this.previewImageURL = url_image;
+  }
+
+  public closeNewProduct() {
+    this.showProductForm = false;
+    this.formProduct.reset();
+    this.previewImageURL = null;
+  }
+
+  public openDeleteModal(product: Product): void {
+    const message = '¿Estás  seguro de eliminar ' + product.name + '?';
+    const dialogRef = this.dialog.open(ModalComponent, {
+      width: '250px',
+      disableClose: true,
+      data: { message }
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe(result => {
+      if (result) this.dashboardFacade.deleteProduct(product);
+    }));
   }
 
 }

@@ -1,14 +1,14 @@
 export class Product {
   id: number;
   name: string;
-  url_image: string;
+  url_image?: string;
+  urlImage?: string;
   value: number;
   tax: number[];
   lot: string;
   quantity: number;
   code: string;
   is_free: boolean;
-  url: string;
 }
 
 export class Tax {
