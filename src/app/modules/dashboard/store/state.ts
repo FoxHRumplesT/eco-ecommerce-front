@@ -10,6 +10,7 @@ export interface DataState {
   taxes: Tax[];
   basket: Basket;
   result: Result;
+  messageSuccess: string;
 }
 export interface State {
   ui: UIState;

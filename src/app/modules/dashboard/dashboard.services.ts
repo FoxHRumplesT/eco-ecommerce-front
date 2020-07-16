@@ -6,9 +6,13 @@ import { environment } from 'src/environments/environment';
 import { Product, Tax, Basket, Result, CalculateTaxesPayload } from './dashboard.entities';
 
 const api = {
-  products: (page: number) => `${environment.api}/ms-e-bill/api/stock?page=${page}`,
+  productsInStock: (page: number) => `${environment.api}/ms-e-bill/api/stock?page=${page}`,
+  products: (page: number) => `${environment.api}/ms-e-bill/api/product?page=${page}`,
   taxes: () => `${environment.api}/ms-e-bill/api/taxes`,
   calculateTaxes: () => `${environment.api}/ms-e-bill/api/bill/calculate`,
+  createProduct: () => `${environment.api}/ms-e-bill/api/product`,
+  updateProduct: (ID: number) => `${environment.api}/ms-e-bill/api/product/${ID}`,
+  loadImage: () => `${environment.blobServer}/api/files`
 };
 
 @Injectable()
@@ -18,6 +22,10 @@ export class DashboardServices {
     private http: HttpClient
   ) {}
 
+  public fetchProductsInStock$(page: number): Observable<{ isSuccess: boolean, message: string, results: Product[]}> {
+    return this.http.get<{ isSuccess: boolean, message: string, results: Product[]}>(api.productsInStock(page));
+  }
+
   public fetchProducts$(page: number): Observable<{ isSuccess: boolean, message: string, results: Product[]}> {
     return this.http.get<{ isSuccess: boolean, message: string, results: Product[]}>(api.products(page));
   }
@@ -26,7 +34,23 @@ export class DashboardServices {
     return this.http.get<{ isSuccess: boolean, message: string, results: Tax[]}>(api.taxes());
   }
 
-  public calculateTaxesInBasket$(payload: CalculateTaxesPayload[]): Observable<{ isSuccess: boolean, message: string, result: Result}> {
-    return this.http.post<{ isSuccess: boolean, message: string, result: Result}>(api.calculateTaxes(), payload);
+  public calculateTaxesInBasket$(basket: Basket): Observable<{ isSuccess: boolean, message: string, result: Result}> {
+    return this.http.post<{ isSuccess: boolean, message: string, result: Result}>(api.calculateTaxes(), basket);
+  }
+
+  public createProduct$(product: Product): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.post<{ isSuccess: boolean, message: string}>(api.createProduct(), product);
+  }
+
+  public updateProduct$(product: Product): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.put<{ isSuccess: boolean, message: string}>(api.updateProduct(product.id), product);
+  }
+
+  public deleteProduct$(product: Product): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.delete<{ isSuccess: boolean, message: string}>(api.updateProduct(product.id));
+  }
+
+  public uploadImage$(formDataToUploadImage: FormData): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.post<{ isSuccess: boolean, message: string}>(api.loadImage(), formDataToUploadImage);
   }
 }

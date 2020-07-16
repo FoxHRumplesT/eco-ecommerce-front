@@ -12,23 +12,21 @@ export class ProductsCardComponent {
 
   @Input() product: Product;
   @Input() basket: Basket;
+  @Input() isBasket: boolean;
   @Output() addProduct: EventEmitter<Product> = new EventEmitter();
   @Output() removeProduct: EventEmitter<Product> = new EventEmitter();
+  @Output() setProductToEdit: EventEmitter<Product> = new EventEmitter();
+  @Output() openDeleteModal: EventEmitter<Product> = new EventEmitter();
+
+  constructor() { }
 
   get hasAddedProduct(): boolean {
-    return this.basket.products.some(product => this.product.id === product.id);
+    if (this.basket !== undefined)
+      return this.basket.products.some(product => this.product.id === product.id);
   }
 
   get quantity(): number {
     return this.basket.products.find(product => product.id === this.product.id).quantity;
-  }
-
-  public addProductToBasket(): void {
-    this.addProduct.emit(this.product);
-  }
-
-  public removeProductToBasket(): void {
-    this.removeProduct.emit(this.product);
   }
 
   get enableAddAction(): boolean {
@@ -37,6 +35,14 @@ export class ProductsCardComponent {
 
   get enableRemoveAction(): boolean {
     return this.quantity <= this.product.quantity;
+  }
+
+  public addProductToBasket(): void {
+    this.addProduct.emit(this.product);
+  }
+
+  public removeProductToBasket(): void {
+    this.removeProduct.emit(this.product);
   }
 
 }

@@ -22,6 +22,11 @@ import { DashboardServices } from './dashboard.services';
 import { DashboardGuard } from './dashboard.guard';
 import { ProductsCardComponent } from './components/products-card/products-card.component';
 import { ProductsBasketCardComponent } from './components/products-basket-card/products-basket-card.component';
+import { ProductsManagementComponent } from './components/products-management/products-management.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -32,6 +37,8 @@ import { ProductsBasketCardComponent } from './components/products-basket-card/p
     BillComponent,
     ProductsCardComponent,
     ProductsBasketCardComponent,
+    ProductsManagementComponent,
+    ModalComponent
   ],
   imports: [
     CommonModule,
@@ -45,6 +52,10 @@ import { ProductsBasketCardComponent } from './components/products-basket-card/p
     MatNativeDateModule,
     FormsModule,
     DashboardRoutingModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [
     DashboardFacade,

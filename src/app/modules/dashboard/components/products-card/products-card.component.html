@@ -6,21 +6,29 @@
     </ng-template>
   </figure>
   <div class="name">{{ product.name }}</div>
-  <ng-container *ngIf="!hasAddedProduct; else counter">
-    <div class="button add" (click)="addProductToBasket()">Agregar</div>
-  </ng-container>
-  <ng-template #counter>
-    <div class="counter">
-      <button class="button" [disabled]="!enableRemoveAction" (click)="removeProductToBasket()">
-        <fa-icon [icon]="['fas', 'minus']"></fa-icon>
-      </button>
-      <div class="number">
-        {{ quantity }}
+  <ng-container *ngIf="isBasket; else options">
+    <ng-container *ngIf="!hasAddedProduct; else counter">
+      <div class="button add" (click)="addProductToBasket()">Agregar</div>
+    </ng-container>
+    <ng-template #counter>
+      <div class="counter">
+        <button class="button" [disabled]="!enableRemoveAction" (click)="removeProductToBasket()">
+          <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+        </button>
+        <div class="number">
+          {{ quantity }}
+        </div>
+        <button class="button" [disabled]="!enableAddAction" (click)="addProductToBasket()">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        </button>
       </div>
-      <button class="button" [disabled]="!enableAddAction" (click)="addProductToBasket()">
-        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-      </button>
+    </ng-template>
+  </ng-container>
+  <ng-template #options>
+    <div class="grid-container">
+      <div class="button edit" (click)="setProductToEdit.emit(product)">Editar</div>
+      <div class="button delete" (click)="openDeleteModal.emit(product)">Borrar</div>
     </div>
   </ng-template>
-  <div class="stock">Disponibles: {{ product.quantity }}</div>
+  <div *ngIf="isBasket" class="stock">Disponibles: {{ product.quantity }}</div>
 </div>

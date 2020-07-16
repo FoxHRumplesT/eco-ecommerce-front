@@ -74,14 +74,7 @@ export class ProductsComponent implements OnInit {
     if (this.stepOne) {
       this.stepOne = !this.stepOne;
       this.stepTwo = !this.stepTwo;
-      const payload: CalculateTaxesPayload[] = basket.products.map(product => ({
-        code: product.code,
-        quantity: basket.products.filter(p => p.id === product.id).length,
-        lot: product.lot,
-        value: product.value,
-        is_free: product.is_free
-      }));
-      this.dashboardFacade.calculateTaxesInBasket(payload);
+      this.dashboardFacade.calculateTaxesInBasket(basket);
     } else {
       // TODO create bill
     }

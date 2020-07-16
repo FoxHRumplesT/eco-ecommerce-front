@@ -1,8 +1,9 @@
+import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { Product, Tax, Basket, Result, CalculateTaxesPayload } from './dashboard.entities';
+import { Product, Tax, Basket, Result } from './dashboard.entities';
 import { productsSelector, taxesSelector, basketSelector, resultSelector } from './store/selectors';
 import * as actions from './store/actions';
 
@@ -33,6 +34,10 @@ export class DashboardFacade {
     this.store.dispatch(actions.fetchProductsAction({ page }));
   }
 
+  public fetchProductsInStock(page: number): void {
+    this.store.dispatch(actions.fetchProductsInStockAction({ page }));
+  }
+
   public fetchTaxes(): void {
     this.store.dispatch(actions.fetchTaxesAction());
   }
@@ -45,11 +50,27 @@ export class DashboardFacade {
     this.store.dispatch(actions.removeProductToBasketAction({ product }));
   }
 
-  public calculateTaxesInBasket(payload: CalculateTaxesPayload[]) {
-    this.store.dispatch(actions.calculateTaxesInBasket({ payload }));
+  public calculateTaxesInBasket(basket: Basket) {
+    this.store.dispatch(actions.calculateTaxesInBasket({ basket }));
   }
 
   public updateProductFromBasket(product: Product): void {
     this.store.dispatch(actions.updateProductFromBasketAction({ product }));
+  }
+
+  public createProduct(product: Product, formDataToUploadImage: FormData): void {
+    this.store.dispatch(actions.createProductAction({ product, formDataToUploadImage }));
+  }
+
+  public updateProduct(product: Product): void {
+    this.store.dispatch(actions.updateProductAction({ product }));
+  }
+
+  public deleteProduct(product: Product): void {
+    this.store.dispatch(actions.deleteProductAction({ product }));
+  }
+
+  public sendMessage(msg: string, status: NgxNotificationStatusMsg): void {
+    this.store.dispatch(actions.notificationAction({ msg, status }));
   }
 }
