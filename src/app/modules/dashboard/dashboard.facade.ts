@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { Product, Tax, Basket, Result } from './dashboard.entities';
-import { productsSelector, taxesSelector, basketSelector, resultSelector } from './store/selectors';
+import { Product, Tax, Basket, Result, Client } from './dashboard.entities';
+import { productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector } from './store/selectors';
 import * as actions from './store/actions';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class DashboardFacade {
@@ -30,6 +31,18 @@ export class DashboardFacade {
     select(resultSelector)
   );
 
+  public clients$: Observable<Client[]> = this.store.pipe(
+    select(clientSelector)
+  );
+
+  public isEnabledBillButton$: Observable<boolean> = this.store.pipe(
+    select(uiSelector), map(state => state.isEnabledBillButton)
+  );
+
+  public setEnabledBillButton(state: boolean): void {
+    this.store.dispatch(actions.setEnableBillButtonAction({ state }));
+  }
+
   public fetchProducts(page: number): void {
     this.store.dispatch(actions.fetchProductsAction({ page }));
   }
@@ -51,7 +64,7 @@ export class DashboardFacade {
   }
 
   public calculateTaxesInBasket(basket: Basket) {
-    this.store.dispatch(actions.calculateTaxesInBasket({ basket }));
+    this.store.dispatch(actions.calculateTaxesInBasketAction({ basket }));
   }
 
   public updateProductFromBasket(product: Product): void {
@@ -72,5 +85,13 @@ export class DashboardFacade {
 
   public sendMessage(msg: string, status: NgxNotificationStatusMsg): void {
     this.store.dispatch(actions.notificationAction({ msg, status }));
+  }
+
+  public createClient(client: Client): void {
+    this.store.dispatch(actions.createClientAction({ client }));
+  }
+
+  public fetchIDNumber(idNumber: number): void {
+    this.store.dispatch(actions.fetchIDNumberAction({ idNumber }));
   }
 }

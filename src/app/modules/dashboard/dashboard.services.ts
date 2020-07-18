@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { Product, Tax, Basket, Result, CalculateTaxesPayload } from './dashboard.entities';
+import { Product, Tax, Basket, Result, CalculateTaxesPayload, Client } from './dashboard.entities';
 
 const api = {
   productsInStock: (page: number) => `${environment.api}/ms-e-bill/api/stock?page=${page}`,
@@ -12,7 +12,9 @@ const api = {
   calculateTaxes: () => `${environment.api}/ms-e-bill/api/bill/calculate`,
   createProduct: () => `${environment.api}/ms-e-bill/api/product`,
   updateProduct: (ID: number) => `${environment.api}/ms-e-bill/api/product/${ID}`,
-  loadImage: () => `${environment.blobServer}/api/files`
+  loadImage: () => `${environment.blobServer}/api/files/`,
+  createClient: () => `${environment.api}/ms-client/api/client`,
+  fetchIDNumber: (idNumber: number) => `${environment.api}/ms-client/api/client?numberIdentification=${idNumber}`,
 };
 
 @Injectable()
@@ -52,5 +54,13 @@ export class DashboardServices {
 
   public uploadImage$(formDataToUploadImage: FormData): Observable<{ isSuccess: boolean, message: string}> {
     return this.http.post<{ isSuccess: boolean, message: string}>(api.loadImage(), formDataToUploadImage);
+  }
+
+  public createClient$(client: Client): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.post<{ isSuccess: boolean, message: string}>(api.createClient(), client);
+  }
+
+  public fetchIDNumber$(idNumber: number): Observable<{ isSuccess: boolean, message: string, result: Client[]}> {
+    return this.http.get<{ isSuccess: boolean, message: string, result: Client[]}>(api.fetchIDNumber(idNumber));
   }
 }

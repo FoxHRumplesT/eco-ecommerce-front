@@ -25,7 +25,8 @@ body
 
 .mat-form-field
   width: 100%
-  margin-bottom: 10px
+  display: inline
+  margin-bottom: -0.8em
   &.mat-focused
     .mat-form-field-wrapper
       .mat-form-field-underline
@@ -45,7 +46,6 @@ body
   .mat-form-field-wrapper
     .mat-form-field-flex
       .mat-form-field-infix
-        border: none
         .mat-form-field-label-wrapper
           .mat-form-field-label
             font-size: 16px
@@ -61,13 +61,16 @@ body
         transform: scale(1)
         background: var(--gray-1)
 
+.mat-form-field-appearance-fill .mat-form-field-flex
+  padding: 0 !important
+
 .mat-dialog-container
-  background-color: white
-  color: black
+  background-color: var(--white-1)
+  color: var(--black-1)
   border-radius: 12px
 
 .mat-select-value
-  color: black
+  color: var(--black-1)
 
 .mat-primary .mat-option.mat-selected:not(.mat-option-disabled)
   color: var(--green-1)
@@ -76,16 +79,20 @@ body
   background: var(--green-1)
 
 .mat-select-panel
-  background: white
+  background: var(--white-1)
 
 .mat-option.mat-active
-  background: white
-  color: black
+  background: var(--white-1)
+  color: var(--black-1)
 
 .mat-option
-  color: black
+  color: var(--black-1)
 
 .mat-pseudo-checkbox
-  color: black
+  color: var(--black-1)
 
+.mat-option.mat-active
+  color: var(--green-1)
 
+.mat-autocomplete-panel
+  background: var(--white-1)

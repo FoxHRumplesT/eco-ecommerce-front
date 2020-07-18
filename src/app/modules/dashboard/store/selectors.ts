@@ -11,3 +11,5 @@ export const resultSelector = createSelector(stateSelector, state => state.data.
 export const createProductSelector = createSelector(stateSelector, state => state.data.messageSuccess);
 export const updateProductSelector = createSelector(stateSelector, state => state.data.messageSuccess);
 export const deleteProductSelector = createSelector(stateSelector, state => state.data.messageSuccess);
+export const createClientSelector = createSelector(stateSelector, state => state.data.messageSuccess);
+export const clientSelector = createSelector(stateSelector, state => state.data.clients);

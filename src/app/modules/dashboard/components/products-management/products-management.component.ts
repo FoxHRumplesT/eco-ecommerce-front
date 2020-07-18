@@ -22,6 +22,7 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
   public previewImageURL: string | ArrayBuffer;
   private isEditingProduct = false;
   private subscriptions: Subscription[] = [];
+  public buttonName = 'Crear';
 
   constructor(
     private dashboardFacade: DashboardFacade,
@@ -88,6 +89,7 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
   }
 
   public setProductToEdit({ code, name, value, url_image}: Product): void {
+    this.buttonName = 'Modificar';
     this.showProductForm = true;
     this.isEditingProduct = true;
     this.formProduct.setValue({ taxes: [1, 2], code, name, value });
@@ -98,6 +100,7 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
     this.showProductForm = false;
     this.formProduct.reset();
     this.previewImageURL = null;
+    this.uploadedImage = null;
   }
 
   public openDeleteModal(product: Product): void {

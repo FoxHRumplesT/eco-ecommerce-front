@@ -6,20 +6,24 @@ import { Result } from '../dashboard.entities';
 
 const initialUiState: UIState = {
   isLoadingProducts: true,
-  isLoadingTaxes: true
+  isLoadingTaxes: true,
+  isEnabledBillButton: false,
 } as UIState;
 
 const ui = createReducer(
   initialUiState,
   on(actions.fetchProductsAction, (state, payload) => ({ ...state, isLoadingProduct: true })),
   on(actions.fetchProductsSuccessAction, (state, payload) => ({ ...state, isLoadingProduct: false })),
+  on(actions.setEnableBillButtonAction, (_state, {state}) => ({ ..._state, isEnabledBillButton: state })),
+
 );
 
 const initialDataState: DataState = {
   products: [],
   taxes: [],
   basket: { products: [] },
-  result: { summary: [] }
+  result: { summary: [] },
+  clients: []
 } as DataState;
 
 const data = createReducer(
@@ -69,13 +73,17 @@ const data = createReducer(
     }
     return ({ ...state, basket: newBasket });
   }),
-  on(actions.calculateTaxesInBasketSuccess, (state, { response }) => ({...state, result: response })),
+  on(actions.calculateTaxesInBasketSuccessAction, (state, { response }) => ({...state, result: response })),
 
-  on(actions.createProductSuccess, (state, { response }) => ({...state, result: response })),
+  on(actions.createProductSuccessAction, (state, { response }) => ({...state, result: response })),
 
-  on(actions.updateProductSuccess, (state, { response }) => ({...state, result: response })),
+  on(actions.updateProductSuccessAction, (state, { response }) => ({...state, result: response })),
 
-  on(actions.deleteProductSuccess, (state, { response }) => ({...state, result: response }))
+  on(actions.deleteProductSuccessAction, (state, { response }) => ({...state, result: response })),
+
+  on(actions.createClientSuccessAction, (state, { response }) => ({...state, result: response })),
+
+  on(actions.fetchIDNumberSuccessAction, (state, { response }) => ({...state, clients: response }))
 );
 
 export const DashboardReducers = combineReducers({

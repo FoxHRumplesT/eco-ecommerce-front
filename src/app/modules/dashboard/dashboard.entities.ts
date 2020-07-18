@@ -43,3 +43,15 @@ export class CalculateTaxesPayload {
   value: number;
   is_free: boolean;
 }
+
+export class Client {
+  document_type: string;
+  number_identification: string;
+  name: string;
+  lastname: string;
+  last_name: string;
+  email: string;
+  phone: number;
+  new: boolean;
+  country_code: string;
+}

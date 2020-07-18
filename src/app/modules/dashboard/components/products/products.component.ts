@@ -1,38 +1,66 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscriber, Subscription } from 'rxjs';
+import { map, startWith, debounceTime, tap } from 'rxjs/operators';
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result, CalculateTaxesPayload } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result, CalculateTaxesPayload, Client } from '../../dashboard.entities';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.sass']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
 
   public stepOne = true;
   public stepTwo = false;
-
+  typeDocument = [
+    { value: 'cc', description: 'Cédula' },
+    { value: 'nit', description: 'Nit' },
+    { value: 'ce', description: 'Extranjería' },
+    { value: 'pp', description: 'Pasaporte' }
+  ];
+  selectetTypeDoc = this.typeDocument[0].value;
   public formClient: FormGroup;
+  client = new Client();
+  newClient = true;
+  private subscriptions: Subscription[] = [];
+
 
   constructor(
     private dashboardFacade: DashboardFacade
   ) {
     const { required, email, minLength, maxLength } = Validators;
     this.formClient = new FormGroup({
-      document: new FormControl('', [required]),
-      name: new FormControl('', [required]),
+      number_identification: new FormControl('', [required]),
+      name: new FormControl(this.client.name, [required]),
       email: new FormControl('', [required, email]),
       phone: new FormControl('', [required, minLength(7), maxLength(10)]),
-      billingDate: new FormControl('', [required]),
-      payDate: new FormControl('', [required])
+      billingDate: new FormControl(new Date(), [required]),
+      payDate: new FormControl(new Date(), [required]),
+      document_type: new FormControl('', [required]),
+      lastname: new FormControl('', [required]),
+      country_code: new FormControl('+57', [required]),
+      new: new FormControl('true', [required]),
+      last_name: new FormControl(''),
     });
   }
 
   ngOnInit(): void {
-    this.dashboardFacade.fetchProducts(1);
+    this.dashboardFacade.fetchProductsInStock(1);
+    this.subscriptions.push(
+      this.formClient.controls.number_identification.valueChanges.pipe(
+        debounceTime(2000))
+        .subscribe(
+          value => {
+            this.dashboardFacade.fetchIDNumber(value);
+          }
+        )
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
   get basket$(): Observable<Basket> {
@@ -49,6 +77,10 @@ export class ProductsComponent implements OnInit {
 
   get result$(): Observable<Result> {
     return this.dashboardFacade.result$;
+  }
+
+  get clients$(): Observable<Client[]> {
+    return this.dashboardFacade.clients$;
   }
 
   public differentProducts(products: Product[]): Product[] {
@@ -81,6 +113,33 @@ export class ProductsComponent implements OnInit {
   }
 
   public toggleFreeProduct(product: Product): void {
-    this.dashboardFacade.updateProductFromBasket({...product, is_free: !product.is_free});
+    this.dashboardFacade.updateProductFromBasket({ ...product, is_free: !product.is_free });
+  }
+
+  public createClient() {
+    this.formClient.controls.phone.setValue(Number(this.formClient.controls.phone.value));
+    this.formClient.controls.last_name.setValue(this.formClient.controls.lastname.value);
+    this.dashboardFacade.createClient(this.formClient.value);
+  }
+
+  public displayIDClient(client: Client) {
+    if (client) {
+      return client.number_identification;
+    }
+  }
+  public setClient(client: Client) {
+    this.formClient.controls.name.setValue(client.name);
+    this.formClient.controls.lastname.setValue(client.lastname);
+    this.formClient.controls.email.setValue(client.email);
+    this.dashboardFacade.setEnabledBillButton(true);
+    this.newClient = false;
+  }
+
+  get validateBillButton$(): Observable<boolean> {
+    return this.dashboardFacade.isEnabledBillButton$.pipe(
+      map(isEnabledBillButton =>
+        (this.stepTwo && this.formClient.invalid) ||
+        (this.stepTwo && !isEnabledBillButton)
+    ));
   }
 }
