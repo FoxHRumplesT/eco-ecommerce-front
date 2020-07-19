@@ -6,13 +6,15 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import {NgxNotificationMsgModule} from 'ngx-notification-msg'
+import { NgxNotificationMsgModule} from 'ngx-notification-msg';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppInterceptor } from './app.interceptor';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -29,13 +31,14 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     }) : [],
     EffectsModule.forRoot([]),
     AppRoutingModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    NgxSpinnerModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AppInterceptor,
-      multi: true
+      multi: true,
     },
   ],
   bootstrap: [AppComponent]

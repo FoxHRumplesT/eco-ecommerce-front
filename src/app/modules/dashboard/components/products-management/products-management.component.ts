@@ -3,10 +3,12 @@ import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { DashboardFacade } from '../../dashboard.facade';
 import { Product, Tax } from '../../dashboard.entities';
 import { ModalComponent } from '../modal/modal.component';
+import { Constants } from '../../dashboard.constants';
 
 @Component({
   selector: 'app-products-management',
@@ -18,6 +20,7 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
   public showProductForm = false;
   public showProductImageStep = true;
   public formProduct: FormGroup;
+  public formSearch: FormGroup;
   public uploadedImage: File;
   public previewImageURL: string | ArrayBuffer;
   private isEditingProduct = false;
@@ -35,10 +38,23 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
       value: new FormControl('', [required]),
       taxes: new FormControl([], [required])
     });
+
+    this.formSearch = new FormGroup({
+      keyword: new FormControl()
+    });
   }
 
   ngOnInit(): void {
-    this.dashboardFacade.fetchProducts(1);
+    this.dashboardFacade.fetchProducts(1, '');
+    this.subscriptions.push(
+      this.formSearch.controls.keyword.valueChanges.pipe(
+        debounceTime(Constants.debounceTime))
+        .subscribe(
+          value => {
+            this.dashboardFacade.fetchProducts(1, value);
+          }
+        )
+    );
   }
 
   ngOnDestroy(): void {

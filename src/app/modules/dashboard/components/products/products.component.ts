@@ -1,9 +1,12 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscriber, Subscription } from 'rxjs';
-import { map, startWith, debounceTime, tap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { map, debounceTime } from 'rxjs/operators';
+import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
+
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result, CalculateTaxesPayload, Client } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result, Client } from '../../dashboard.entities';
+import { Constants } from '../../dashboard.constants';
 
 @Component({
   selector: 'app-products',
@@ -14,16 +17,17 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   public stepOne = true;
   public stepTwo = false;
-  typeDocument = [
+  public typeDocument = [
     { value: 'cc', description: 'Cédula' },
     { value: 'nit', description: 'Nit' },
     { value: 'ce', description: 'Extranjería' },
     { value: 'pp', description: 'Pasaporte' }
   ];
-  selectetTypeDoc = this.typeDocument[0].value;
+  public selectetTypeDoc = this.typeDocument[0].value;
   public formClient: FormGroup;
-  client = new Client();
-  newClient = true;
+  public formSearch: FormGroup;
+  private client = new Client();
+  public newClient = true;
   private subscriptions: Subscription[] = [];
 
 
@@ -42,18 +46,31 @@ export class ProductsComponent implements OnInit, OnDestroy {
       lastname: new FormControl('', [required]),
       country_code: new FormControl('+57', [required]),
       new: new FormControl('true', [required]),
-      last_name: new FormControl(''),
+      last_name: new FormControl('')
+    });
+
+    this.formSearch = new FormGroup({
+      keyword: new FormControl()
     });
   }
 
   ngOnInit(): void {
-    this.dashboardFacade.fetchProductsInStock(1);
+    this.dashboardFacade.fetchProductsInStock(1, '');
     this.subscriptions.push(
       this.formClient.controls.number_identification.valueChanges.pipe(
-        debounceTime(2000))
+        debounceTime(Constants.debounceTime))
         .subscribe(
           value => {
             this.dashboardFacade.fetchIDNumber(value);
+          }
+        )
+    );
+    this.subscriptions.push(
+      this.formSearch.controls.keyword.valueChanges.pipe(
+        debounceTime(Constants.debounceTime))
+        .subscribe(
+          value => {
+            this.dashboardFacade.fetchProductsInStock(1, value);
           }
         )
     );
@@ -103,12 +120,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   public continue(basket: Basket): void {
-    if (this.stepOne) {
-      this.stepOne = !this.stepOne;
-      this.stepTwo = !this.stepTwo;
-      this.dashboardFacade.calculateTaxesInBasket(basket);
+    if (basket.products.length !== 0) {
+      if (this.stepOne) {
+        this.stepOne = !this.stepOne;
+        this.stepTwo = !this.stepTwo;
+        this.dashboardFacade.calculateTaxesInBasket(basket);
+      } else {
+        // TODO create bill
+      }
     } else {
-      // TODO create bill
+      this.dashboardFacade.sendMessage('Debe seleccionar por lo menos un producto.', NgxNotificationStatusMsg.FAILURE);
     }
   }
 
@@ -140,6 +161,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
       map(isEnabledBillButton =>
         (this.stepTwo && this.formClient.invalid) ||
         (this.stepTwo && !isEnabledBillButton)
-    ));
+      ));
   }
 }

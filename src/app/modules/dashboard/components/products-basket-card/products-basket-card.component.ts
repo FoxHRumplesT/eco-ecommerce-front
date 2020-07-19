@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
-import { Product, Basket, Tax, Summary, Result } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result } from '../../dashboard.entities';
 
 @Component({
   selector: 'app-products-basket-card',
@@ -32,8 +32,10 @@ export class ProductsBasketCardComponent {
 
   get resultSummary(): number {
     if (this.result.summary.length > 0) {
-      return this.result.summary[0].taxTotal;
+      this.result.summary.forEach(tax => {
+      });
     }
+    return 1;
   }
 
   public onToggleIsFree(): void {

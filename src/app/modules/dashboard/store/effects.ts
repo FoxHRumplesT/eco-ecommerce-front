@@ -34,7 +34,7 @@ export class DashboardEffects {
   @Effect()
   fetchProducts$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchProductsAction),
-    switchMap(({ page }) => this.services.fetchProducts$(page).pipe(
+    switchMap(({ page, keyword }) => this.services.fetchProducts$(page, keyword).pipe(
       map(response => ({ response: response.results, error: null })),
       catchError(error => of({ error, response: [] })),
     )),
@@ -44,7 +44,7 @@ export class DashboardEffects {
   @Effect()
   fetchProductsInStock$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchProductsInStockAction),
-    switchMap(({ page }) => this.services.fetchProductsInStock$(page).pipe(
+    switchMap(({ page, keyword }) => this.services.fetchProductsInStock$(page, keyword).pipe(
       map(response => ({ response: response.results, error: null })),
       catchError(error => of({ error, response: [] })),
     )),
@@ -84,7 +84,7 @@ export class DashboardEffects {
     )),
     concatMap(({ response, error }) => !error ? [
       actions.notificationAction({ msg: 'Producto creado!', status: NgxNotificationStatusMsg.SUCCESS }),
-      actions.fetchProductsAction({ page: 1 })
+      actions.fetchProductsAction({ page: 1, keyword: '' })
     ] : [
         actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
       ])

@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'eco-ecommerce';
+  public spinnerColor = '#16C0C0';
 }
