@@ -1,0 +1,15 @@
+<div class="wrapper-paginator">
+  <div class="paginator">
+    <span class="button preview" *ngIf="showPreview" (click)="selectPreview()">
+      <fa-icon [icon]="['fas', 'angle-left']"></fa-icon>
+    </span>
+    <ul>
+      <li *ngFor="let _ of pagesToShow; index as i" [class.active]="isCurrentPage(i)">
+        <span class="number">{{ i + 1 }}</span>
+      </li>
+    </ul>
+    <span class="button next" *ngIf="showNext" (click)="selectNext()">
+      <fa-icon [icon]="['fas', 'angle-right']"></fa-icon>
+    </span>
+  </div>
+</div>

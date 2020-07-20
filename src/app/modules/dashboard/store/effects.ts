@@ -35,8 +35,8 @@ export class DashboardEffects {
   fetchProducts$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchProductsAction),
     switchMap(({ page, keyword }) => this.services.fetchProducts$(page, keyword).pipe(
-      map(response => ({ response: response.results, error: null })),
-      catchError(error => of({ error, response: [] })),
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null })),
     )),
     map(({ response, error }) => actions.fetchProductsSuccessAction({ response }))
   );
@@ -45,8 +45,8 @@ export class DashboardEffects {
   fetchProductsInStock$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchProductsInStockAction),
     switchMap(({ page, keyword }) => this.services.fetchProductsInStock$(page, keyword).pipe(
-      map(response => ({ response: response.results, error: null })),
-      catchError(error => of({ error, response: [] })),
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null })),
     )),
     map(({ response, error }) => actions.fetchProductsInStockSuccessAction({ response }))
   );

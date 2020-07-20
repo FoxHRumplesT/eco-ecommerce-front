@@ -15,7 +15,7 @@ export class DashboardFacade {
     private store: Store
   ) {}
 
-  public products$: Observable<Product[]> = this.store.pipe(
+  public products$: Observable<ProductsResponse> = this.store.pipe(
     select(productsSelector)
   );
 

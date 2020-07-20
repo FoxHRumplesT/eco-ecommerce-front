@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Product, CalculateTaxesPayload, Basket, Client } from '../dashboard.entities';
+import { Product, Basket, Client } from '../dashboard.entities';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 
 export const notificationAction = createAction('[Dashboard] notification',

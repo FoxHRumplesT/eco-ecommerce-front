@@ -19,7 +19,7 @@ const ui = createReducer(
 );
 
 const initialDataState: DataState = {
-  products: [],
+  products: {},
   taxes: [],
   basket: { products: [] },
   result: { summary: [] },

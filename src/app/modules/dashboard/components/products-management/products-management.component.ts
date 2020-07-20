@@ -3,10 +3,10 @@ import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { map, debounceTime } from 'rxjs/operators';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Tax } from '../../dashboard.entities';
+import { Product, Tax, ProductsResponse } from '../../dashboard.entities';
 import { ModalComponent } from '../modal/modal.component';
 import { Constants } from '../../dashboard.constants';
 
@@ -62,11 +62,17 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
   }
 
   get products$(): Observable<Product[]> {
-    return this.dashboardFacade.products$;
+    return this.dashboardFacade.products$.pipe(
+      map(p => p.results)
+    );
   }
 
   get taxes$(): Observable<Tax[]> {
     return this.dashboardFacade.taxes$;
+  }
+
+  get paginatorInfo$(): Observable<ProductsResponse> {
+    return this.dashboardFacade.products$;
   }
 
   public setImagePreview(files: FileList): void {
@@ -130,6 +136,10 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
     this.subscriptions.push(dialogRef.afterClosed().subscribe(result => {
       if (result) this.dashboardFacade.deleteProduct(product);
     }));
+  }
+
+  public goToPage(page: number): void {
+    this.dashboardFacade.fetchProducts(page, '');
   }
 
 }

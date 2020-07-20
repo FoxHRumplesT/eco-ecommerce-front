@@ -1,0 +1,26 @@
+@import 'mixins'
+
+.wrapper-paginator
+  +flex(center, center)
+  height: 40px
+  .paginator
+    +flex(center, center)
+    .preview, .next
+      padding: 0
+      width: 26px
+      height: 26px
+    .preview
+      border-radius: 10px 0 0 10px
+    .next
+      border-radius: 0 10px 10px 0
+    ul
+      +flex()
+      height: 26px
+      li
+        +flex(center, center)
+        width: 26px
+        height: 26px
+        cursor: pointer
+        background-color: var(--blue-1)
+        &.active
+          background-color: var(--green-1)

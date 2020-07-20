@@ -8,6 +8,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard.component';
@@ -24,10 +28,7 @@ import { ProductsCardComponent } from './components/products-card/products-card.
 import { ProductsBasketCardComponent } from './components/products-basket-card/products-basket-card.component';
 import { ProductsManagementComponent } from './components/products-management/products-management.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { PaginatorComponent } from './components/paginator/paginator.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     ProductsCardComponent,
     ProductsBasketCardComponent,
     ProductsManagementComponent,
-    ModalComponent
+    ModalComponent,
+    PaginatorComponent
   ],
   imports: [
     CommonModule,

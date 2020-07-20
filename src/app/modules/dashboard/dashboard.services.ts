@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { Product, Tax, Basket, Result, CalculateTaxesPayload, Client } from './dashboard.entities';
+import { Product, Tax, Basket, Result, Client } from './dashboard.entities';
 
 const api = {
   productsInStock: (page: number, keyword: string) => `${environment.api}/ms-e-bill/api/stock?page=${page}&keyword=${keyword}`,

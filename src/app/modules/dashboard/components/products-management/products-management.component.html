@@ -20,6 +20,14 @@
         </app-products-card>
       </li>
     </ul>
+    <div class="paginator" *ngIf="paginatorInfo$ | async as paginator">
+      <app-paginator
+        [total]="paginator.total"
+        [perPage]="paginator.per_page"
+        [currentPage]="paginator.page"
+        (selectPage)="goToPage($event)"
+      ></app-paginator>
+    </div>
   </div>
   <div class="added-products" *ngIf="showProductForm">
     <div class="close">

@@ -36,12 +36,11 @@ export class Result {
 //  tax: Tax;
 //}
 
-export class CalculateTaxesPayload {
-  code: string;
-  quantity: number;
-  lot: string;
-  value: number;
-  is_free: boolean;
+export class ProductsResponse {
+  results: Product[];
+  page: number;
+  per_page: number;
+  total: number;
 }
 
 export class Client {

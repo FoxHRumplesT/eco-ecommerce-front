@@ -5,7 +5,7 @@ import { map, debounceTime } from 'rxjs/operators';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result, Client } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result, Client, ProductsResponse } from '../../dashboard.entities';
 import { Constants } from '../../dashboard.constants';
 
 @Component({
@@ -85,6 +85,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   get products$(): Observable<Product[]> {
+    return this.dashboardFacade.products$.pipe(
+      map(p => p.results)
+    );
+  }
+
+  get paginatorInfo$(): Observable<ProductsResponse> {
     return this.dashboardFacade.products$;
   }
 
@@ -108,9 +114,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   public total(basket: Basket): number {
     let total = 0;
-    basket.products.forEach(product => {
-      total += product.value;
-    });
+    basket.products.forEach(product => total += product.value);
     return total;
   }
 
