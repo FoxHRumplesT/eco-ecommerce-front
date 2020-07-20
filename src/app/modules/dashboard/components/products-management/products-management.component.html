@@ -5,8 +5,8 @@
         Productos
         <fa-icon [icon]="['fas', 'plus-circle']" class="new-product" (click)="showProductForm = true"></fa-icon>
       </h2>
-      <div class="search">
-        <input type="text" id="search-input" class="input-text" placeholder="Busca tu producto">
+      <div class="search" [formGroup]="formSearch">
+        <input type="text" id="search-input" class="input-text" placeholder="Busca tu producto" formControlName="keyword">
         <fa-icon [icon]="['fas', 'search']"></fa-icon>
       </div>
     </div>

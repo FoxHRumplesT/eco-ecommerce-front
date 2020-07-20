@@ -43,12 +43,12 @@ export class DashboardFacade {
     this.store.dispatch(actions.setEnableBillButtonAction({ state }));
   }
 
-  public fetchProducts(page: number): void {
-    this.store.dispatch(actions.fetchProductsAction({ page }));
+  public fetchProducts(page: number, keyword: string): void {
+    this.store.dispatch(actions.fetchProductsAction({ page, keyword }));
   }
 
-  public fetchProductsInStock(page: number): void {
-    this.store.dispatch(actions.fetchProductsInStockAction({ page }));
+  public fetchProductsInStock(page: number, keyword: string): void {
+    this.store.dispatch(actions.fetchProductsInStockAction({ page, keyword }));
   }
 
   public fetchTaxes(): void {

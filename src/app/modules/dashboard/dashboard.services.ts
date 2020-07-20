@@ -6,8 +6,8 @@ import { environment } from 'src/environments/environment';
 import { Product, Tax, Basket, Result, CalculateTaxesPayload, Client } from './dashboard.entities';
 
 const api = {
-  productsInStock: (page: number) => `${environment.api}/ms-e-bill/api/stock?page=${page}`,
-  products: (page: number) => `${environment.api}/ms-e-bill/api/product?page=${page}`,
+  productsInStock: (page: number, keyword: string) => `${environment.api}/ms-e-bill/api/stock?page=${page}&keyword=${keyword}`,
+  products: (page: number, keyword: string) => `${environment.api}/ms-e-bill/api/product?page=${page}&keyword=${keyword}`,
   taxes: () => `${environment.api}/ms-e-bill/api/taxes`,
   calculateTaxes: () => `${environment.api}/ms-e-bill/api/bill/calculate`,
   createProduct: () => `${environment.api}/ms-e-bill/api/product`,
@@ -24,12 +24,12 @@ export class DashboardServices {
     private http: HttpClient
   ) {}
 
-  public fetchProductsInStock$(page: number): Observable<{ isSuccess: boolean, message: string, results: Product[]}> {
-    return this.http.get<{ isSuccess: boolean, message: string, results: Product[]}>(api.productsInStock(page));
+  public fetchProductsInStock$(page: number, keyword: string): Observable<{ isSuccess: boolean, message: string, results: Product[]}> {
+    return this.http.get<{ isSuccess: boolean, message: string, results: Product[]}>(api.productsInStock(page, keyword));
   }
 
-  public fetchProducts$(page: number): Observable<{ isSuccess: boolean, message: string, results: Product[]}> {
-    return this.http.get<{ isSuccess: boolean, message: string, results: Product[]}>(api.products(page));
+  public fetchProducts$(page: number, keyword: string): Observable<{ isSuccess: boolean, message: string, results: Product[]}> {
+    return this.http.get<{ isSuccess: boolean, message: string, results: Product[]}>(api.products(page, keyword));
   }
 
   public fetchTaxes$(): Observable<{ isSuccess: boolean, message: string, results: Tax[]}> {

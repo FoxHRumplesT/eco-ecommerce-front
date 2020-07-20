@@ -7,9 +7,9 @@ export const notificationAction = createAction('[Dashboard] notification',
   props<{ msg: string, status: NgxNotificationStatusMsg }>()
 );
 
-export const fetchProductsAction = createAction('[Dashboard] fetch products', props<{ page: number }>());
+export const fetchProductsAction = createAction('[Dashboard] fetch products', props<{ page: number, keyword: string }>());
 export const fetchProductsSuccessAction = createAction('[Dashboard] fetch products success', props<{ response: any }>());
-export const fetchProductsInStockAction = createAction('[Dashboard] fetch products in stock', props<{ page: number }>());
+export const fetchProductsInStockAction = createAction('[Dashboard] fetch products in stock', props<{ page: number, keyword: string }>());
 export const fetchProductsInStockSuccessAction = createAction('[Dashboard] fetch products in stock success', props<{ response: any }>());
 export const fetchTaxesAction = createAction('[Dashboard] fetch dashboard');
 export const fetchTaxesSuccessAction = createAction('[Dashboard] fetch taxes success', props<{ response: any }>());

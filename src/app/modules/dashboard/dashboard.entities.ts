@@ -24,17 +24,17 @@ export class Basket {
 }
 
 export class Result {
-  summary: Summary[];
+  summary: any[];
   total: number;
 }
 
-export class Summary {
-  productTotal: number;
-  taxTotal: number;
-  quantity: number;
-  product: Product;
-  tax: Tax;
-}
+//export class Summary {
+//  productTotal: number;
+//  taxTotal: number;
+//  quantity: number;
+//  product: Product;
+//  tax: Tax;
+//}
 
 export class CalculateTaxesPayload {
   code: string;
