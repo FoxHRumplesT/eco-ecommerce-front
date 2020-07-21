@@ -93,7 +93,18 @@
         &:disabled
           background: var(--gray-1)
           cursor: not-allowed
-
+    .close
+      padding: 10px 10px 0 0
+    .close-button
+      +flex(center, center)
+      width: 26px
+      height: 26px
+      cursor: pointer
+      border-radius: 50%
+      background-color: var(--red-1)
+      float: right
+      .close-icon
+        color: var(--white-1)
 
 .grid-Phone
     display: grid

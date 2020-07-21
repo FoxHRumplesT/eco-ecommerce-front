@@ -1,0 +1,54 @@
+<div class="wrapper-report">
+  <div class="form-container">
+    <div class="header">
+      <h2 class="title">
+        Reportes
+      </h2>
+    </div>
+    <form class="report-form" [formGroup]="reportForm" *ngIf="!showReport; else report">
+      <div class="grid-report">
+        <div class="typeReport">
+        <mat-form-field appearance="fill">
+        <mat-label>Tipo de reporte</mat-label>
+        <mat-select formControlName="typeReport">
+          <mat-option *ngFor="let type of reportType" [value]="type.value">
+            {{type.description}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+        <div class="start">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" formControlName="startDate" placeholder="Fecha inicial">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="end">
+          <mat-form-field>
+            <input matInput [matDatepicker]="pickerPag" formControlName="endDate" placeholder="Fecha final">
+            <mat-datepicker-toggle matSuffix [for]="pickerPag"></mat-datepicker-toggle>
+            <mat-datepicker #pickerPag></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="btnReport">
+        <button type="submit" class="button primary"
+        [disabled] = "reportForm.invalid"
+        (click)="generateReport()">Generar reporte</button>
+      </div>
+    </form>
+    <ng-template #report >
+      <div class="close">
+        <div class="close-button" (click)="closeReport()">
+          <fa-icon [icon]="['fas', 'times']" class="close-icon"></fa-icon>
+        </div>
+      </div>
+      <iframe [src]= "srcFile | domSanitizer"
+              height="100%"
+              width="96%"
+              class="iframe-file">
+      </iframe>
+    </ng-template>
+  </div>
+</div>

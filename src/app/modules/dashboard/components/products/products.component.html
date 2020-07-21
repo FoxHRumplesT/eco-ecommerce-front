@@ -45,7 +45,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="example-full-width">
+      <mat-form-field>
         <input type="text"
                placeholder="NIT o documento de identificación"
                aria-label="Number"
@@ -92,6 +92,11 @@
     </form>
   </ng-template>
   <div class="added-products">
+    <div class="close">
+      <div class="close-button" (click)="closeBill()" *ngIf="stepTwo">
+        <fa-icon [icon]="['fas', 'times']" class="close-icon"></fa-icon>
+      </div>
+    </div>
     <h3 class="title">Factura</h3>
     <ul class="items">
       <li *ngFor="let product of differentProducts(basket.products)">
