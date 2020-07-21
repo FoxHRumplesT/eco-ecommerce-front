@@ -86,18 +86,27 @@ export class DashboardEffects {
       actions.notificationAction({ msg: 'Producto creado!', status: NgxNotificationStatusMsg.SUCCESS }),
       actions.fetchProductsAction({ page: 1, keyword: '' })
     ] : [
-        actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
-      ])
+      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+    ])
   );
 
   @Effect()
   updateProduct$: Observable<Action> = this.actions$.pipe(
     ofType(actions.updateProductAction),
+    switchMap(({ product, formDataToUploadImage }) => this.services.uploadImage$(formDataToUploadImage).pipe(
+      map(response => ({ product: { ...product, urlImage: response.message }, error: null })),
+      catchError(error => of({ error, product: { ...product, urlImage: product.urlImage } })),
+    )),
     switchMap(({ product }) => this.services.updateProduct$(product).pipe(
       map(response => ({ response: response.message, error: null })),
-      catchError(error => of({ error, response: [] })),
+      catchError(error => of({ error, response: null })),
     )),
-    map(({ response, error }) => actions.updateProductSuccessAction({ response }))
+    concatMap(({ response, error }) => !error ? [
+      actions.notificationAction({ msg: 'Producto editado!', status: NgxNotificationStatusMsg.SUCCESS }),
+      actions.fetchProductsAction({ page: 1, keyword: '' })
+    ] : [
+      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+    ])
   );
 
   @Effect()

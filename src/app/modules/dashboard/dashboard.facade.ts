@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { Product, Tax, Basket, Result, Client } from './dashboard.entities';
+import { Product, Tax, Basket, Result, Client, ProductsResponse } from './dashboard.entities';
 import { productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector } from './store/selectors';
 import * as actions from './store/actions';
 import { map } from 'rxjs/operators';
@@ -75,8 +75,8 @@ export class DashboardFacade {
     this.store.dispatch(actions.createProductAction({ product, formDataToUploadImage }));
   }
 
-  public updateProduct(product: Product): void {
-    this.store.dispatch(actions.updateProductAction({ product }));
+  public updateProduct(product: Product, formDataToUploadImage: FormData): void {
+    this.store.dispatch(actions.updateProductAction({ product, formDataToUploadImage }));
   }
 
   public deleteProduct(product: Product): void {

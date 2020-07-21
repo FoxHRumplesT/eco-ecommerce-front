@@ -47,13 +47,8 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dashboardFacade.fetchProducts(1, '');
     this.subscriptions.push(
-      this.formSearch.controls.keyword.valueChanges.pipe(
-        debounceTime(Constants.debounceTime))
-        .subscribe(
-          value => {
-            this.dashboardFacade.fetchProducts(1, value);
-          }
-        )
+      this.formSearch.controls.keyword.valueChanges.pipe(debounceTime(Constants.debounceTime))
+        .subscribe(value => this.dashboardFacade.fetchProducts(1, value))
     );
   }
 
@@ -91,38 +86,45 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
     this.uploadedImage = files.item(0);
   }
 
+  public openCreateForm(): void {
+    this.closeNewProduct();
+    this.showProductForm = true;
+  }
+
   public goToProductInfoStep() {
     this.showProductImageStep = !this.showProductImageStep;
   }
 
   public createOrEditProduct() {
+    const formData = new FormData();
+    formData.append('file', this.uploadedImage);
+    formData.append('path', 'dev');
     if (!this.isEditingProduct) {
-      const formData = new FormData();
-      formData.append('file', this.uploadedImage);
-      formData.append('path', 'dev');
       this.dashboardFacade.createProduct(this.formProduct.value, formData);
     } else {
-      this.dashboardFacade.updateProduct({
-        ...this.formProduct.value, urlImage: this.previewImageURL
-      });
+      this.dashboardFacade.updateProduct({...this.formProduct.value, urlImage: this.uploadedImage ? '' : this.previewImageURL}, formData);
       this.isEditingProduct = false;
     }
     this.closeNewProduct();
   }
 
-  public setProductToEdit({ code, name, value, url_image}: Product): void {
+  public setProductToEdit({ code, name, value, url_image, tax }: Product): void {
     this.buttonName = 'Modificar';
     this.showProductForm = true;
     this.isEditingProduct = true;
-    this.formProduct.setValue({ taxes: [1, 2], code, name, value });
+    this.showProductImageStep = true;
+    this.formProduct.setValue({ taxes: tax, code, name, value });
     this.previewImageURL = url_image;
   }
 
   public closeNewProduct() {
+    this.buttonName = 'Crear';
     this.showProductForm = false;
-    this.formProduct.reset();
+    this.isEditingProduct = false;
+    this.showProductImageStep = true;
     this.previewImageURL = null;
     this.uploadedImage = null;
+    this.formProduct.reset();
   }
 
   public openDeleteModal(product: Product): void {

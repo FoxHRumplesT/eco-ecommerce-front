@@ -23,7 +23,9 @@ export const createProductAction = createAction('[Dashboard] create product',
 );
 export const createProductSuccessAction = createAction('[Dashboard] create product success', props<{ response: any }>());
 export const createProductErrorAction = createAction('[Dashboard] create product error');
-export const updateProductAction = createAction('[Dashboard] update product', props<{ product: Product }>());
+export const updateProductAction = createAction('[Dashboard] update product',
+  props<{ product: Product, formDataToUploadImage: FormData }>()
+);
 export const updateProductSuccessAction = createAction('[Dashboard] update product success', props<{ response: any }>());
 export const updateProductErrorAction = createAction('[Dashboard] update product error');
 export const deleteProductAction = createAction('[Dashboard] delete product', props<{ product: Product }>());
