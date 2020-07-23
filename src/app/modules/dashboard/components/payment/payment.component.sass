@@ -1,0 +1,50 @@
+@import 'mixins'
+
+.wrapper-payment
+  +flex()
+  width: 100%
+  height: 100%
+  border-radius: 16px
+  background: var(--white-1)
+  box-shadow: 0px 8px 32px rgba(51, 38, 174, 0.08)
+  .form-container
+    width: 100%
+    height: 100%
+    overflow: hidden
+    .header
+      .title
+        +bold()
+        text-align: center
+        margin: 20px 0 20px 10px
+    .button
+      background: var(--yellow-1)
+      &:disabled
+          background: var(--gray-1)
+          cursor: not-allowed
+    .grid-file
+      margin: 50px 20px
+      display: grid
+      grid-template-columns: 30% 30% auto
+      grid-template-rows: 1fr
+      gap: 1px 1px
+      grid-template-areas: "title-column file-column upload-file"
+      .title-column
+        grid-area: title-column
+        align-self: center
+        margin-right: 25px
+        text-align: right
+      .file-column
+        grid-area: file-column
+        padding-left: 5px
+        width: 50%
+      .upload-file
+        grid-area: upload-file
+    .file-preview
+      width: 100%
+      padding-top: 10px
+    .image-container
+      text-align: center
+      height: inherit
+      .image-preview
+        height: 60%
+        padding-top: 10px

@@ -167,4 +167,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
         (this.stepTwo && !isEnabledBillButton)
       ));
   }
+  public closeBill() {
+    this.stepOne = !this.stepOne;
+    this.stepTwo = !this.stepTwo;
+  }
 }

@@ -7,6 +7,8 @@ import { ProductsComponent } from './components/products/products.component';
 import { BillComponent } from './components/bill/bill.component';
 import { DashboardGuard } from './dashboard.guard';
 import { ProductsManagementComponent } from './components/products-management/products-management.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { ReportComponent } from './components/report/report.component';
 
 @NgModule({
   declarations: [],
@@ -27,8 +29,12 @@ import { ProductsManagementComponent } from './components/products-management/pr
             component: ProductsManagementComponent
           },
           {
-            path: 'bill',
-            component: BillComponent
+            path: 'payment',
+            component: PaymentComponent
+          },
+          {
+            path: 'report',
+            component: ReportComponent
           },
           {
             path: '',

@@ -1,0 +1,22 @@
+<div class="wrapper-payment">
+  <div class="form-container">
+    <div class="header">
+      <h2 class="title">
+        Pagos
+      </h2>
+    </div>
+    <div class="grid-file">
+      <div class="title-column">
+        <label>Subir archivo de pagos</label>
+      </div>
+      <div class="file-column">
+        <input #file type="file" (change)="setImagePreview(file.files)" class="input-file" />
+      </div>
+      <div class="upload-file">
+        <button type="submit" class="button" (click)="uploadFile()" [disabled]="validateUploadButton">Cargar archivo</button>
+      </div>
+    </div>
+    <div class="image-container">
+      <img [src]="previewImageURL" *ngIf="previewImageURL" class="image-preview">
+    </div>
+  </div>

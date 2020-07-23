@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { DomSanitizerPipe } from 'src/app/pipes/domSanitizer.pipe';
 
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard.component';
@@ -29,6 +30,8 @@ import { ProductsBasketCardComponent } from './components/products-basket-card/p
 import { ProductsManagementComponent } from './components/products-management/products-management.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
+import { PaymentComponent } from './components/payment/payment.component';
+import { ReportComponent } from './components/report/report.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,10 @@ import { PaginatorComponent } from './components/paginator/paginator.component';
     ProductsBasketCardComponent,
     ProductsManagementComponent,
     ModalComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    PaymentComponent,
+    ReportComponent,
+    DomSanitizerPipe
   ],
   imports: [
     CommonModule,
