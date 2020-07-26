@@ -3,8 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   api: 'https://blitz-dev1.azurewebsites.net',
+  logo: $ENV.LOGO_URL,
+  logo1: '{LOGO_URL}',
+  logo2: "#{LOGO_URL}#",
+  logo3: window["env"]["LOGO_URL"] || "default",
   blobServer : 'https://blitz-blob.azurewebsites.net'
 
 };

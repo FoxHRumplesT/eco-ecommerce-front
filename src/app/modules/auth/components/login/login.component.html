@@ -1,7 +1,12 @@
 <div class="wrapper-login">
   <div class="form-container">
     <form [formGroup]="form" (submit)="submit()">
-      <div class="img"></div>
+      <div >
+        <img [src]="img">
+        <img [src]="img1">   
+        <img [src]="img2">
+        <img [src]="img3">
+      </div>
       <input class="input-text user" type="text" formControlName="user" placeholder="Correo electrónico">
       <input class="input-text password" type="password" formControlName="password" placeholder="Contraseña" autocomplete="false">
       <button type="submit" class="button primary" [disabled]="form.invalid">Ingresar</button>
