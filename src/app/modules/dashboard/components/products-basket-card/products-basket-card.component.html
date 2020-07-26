@@ -16,7 +16,8 @@
     <div class="values">
       <div class="price" *ngIf="!isEditing; else inputPrice">{{ total | currencyFormat }}</div>
       <ng-template #inputPrice>
-        <input class="input-text input-price" type="text" name="a" [value]="product.value">
+        <input  class="input-text input-price" type="text" name="a"
+        [value]="product.value" [(ngModel)]="newValue">
       </ng-template>
       <div class="icons">
         <fa-icon
@@ -24,14 +25,14 @@
           [class]="'pen'"
           [icon]="['fas', 'pen']"
           [size]="'1x'"
-          (click)="isEditing = !isEditing">
+          (click)="updateNewProduct(newValue)">
         </fa-icon>
         <ng-template #check>
           <fa-icon
             [class]="'check'"
             [icon]="['fas', 'check']"
             [size]="'1x'"
-            (click)="isEditing = !isEditing">
+            (click)="updateNewProduct(newValue)">
           </fa-icon>
         </ng-template>
         <fa-icon
@@ -45,11 +46,14 @@
   </div>
   <ul class="taxes">
     <li *ngFor="let tax of productTaxes">
-      {{ tax.name }}
-    </li>
-    <li >
-      {{resultSummary}}
+      <div class="grid-tax">
+        <div class="tax" >
+          {{ tax.name }}
+        </div>
+        <div class="tax-value">
+          {{ getTotalTax(tax) | currencyFormat}}
+        </div>
+      </div>
     </li>
   </ul>
-
 </div>

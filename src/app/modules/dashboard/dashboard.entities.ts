@@ -24,17 +24,26 @@ export class Basket {
 }
 
 export class Result {
-  summary: any[];
+  summary: {
+    [key: string]: {
+      product_value: number;
+      tax_value: number;
+      total: number;
+      quantity: number;
+      product: {
+        code: number;
+        name: string;
+        url_image: string;
+        value: number;
+        tax: Tax[]
+      };
+      tax: Tax[]
+  };
+};
   total: number;
+  total_product: number;
+  tax: number;
 }
-
-//export class Summary {
-//  productTotal: number;
-//  taxTotal: number;
-//  quantity: number;
-//  product: Product;
-//  tax: Tax;
-//}
 
 export class ProductsResponse {
   results: Product[];

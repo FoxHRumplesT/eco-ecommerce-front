@@ -121,6 +121,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
   public addRemoveProductToBasket(type: string, product: Product): void {
     if (type === 'add') this.dashboardFacade.addProductToBasket({ ...product, quantity: 1, is_free: false });
     else if (type === 'remove') this.dashboardFacade.removeProductToBasket(product);
+    this.basket$.subscribe(x =>
+      this.dashboardFacade.calculateTaxesInBasket(x)
+      ).unsubscribe();
   }
 
   public continue(basket: Basket): void {
@@ -128,7 +131,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
       if (this.stepOne) {
         this.stepOne = !this.stepOne;
         this.stepTwo = !this.stepTwo;
-        this.dashboardFacade.calculateTaxesInBasket(basket);
       } else {
         // TODO create bill
       }
@@ -139,6 +141,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   public toggleFreeProduct(product: Product): void {
     this.dashboardFacade.updateProductFromBasket({ ...product, is_free: !product.is_free });
+  }
+
+  public newProductValue(product: Product): void {
+    this.dashboardFacade.updateProductFromBasket(product);
+    this.basket$.subscribe(x =>
+      this.dashboardFacade.calculateTaxesInBasket(x)
+      ).unsubscribe();
   }
 
   public createClient() {

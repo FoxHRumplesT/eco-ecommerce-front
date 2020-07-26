@@ -101,15 +101,19 @@
     <ul class="items">
       <li *ngFor="let product of differentProducts(basket.products)">
         <app-products-basket-card [product]="product" [basket]="basket" [result]="result$ | async"
-          [taxes]="taxes$ | async" (toggleIsFree)="toggleFreeProduct($event)">
+          [taxes]="taxes$ | async" (toggleIsFree)="toggleFreeProduct($event)" (newProductValue)="newProductValue($event)" >
         </app-products-basket-card>
       </li>
     </ul>
     <div class="total">
-      <div class="title">Total sin impuestos</div>
+      <div class="title">Total</div>
       <div class="price">
-        <span class="text">Total</span>
-        <span class="value">{{ total(basket) | currencyFormat }}</span>
+        <span class="text">Total sin impuestos</span>
+        <span class="value">{{ (result$ | async).total_product | currencyFormat }}</span>
+      </div>
+      <div class="price">
+        <span class="text">Total con impuestos</span>
+        <span class="value">{{ (result$ | async).total | currencyFormat }}</span>
       </div>
 
       <button class="create" (click)="continue(basket)"
