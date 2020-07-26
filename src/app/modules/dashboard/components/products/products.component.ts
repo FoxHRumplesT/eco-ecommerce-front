@@ -128,7 +128,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
       if (this.stepOne) {
         this.stepOne = !this.stepOne;
         this.stepTwo = !this.stepTwo;
-        this.dashboardFacade.calculateTaxesInBasket(basket);
       } else {
         // TODO create bill
       }
@@ -139,6 +138,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   public toggleFreeProduct(product: Product): void {
     this.dashboardFacade.updateProductFromBasket({ ...product, is_free: !product.is_free });
+  }
+
+  public newProductValue(product: Product): void {
+    this.dashboardFacade.updateProductFromBasket(product);
   }
 
   public createClient() {

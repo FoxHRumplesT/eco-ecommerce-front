@@ -37,7 +37,7 @@ const data = createReducer(
     if (indexToUpdate > -1) {
       newBasket.products = [
         ...newBasket.products.slice(0, indexToUpdate),
-        { ...product, quantity: newBasket.products[indexToUpdate].quantity + product.quantity},
+        { ...product, quantity: newBasket.products[indexToUpdate].quantity + product.quantity, value: newBasket.products[0].value},
         ...newBasket.products.slice(indexToUpdate + 1)
       ];
     } else {

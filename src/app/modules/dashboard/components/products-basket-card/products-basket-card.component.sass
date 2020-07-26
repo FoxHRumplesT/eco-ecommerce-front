@@ -52,3 +52,17 @@
     width: 100%
     list-style: disc
     padding: 10px 0 0 25px
+
+  .grid-tax
+    display: grid
+    grid-template-columns: 1fr 1fr
+    grid-template-rows: 1fr
+    gap: 1px 1px
+    grid-template-areas: "tax tax-value"
+  .tax
+    grid-area: tax
+  .tax-value
+    grid-area: tax-value
+    text-align: end
+    padding-right: 10px
+

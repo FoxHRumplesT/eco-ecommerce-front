@@ -26,15 +26,18 @@ export class Basket {
 export class Result {
   summary: any[];
   total: number;
+  total_product: number;
+  tax: number;
 }
 
-//export class Summary {
-//  productTotal: number;
-//  taxTotal: number;
-//  quantity: number;
-//  product: Product;
-//  tax: Tax;
-//}
+export class SummaryTax {
+  product_value: number;
+  tax_value: number;
+  total: number;
+  quantity: number;
+  product: Product;
+  tax: Tax[];
+}
 
 export class ProductsResponse {
   results: Product[];
