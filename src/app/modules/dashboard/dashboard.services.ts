@@ -11,7 +11,8 @@ const api = {
   taxes: () => `${environment.api}/ms-e-bill/api/taxes`,
   calculateTaxes: () => `${environment.api}/ms-e-bill/api/bill/calculate`,
   createProduct: () => `${environment.api}/ms-e-bill/api/product`,
-  updateProduct: (ID: number) => `${environment.api}/ms-e-bill/api/product/${ID}`,
+  updateProduct: (code: string) => `${environment.api}/ms-e-bill/api/product/${code}`,
+  deleteProduct: (code: string) => `${environment.api}/ms-e-bill/api/product/${code}`,
   loadImage: () => `${environment.blobServer}/api/files/`,
   createClient: () => `${environment.api}/ms-client/api/client`,
   fetchIDNumber: (idNumber: number) => `${environment.api}/ms-client/api/client?numberIdentification=${idNumber}`,
@@ -45,11 +46,11 @@ export class DashboardServices {
   }
 
   public updateProduct$(product: Product): Observable<{ isSuccess: boolean, message: string}> {
-    return this.http.put<{ isSuccess: boolean, message: string}>(api.updateProduct(product.id), product);
+    return this.http.put<{ isSuccess: boolean, message: string}>(api.updateProduct(product.code), product);
   }
 
   public deleteProduct$(product: Product): Observable<{ isSuccess: boolean, message: string}> {
-    return this.http.delete<{ isSuccess: boolean, message: string}>(api.updateProduct(product.id));
+    return this.http.delete<{ isSuccess: boolean, message: string}>(api.deleteProduct(product.code));
   }
 
   public uploadImage$(formDataToUploadImage: FormData): Observable<{ isSuccess: boolean, message: string}> {

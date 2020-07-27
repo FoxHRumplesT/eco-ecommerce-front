@@ -119,11 +119,12 @@ export class DashboardEffects {
 
     concatMap(({ response, error }) => !error ? [
       actions.deleteProductSuccessAction({ response }),
+      actions.fetchProductsAction({ page: 1, keyword: '' }),
       actions.notificationAction({ msg: 'Producto eliminado', status: NgxNotificationStatusMsg.SUCCESS })
     ] : [
-        actions.deleteProductErrorAction(),
-        actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
-      ]
+      actions.deleteProductErrorAction(),
+      actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
+    ]
     )
   );
 

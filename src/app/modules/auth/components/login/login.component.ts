@@ -11,6 +11,8 @@ import { AuthFacade } from '../../auth.facade';
 export class LoginComponent implements OnInit {
 
   public form: FormGroup;
+  public logoUrl = 'assets/img/logo.jpg';
+  public backgroundUrl = 'assets/img/background.jpg';
 
   constructor(
     private authFacade: AuthFacade
