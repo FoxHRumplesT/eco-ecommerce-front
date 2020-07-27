@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
 
   public form: FormGroup;
   public logoUrl = 'assets/img/logo.jpg';
-  public backgroundUrl = 'assets/img/background.jpg';
+  public backgroundUrl = 'assets/img/background.png';
 
   constructor(
     private authFacade: AuthFacade
