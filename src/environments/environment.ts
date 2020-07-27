@@ -1,23 +1,7 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: true,
-  api: 'https://blitz-dev1.azurewebsites.net',
-  logo: $ENV.LOGO_URL,
-  logo1: '{LOGO_URL}',
-  logo2: "#{LOGO_URL}#",
-  logo3: window["env"]["LOGO_URL"] || "default",
-  blobServer : 'https://blitz-blob.azurewebsites.net'
-
+   production: true,
+   logo: "https://zuama.blob.core.windows.net/pradma/logo_pradma.png",
+   api: 'https://blitz-dev1.azurewebsites.net',
+   blobServer : 'https://blitz-blob.azurewebsites.net'
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
