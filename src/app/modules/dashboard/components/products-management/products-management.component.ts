@@ -36,7 +36,7 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
       code: new FormControl('', [required]),
       name: new FormControl('', [required]),
       value: new FormControl('', [required]),
-      taxes: new FormControl([], [required])
+      tax: new FormControl([], [required])
     });
 
     this.formSearch = new FormGroup({
@@ -113,7 +113,7 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
     this.showProductForm = true;
     this.isEditingProduct = true;
     this.showProductImageStep = true;
-    this.formProduct.setValue({ taxes: tax, code, name, value });
+    this.formProduct.setValue({ tax, code, name, value });
     this.previewImageURL = url_image;
   }
 

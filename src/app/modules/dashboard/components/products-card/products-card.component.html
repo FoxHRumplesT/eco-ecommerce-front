@@ -6,6 +6,8 @@
     </ng-template>
   </figure>
   <div class="name">{{ product.name }}</div>
+  <div class="stock">Código: {{ product.code }}</div>
+  <div class="stock">Lote: {{ product.lot }}</div>
   <ng-container *ngIf="isBasket; else options">
     <ng-container *ngIf="!hasAddedProduct; else counter">
       <div class="button add" (click)="addProductToBasket()">Agregar</div>
