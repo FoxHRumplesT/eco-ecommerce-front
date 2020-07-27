@@ -23,7 +23,8 @@ const initialDataState: DataState = {
   taxes: [],
   basket: { products: [] },
   result: { summary: {} },
-  clients: []
+  clients: [],
+  bill: {}
 } as DataState;
 
 const data = createReducer(
@@ -81,9 +82,11 @@ const data = createReducer(
 
   on(actions.deleteProductSuccessAction, (state, { response }) => ({...state, result: response })),
 
-  on(actions.createClientSuccessAction, (state, { response }) => ({...state, result: response })),
+  on(actions.createClientSuccessAction, (state, { response }) => ({...state, resultClient: response })),
 
-  on(actions.fetchIDNumberSuccessAction, (state, { response }) => ({...state, clients: response }))
+  on(actions.fetchIDNumberSuccessAction, (state, { response }) => ({...state, clients: response })),
+
+  on(actions.createBillSuccessAction, (state, { response }) => ({...state, bill: response }))
 );
 
 export const DashboardReducers = combineReducers({

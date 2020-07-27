@@ -5,7 +5,7 @@ import { map, debounceTime } from 'rxjs/operators';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result, Client, ProductsResponse } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result, Client, ProductsResponse, Bill, BillResponse } from '../../dashboard.entities';
 import { Constants } from '../../dashboard.constants';
 
 @Component({
@@ -132,7 +132,19 @@ export class ProductsComponent implements OnInit, OnDestroy {
         this.stepOne = !this.stepOne;
         this.stepTwo = !this.stepTwo;
       } else {
-        // TODO create bill
+        this.formClient.controls.last_name.setValue(this.formClient.controls.lastname.value);
+        this.formClient.controls.new.setValue(false);
+        const actualDate = new Date();
+        const bill: Bill = {
+        client: this.formClient.value,
+        products: basket.products,
+        date: actualDate,
+        expired_date: actualDate
+        };
+        if (!this.newClient) {
+          bill.client.number_identification = this.formClient.controls.number_identification.value.number_identification;
+        }
+        this.dashboardFacade.createBill(bill);
       }
     } else {
       this.dashboardFacade.sendMessage('Debe seleccionar por lo menos un producto.', NgxNotificationStatusMsg.FAILURE);
@@ -165,6 +177,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.formClient.controls.name.setValue(client.name);
     this.formClient.controls.lastname.setValue(client.lastname);
     this.formClient.controls.email.setValue(client.email);
+    this.formClient.controls.new.setValue(false);
     this.dashboardFacade.setEnabledBillButton(true);
     this.newClient = false;
   }

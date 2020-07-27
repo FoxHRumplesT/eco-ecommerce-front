@@ -2,11 +2,11 @@ import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-
-import { Product, Tax, Basket, Result, Client, ProductsResponse } from './dashboard.entities';
-import { productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector } from './store/selectors';
-import * as actions from './store/actions';
 import { map } from 'rxjs/operators';
+
+import { Product, Tax, Basket, Result, Client, ProductsResponse, BillResponse, Bill } from './dashboard.entities';
+import { productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector, billSelector } from './store/selectors';
+import * as actions from './store/actions';
 
 @Injectable()
 export class DashboardFacade {
@@ -31,8 +31,16 @@ export class DashboardFacade {
     select(resultSelector)
   );
 
+  public resultClient$: Observable<Result> = this.store.pipe(
+    select(resultSelector)
+  );
+
   public clients$: Observable<Client[]> = this.store.pipe(
     select(clientSelector)
+  );
+
+  public bill$: Observable<BillResponse> = this.store.pipe(
+    select(billSelector)
   );
 
   public isEnabledBillButton$: Observable<boolean> = this.store.pipe(
@@ -93,5 +101,9 @@ export class DashboardFacade {
 
   public fetchIDNumber(idNumber: number): void {
     this.store.dispatch(actions.fetchIDNumberAction({ idNumber }));
+  }
+
+  public createBill(bill: Bill): void {
+    this.store.dispatch(actions.createBillAction({ bill }));
   }
 }

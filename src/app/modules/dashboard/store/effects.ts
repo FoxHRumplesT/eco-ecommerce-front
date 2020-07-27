@@ -158,4 +158,23 @@ export class DashboardEffects {
     )),
     map(({ response, error }) => actions.fetchIDNumberSuccessAction({ response }))
   );
+
+  @Effect()
+  createBill$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.createBillAction),
+    switchMap(({ bill }) => this.services.createBill$(bill).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: [] })),
+    )),
+    concatMap(({ response, error }) =>
+      error === null ? [actions.createBillSuccessAction({ response }),
+      actions.notificationAction({
+        msg: 'Factura creada satisfactoriamente.',
+        status: NgxNotificationStatusMsg.SUCCESS
+      })] : [actions.createBillErrorAction(),
+      actions.notificationAction({
+        msg: 'Ocurrio un error al generar factura.',
+        status: NgxNotificationStatusMsg.FAILURE
+      })])
+  );
 }

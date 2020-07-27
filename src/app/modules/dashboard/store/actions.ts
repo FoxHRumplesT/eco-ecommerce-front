@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Product, Basket, Client } from '../dashboard.entities';
+import { Product, Basket, Client, Bill } from '../dashboard.entities';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 
 export const notificationAction = createAction('[Dashboard] notification',
@@ -38,3 +38,6 @@ export const createClientErrorAction = createAction('[Dashboard] create client e
 export const fetchIDNumberAction = createAction('[Dashboard] fetch ID number', props<{ idNumber: number }>());
 export const fetchIDNumberSuccessAction = createAction('[Dashboard] fetch ID number success', props<{ response: any }>());
 export const setEnableBillButtonAction = createAction('[Dashboard] Enable Bill Button', props<{ state: boolean }>());
+export const createBillAction = createAction('[Dashboard] create bill', props<{ bill: Bill }>());
+export const createBillSuccessAction = createAction('[Dashboard] create bill success', props<{ response: any }>());
+export const createBillErrorAction = createAction('[Dashboard] create bill error');
