@@ -75,8 +75,8 @@ export class DashboardEffects {
   createProduct$: Observable<Action> = this.actions$.pipe(
     ofType(actions.createProductAction),
     switchMap(({ product, formDataToUploadImage }) => this.services.uploadImage$(formDataToUploadImage).pipe(
-      map(response => ({ product: { ...product, urlImage: response.message }, error: null })),
-      catchError(error => of({ error, product: { ...product, urlImage: '' } })),
+      map(response => ({ product: { ...product, url_image: response.message }, error: null })),
+      catchError(error => of({ error, product: { ...product, url_image: '' } })),
     )),
     switchMap(({ product }) => this.services.createProduct$(product).pipe(
       map(response => ({ response: response.message, error: null })),
@@ -94,8 +94,8 @@ export class DashboardEffects {
   updateProduct$: Observable<Action> = this.actions$.pipe(
     ofType(actions.updateProductAction),
     switchMap(({ product, formDataToUploadImage }) => this.services.uploadImage$(formDataToUploadImage).pipe(
-      map(response => ({ product: { ...product, urlImage: response.message }, error: null })),
-      catchError(error => of({ error, product: { ...product, urlImage: product.urlImage } })),
+      map(response => ({ product: { ...product, url_image: response.message }, error: null })),
+      catchError(error => of({ error, product: { ...product, url_image: product.urlImage } })),
     )),
     switchMap(({ product }) => this.services.updateProduct$(product).pipe(
       map(response => ({ response: response.message, error: null })),
