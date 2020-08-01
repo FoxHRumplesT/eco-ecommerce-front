@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { Product, Tax, Basket, Result, Client } from './dashboard.entities';
+import { Product, Tax, Basket, Result, Client, Bill, BillResponse } from './dashboard.entities';
 
 const api = {
   productsInStock: (page: number, keyword: string) => `${environment.api}/ms-e-bill/api/stock?page=${page}&keyword=${keyword}`,
@@ -16,6 +16,9 @@ const api = {
   loadImage: () => `${environment.blobServer}/api/files/`,
   createClient: () => `${environment.api}/ms-client/api/client`,
   fetchIDNumber: (idNumber: number) => `${environment.api}/ms-client/api/client?numberIdentification=${idNumber}`,
+  createBill: () => `${environment.api}/ms-e-bill/api/bill`,
+  fetchBills: (page: number) => `${environment.api}/ms-e-bill/api/bill?page=${page}`,
+  fetchBillById_delete_update: (id: number) => `${environment.api}/ms-e-bill/api/bill/${id}`
 };
 
 @Injectable()
@@ -63,5 +66,25 @@ export class DashboardServices {
 
   public fetchIDNumber$(idNumber: number): Observable<{ isSuccess: boolean, message: string, result: Client[]}> {
     return this.http.get<{ isSuccess: boolean, message: string, result: Client[]}>(api.fetchIDNumber(idNumber));
+  }
+
+  public createBill$(bill: Bill): Observable<{ isSuccess: boolean, message: string, result: BillResponse}> {
+    return this.http.post<{ isSuccess: boolean, message: string, result: BillResponse}>(api.createBill(), bill);
+  }
+
+  public fetchBills$(page: number): Observable<{ isSuccess: boolean, message: string, result: Bill[]}> {
+    return this.http.get<{ isSuccess: boolean, message: string, result: Bill[]}>(api.fetchBills(page));
+  }
+
+  public fetchBillById$(idBill: number): Observable<{ isSuccess: boolean, message: string, result: Bill}> {
+    return this.http.get<{ isSuccess: boolean, message: string, result: Bill}>(api.fetchBillById_delete_update(idBill));
+  }
+
+  public deleteBill$(bill: Bill): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.delete<{ isSuccess: boolean, message: string, result: BillResponse}>(api.fetchBillById_delete_update(bill.id));
+  }
+
+  public updateBill$(bill: Bill): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.put<{ isSuccess: boolean, message: string}>(api.fetchBillById_delete_update(bill.id), bill);
   }
 }

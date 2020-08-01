@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Product, Basket, Client } from '../dashboard.entities';
+import { Product, Basket, Client, Bill } from '../dashboard.entities';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 
 export const notificationAction = createAction('[Dashboard] notification',
@@ -38,3 +38,16 @@ export const createClientErrorAction = createAction('[Dashboard] create client e
 export const fetchIDNumberAction = createAction('[Dashboard] fetch ID number', props<{ idNumber: number }>());
 export const fetchIDNumberSuccessAction = createAction('[Dashboard] fetch ID number success', props<{ response: any }>());
 export const setEnableBillButtonAction = createAction('[Dashboard] Enable Bill Button', props<{ state: boolean }>());
+export const createBillAction = createAction('[Dashboard] create bill', props<{ bill: Bill }>());
+export const createBillSuccessAction = createAction('[Dashboard] create bill success', props<{ response: any }>());
+export const createBillErrorAction = createAction('[Dashboard] create bill error');
+export const fetchBillsAction = createAction('[Dashboard] fetch bills', props<{ page: number }>());
+export const fetchBillsSuccessAction = createAction('[Dashboard] fetch bills success', props<{ response: any }>());
+export const fetchBillsByIdAction = createAction('[Dashboard] fetch bills by id', props<{ id: number}>());
+export const fetchBillsByIdSuccessAction = createAction('[Dashboard] fetch bills by id success', props<{ response: any }>());
+export const updateBillAction = createAction('[Dashboard] update bill', props<{ bill: Bill }>());
+export const updateBillSuccessAction = createAction('[Dashboard] update bill success', props<{ response: any }>());
+export const updateBillErrorAction = createAction('[Dashboard] update bill error');
+export const deleteBillAction = createAction('[Dashboard] delete bill', props<{ bill: Bill }>());
+export const deleteBillSuccessAction = createAction('[Dashboard] delete bill success', props<{ response: any }>());
+export const deleteBillErrorAction = createAction('[Dashboard] delete bill error');

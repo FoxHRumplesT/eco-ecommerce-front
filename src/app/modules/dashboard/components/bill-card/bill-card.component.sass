@@ -1,0 +1,71 @@
+.grid-bill-card
+  display: grid
+  grid-template-columns: 1fr 1fr 1fr 1fr
+  grid-template-rows: 1fr
+  gap: 1px 1px
+  grid-template-areas: ". . . yes"
+  .yes
+    grid-area: yes
+    margin-bottom: 4px
+    background: var(--green-1)
+
+
+.grid-container-bill
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-template-rows: auto auto auto auto
+  gap: 1px 1px
+  grid-template-areas: "bill-grid bill-grid" "bill_date bill_expired_date" "client-grid client-grid" "client-name client_document" "client-email client_phone" "products-grid products-grid"
+  .bill-grid
+    grid-area: bill-grid
+    font-weight: bold
+    padding-top: 15px
+  .client-grid
+    grid-area: client-grid
+    font-weight: bold
+    padding-top: 15px
+  .products-grid
+    grid-area: products-grid
+    font-weight: bold
+    padding-top: 15px
+  .client-email
+    grid-area: client-email
+  .client-name
+    grid-area: client-name
+  .client_document
+    grid-area: client_document
+  .client_phone
+    grid-area: client_phone
+  .bill_expired_date
+    grid-area: bill_expired_date
+  .bill_date
+    grid-area: bill_date
+
+
+.grid-container-product
+  display: grid
+  grid-template-columns: 1fr 1fr
+  grid-template-rows: auto auto auto auto
+  gap: 1px 1px
+  grid-template-areas: "product-lot product-code" "product-value product-is_free" "product-quantity tax" "total-products total"
+  .product-code
+    grid-area: product-code
+    padding-top: 10px
+  .product-quantity
+    grid-area: product-quantity
+  .product-value
+    grid-area: product-value
+  .product-is_free
+    grid-area: product-is_free
+  .product-lot
+    grid-area: product-lot
+    padding-top: 10px
+  .total-products
+    grid-area: total-products
+  .total
+    grid-area: total
+  .tax
+    grid-area: tax
+
+
+

@@ -1,0 +1,37 @@
+<div class="wrapper-bill">
+  <div class="form-container">
+    <div class="header">
+      <h2 class="title">
+        Facturas
+      </h2>
+    </div>
+    <div class="bill-detail">
+    <ngx-datatable
+      [rows]="bills$ | async"
+      [rowHeight]="50"
+      [columnMode]="mode.force">
+      <ngx-datatable-column prop= "id" name= 'Id'></ngx-datatable-column>
+      <ngx-datatable-column prop= "date" name= "Fecha"></ngx-datatable-column>
+      <ngx-datatable-column prop= "client.number_identification" name= "ID Cliente"></ngx-datatable-column>
+      <ngx-datatable-column prop= "client" name= "Nombre Cliente" >
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{value.name}} {{value.last_name}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column prop= "total" name= "Total"></ngx-datatable-column>
+      <ngx-datatable-column prop= "actions" name= "Acciones" sortable="false">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <button class="btn-actions" (click)='onBillDetail(row)'>
+                <fa-icon [icon]="['fas', 'table']"></fa-icon>
+              </button>
+              <button class="btn-actions" (click)='onUpdateBill(row)'>
+                <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+              </button>
+              <button class="btn-actions" (click)='onDeleteBill(row)'>
+                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+              </button>
+        </ng-template>
+  </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>

@@ -30,13 +30,7 @@ export class Result {
       tax_value: number;
       total: number;
       quantity: number;
-      product: {
-        code: number;
-        name: string;
-        url_image: string;
-        value: number;
-        tax: Tax[]
-      };
+      product: Product;
       tax: Tax[]
   };
 };
@@ -62,4 +56,33 @@ export class Client {
   phone: number;
   new: boolean;
   country_code: string;
+}
+
+export class BillsResponse {
+  results: Bill[];
+  page: number;
+  per_page: number;
+  total: number;
+}
+
+export class Bill {
+  id: number;
+  products: Product[];
+  client: Client;
+  date: Date;
+  expired_date: Date;
+  total_products: number;
+  tax: number;
+  total: number;
+  paid: boolean;
+}
+
+export class BillResponse {
+  request: {
+     products: Product[];
+     date: Date;
+     expired_date: Date;
+     client: Client;
+  };
+  bill: Result;
 }
