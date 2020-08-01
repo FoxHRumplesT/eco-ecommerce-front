@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <div class="grid-container-bill">
+    <div class="bill-grid"> Factura Id: {{ bill.id }} </div>
+    <div class="bill_expired_date">Fecha vencimiento: {{ bill.expired_date }}</div>
+    <div class="bill_date"> Fecha: {{ bill.date }}</div>
+    <div class="client-grid">Cliente</div>
+    <div class="client-email">Correo: {{ bill.client.email}}</div>
+    <div class="client-name"> Nombre: {{ bill.client.name }}  {{ bill.client.last_name }}</div>
+    <div class="client_document">
+      Numero identificacion: {{ bill.client.document_type }} {{ bill.client.number_identification }}
+    </div>
+    <div class="client_phone"> Celular: {{ bill.client.phone }}</div>
+    <div class="products-grid"> Productos</div>
+  </div>
+    <div class="grid-container-product" *ngFor="let product of bill.products">
+    <div class="product-lot"><li>Lote: {{ product.lot }}</li></div>
+    <div class="product-code">Codigo: {{ product.code }}</div>
+    <div class="product-quantity">Cantidad:{{ product.quantity }}</div>
+    <div class="product-value">Valor: {{ product.value }}</div>
+    <div class="product-is_free">Free: {{ product.is_free }}</div>
+    <div class="total-products">Total productos: {{ bill.total_products }}</div>
+    <div class="total">Total: {{ bill.total }}</div>
+    <div class="tax">Impuesto: {{ bill.tax }}</div>
+    </div>
+</div>
+<div mat-dialog-actions class="grid-bill-card">
+  <button mat-button class="button yes" [mat-dialog-close]="true" cdkFocusInitial>Aceptar</button>
+</div>

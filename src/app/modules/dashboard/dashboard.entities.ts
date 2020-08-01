@@ -63,3 +63,32 @@ export class Client {
   new: boolean;
   country_code: string;
 }
+
+export class BillsResponse {
+  results: Bill[];
+  page: number;
+  per_page: number;
+  total: number;
+}
+
+export class Bill {
+  id: number;
+  products: Product[];
+  client: Client;
+  date: Date;
+  expired_date: Date;
+  total_products: number;
+  tax: number;
+  total: number;
+  paid: boolean;
+}
+
+export class BillResponse {
+  request: {
+     products: Product[];
+     date: Date;
+     expired_date: Date;
+     client: Client;
+  };
+  bill: Result;
+}

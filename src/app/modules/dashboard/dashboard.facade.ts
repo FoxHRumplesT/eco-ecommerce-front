@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { Product, Tax, Basket, Result, Client, ProductsResponse } from './dashboard.entities';
-import { productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector } from './store/selectors';
+import { Product, Tax, Basket, Result, Client, ProductsResponse, BillResponse, Bill, BillsResponse } from './dashboard.entities';
+import { productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector, billSelector, billsSelector } from './store/selectors';
 import * as actions from './store/actions';
 import { map } from 'rxjs/operators';
 
@@ -34,6 +34,15 @@ export class DashboardFacade {
   public clients$: Observable<Client[]> = this.store.pipe(
     select(clientSelector)
   );
+
+  public bill$: Observable<BillResponse> = this.store.pipe(
+    select(billSelector)
+  );
+
+  public bills$: Observable<BillsResponse> = this.store.pipe(
+    select(billsSelector)
+  );
+
 
   public isEnabledBillButton$: Observable<boolean> = this.store.pipe(
     select(uiSelector), map(state => state.isEnabledBillButton)
@@ -94,4 +103,26 @@ export class DashboardFacade {
   public fetchIDNumber(idNumber: number): void {
     this.store.dispatch(actions.fetchIDNumberAction({ idNumber }));
   }
+
+  public createBill(bill: Bill): void {
+    this.store.dispatch(actions.createBillAction({ bill }));
+  }
+  public fetchBills$(page: number): void {
+    this.store.dispatch(actions.fetchBillsAction({ page }));
+  }
+
+  public fetchBillById$(id: number): void {
+    this.store.dispatch(actions.fetchBillsByIdAction({ id }));
+  }
+
+  public deleteBill$(bill: Bill): void {
+    this.store.dispatch(actions.deleteBillAction({ bill }));
+  }
+
+  public updateBill$(bill: Bill): void {
+    this.store.dispatch(actions.updateBillAction({ bill }));
+  }
+
+
+
 }

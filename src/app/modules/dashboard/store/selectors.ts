@@ -13,3 +13,5 @@ export const updateProductSelector = createSelector(stateSelector, state => stat
 export const deleteProductSelector = createSelector(stateSelector, state => state.data.messageSuccess);
 export const createClientSelector = createSelector(stateSelector, state => state.data.messageSuccess);
 export const clientSelector = createSelector(stateSelector, state => state.data.clients);
+export const billSelector = createSelector(stateSelector, state => state.data.bill);
+export const billsSelector = createSelector(stateSelector, state => state.data.bills);
