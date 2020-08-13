@@ -75,8 +75,8 @@ export class DashboardEffects {
   createProduct$: Observable<Action> = this.actions$.pipe(
     ofType(actions.createProductAction),
     switchMap(({ product, formDataToUploadImage }) => this.services.uploadImage$(formDataToUploadImage).pipe(
-      map(response => ({ product: { ...product, url_image: response.message }, error: null })),
-      catchError(error => of({ error, product: { ...product, url_image: '' } })),
+      map(response => ({ product: { ...product, urlImage: response.message }, error: null })),
+      catchError(error => of({ error, product: { ...product, urlImage: '' } })),
     )),
     switchMap(({ product }) => this.services.createProduct$(product).pipe(
       map(response => ({ response: response.message, error: null })),
@@ -94,8 +94,8 @@ export class DashboardEffects {
   updateProduct$: Observable<Action> = this.actions$.pipe(
     ofType(actions.updateProductAction),
     switchMap(({ product, formDataToUploadImage }) => this.services.uploadImage$(formDataToUploadImage).pipe(
-      map(response => ({ product: { ...product, url_image: response.message }, error: null })),
-      catchError(error => of({ error, product: { ...product, url_image: product.urlImage } })),
+      map(response => ({ product: { ...product, urlImage: response.message }, error: null })),
+      catchError(error => of({ error, product: { ...product, urlImage: product.urlImage } })),
     )),
     switchMap(({ product }) => this.services.updateProduct$(product).pipe(
       map(response => ({ response: response.message, error: null })),
@@ -157,5 +157,78 @@ export class DashboardEffects {
       catchError(error => of({ error, response: [] })),
     )),
     map(({ response, error }) => actions.fetchIDNumberSuccessAction({ response }))
+  );
+
+  @Effect()
+  createBill$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.createBillAction),
+    switchMap(({ bill }) => this.services.createBill$(bill).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: [] })),
+    )),
+    concatMap(({ response, error }) =>
+      error === null ? [actions.createBillSuccessAction({ response }),
+      actions.notificationAction({
+        msg: 'Factura creada satisfactoriamente.',
+        status: NgxNotificationStatusMsg.SUCCESS
+      })] : [actions.createBillErrorAction(),
+      actions.notificationAction({
+        msg: 'Ocurrio un error al generar factura.',
+        status: NgxNotificationStatusMsg.FAILURE
+      })])
+  );
+
+  @Effect()
+  fetchBills$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.fetchBillsAction),
+    switchMap(({page}) => this.services.fetchBills$(page).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null })),
+    )),
+    map(({ response, error }) => actions.fetchBillsSuccessAction({ response }))
+  );
+
+  @Effect()
+  fetchBillsById$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.fetchBillsByIdAction),
+    switchMap(({id}) => this.services.fetchBillById$(id).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null })),
+    )),
+    map(({ response, error }) => actions.fetchBillsByIdSuccessAction({ response }))
+  );
+
+  @Effect()
+  updateBill$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.updateBillAction),
+    switchMap(({ bill }) => this.services.updateBill$(bill).pipe(
+      map(response => ({ response: response.message, error: null })),
+      catchError(error => of({ error, response: null })),
+    )),
+    concatMap(({ response, error }) => !error ? [
+      actions.notificationAction({ msg: 'Factura editada!', status: NgxNotificationStatusMsg.SUCCESS }),
+      actions.fetchBillsAction({ page: 1 })
+    ] : [
+        actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+      ])
+  );
+
+  @Effect()
+  deleteBill$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.deleteBillAction),
+    switchMap(({ bill }) => this.services.deleteBill$(bill).pipe(
+      map(response => ({ response: response.message, error: null })),
+      catchError(error => of({ error, response: [] })),
+    )),
+
+    concatMap(({ response, error }) => !error ? [
+      actions.deleteBillSuccessAction({ response }),
+      actions.fetchBillsAction({ page: 1 }),
+      actions.notificationAction({ msg: 'Factura eliminada', status: NgxNotificationStatusMsg.SUCCESS })
+    ] : [
+        actions.deleteBillErrorAction(),
+        actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
+      ]
+    )
   );
 }

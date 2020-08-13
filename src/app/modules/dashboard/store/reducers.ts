@@ -23,7 +23,10 @@ const initialDataState: DataState = {
   taxes: [],
   basket: { products: [] },
   result: { summary: {} },
-  clients: []
+  clients: [],
+  bill: {},
+  bills: {},
+  client: {}
 } as DataState;
 
 const data = createReducer(
@@ -73,6 +76,17 @@ const data = createReducer(
     }
     return ({ ...state, basket: newBasket });
   }),
+
+  on(actions.cleanBasket, (state) => {
+    const newBasket = { ...state.basket };
+    newBasket.products = [];
+    return ({ ...state, basket: newBasket });
+  }),
+
+  on(actions.setClient, (state, { client }) => {
+    return ({ ...state, client });
+  }),
+
   on(actions.calculateTaxesInBasketSuccessAction, (state, { response }) => ({...state, result: response })),
 
   on(actions.createProductSuccessAction, (state, { response }) => ({...state, result: response })),
@@ -81,9 +95,19 @@ const data = createReducer(
 
   on(actions.deleteProductSuccessAction, (state, { response }) => ({...state, result: response })),
 
-  on(actions.createClientSuccessAction, (state, { response }) => ({...state, result: response })),
+  on(actions.createClientSuccessAction, (state, { response }) => ({...state, resultClient: response })),
 
-  on(actions.fetchIDNumberSuccessAction, (state, { response }) => ({...state, clients: response }))
+  on(actions.fetchIDNumberSuccessAction, (state, { response }) => ({...state, clients: response })),
+
+  on(actions.createBillSuccessAction, (state, { response }) => ({...state, bill: response })),
+
+  on(actions.fetchBillsSuccessAction, (state, { response }) => ({ ...state, bills: response })),
+
+  on(actions.fetchBillsByIdSuccessAction, (state, { response }) => ({ ...state, bills: response })),
+
+  on(actions.updateBillSuccessAction, (state, { response }) => ({...state, response })),
+
+  on(actions.deleteBillSuccessAction, (state, { response }) => ({...state, response })),
 );
 
 export const DashboardReducers = combineReducers({

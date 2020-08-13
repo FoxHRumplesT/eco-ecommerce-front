@@ -1,11 +1,11 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { map, debounceTime } from 'rxjs/operators';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result, Client, ProductsResponse } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result, Client, ProductsResponse, Bill, BillResponse } from '../../dashboard.entities';
 import { Constants } from '../../dashboard.constants';
 
 @Component({
@@ -14,7 +14,6 @@ import { Constants } from '../../dashboard.constants';
   styleUrls: ['./products.component.sass']
 })
 export class ProductsComponent implements OnInit, OnDestroy {
-
   public stepOne = true;
   public stepTwo = false;
   public typeDocument = [
@@ -29,26 +28,35 @@ export class ProductsComponent implements OnInit, OnDestroy {
   private client = new Client();
   public newClient = true;
   private subscriptions: Subscription[] = [];
+  public isUpdateBill = false;
+  public actionButtonBill = 'Crear factura';
 
 
   constructor(
     private dashboardFacade: DashboardFacade
   ) {
     const { required, email, minLength, maxLength } = Validators;
+    this.dashboardFacade.client$.subscribe(x => this.client = x);
+    if (this.client.name !== undefined) {
+      this.isUpdateBill = true;
+      this.newClient = false;
+      this.dashboardFacade.setEnabledBillButton(true);
+      this.actionButtonBill = 'Modificar factura';
+    }
     this.formClient = new FormGroup({
       number_identification: new FormControl('', [required]),
       name: new FormControl(this.client.name, [required]),
-      email: new FormControl('', [required, email]),
-      phone: new FormControl('', [required, minLength(7), maxLength(10)]),
+      email: new FormControl(this.client.email, [required, email]),
+      phone: new FormControl(this.client.phone, [required, minLength(7), maxLength(10)]),
       billingDate: new FormControl(new Date(), [required]),
       payDate: new FormControl(new Date(), [required]),
-      document_type: new FormControl('', [required]),
-      lastname: new FormControl('', [required]),
+      document_type: new FormControl(this.client.document_type, [required]),
+      lastname: new FormControl(this.client.last_name, [required]),
       country_code: new FormControl('+57', [required]),
       new: new FormControl('true', [required]),
-      last_name: new FormControl('')
+      last_name: new FormControl(this.client.last_name)
     });
-
+    this.formClient.controls.number_identification.setValue({number_identification : this.client.number_identification});
     this.formSearch = new FormGroup({
       keyword: new FormControl()
     });
@@ -79,6 +87,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
+
 
   get basket$(): Observable<Basket> {
     return this.dashboardFacade.basket$;
@@ -132,7 +141,29 @@ export class ProductsComponent implements OnInit, OnDestroy {
         this.stepOne = !this.stepOne;
         this.stepTwo = !this.stepTwo;
       } else {
-        // TODO create bill
+        this.formClient.controls.last_name.setValue(this.formClient.controls.lastname.value);
+        this.formClient.controls.new.setValue(false);
+        const actualDate = new Date();
+        const bill: Bill = {
+        client: this.formClient.value,
+        products: basket.products,
+        date: actualDate,
+        expired_date: actualDate,
+        id: null,
+        paid: null,
+        tax: null,
+        total: null,
+        total_products: null
+        };
+        if (!this.newClient) {
+          bill.client.number_identification = this.formClient.controls.number_identification.value.number_identification;
+        }
+        if (this.isUpdateBill) {
+          this.dashboardFacade.updateBill(bill);
+        }
+        else {
+          this.dashboardFacade.createBill(bill);
+        }
       }
     } else {
       this.dashboardFacade.sendMessage('Debe seleccionar por lo menos un producto.', NgxNotificationStatusMsg.FAILURE);
@@ -165,6 +196,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.formClient.controls.name.setValue(client.name);
     this.formClient.controls.lastname.setValue(client.lastname);
     this.formClient.controls.email.setValue(client.email);
+    this.formClient.controls.new.setValue(false);
     this.dashboardFacade.setEnabledBillButton(true);
     this.newClient = false;
   }

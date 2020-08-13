@@ -1,7 +1,7 @@
 <div class="wrapper-products" [ngClass]="{'step-1': stepOne, 'step-2': stepTwo}" *ngIf="basket$ | async as basket">
   <div class="all-products" *ngIf="stepOne; else clientForm">
     <div class="header">
-      <h2 class="title">Productos</h2>
+      <h2 class="title">Stock</h2>
       <div class="search" [formGroup]="formSearch">
         <input type="text" id="search-input" class="input-text" placeholder="Busca tu producto" formControlName="keyword">
         <fa-icon [icon]="['fas', 'search']"></fa-icon>
@@ -62,7 +62,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Nombres</mat-label>
-        <input matInput type="text" formControlName="name">
+        <input matInput type="text" formControlName="name" >
       </mat-form-field>
       <mat-form-field>
         <mat-label>Apellidos</mat-label>
@@ -93,7 +93,7 @@
   </ng-template>
   <div class="added-products">
     <div class="close">
-      <div class="close-button" (click)="closeBill()" *ngIf="stepTwo">
+      <div class="close-button" (click)="closeBill()" *ngIf="stepTwo && !isUpdateBill">
         <fa-icon [icon]="['fas', 'times']" class="close-icon"></fa-icon>
       </div>
     </div>
@@ -118,7 +118,7 @@
 
       <button class="create" (click)="continue(basket)"
       [disabled]="validateBillButton$ | async">
-        Crear factura
+        {{actionButtonBill}}
       </button>
     </div>
   </div>
