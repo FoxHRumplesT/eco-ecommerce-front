@@ -33,5 +33,12 @@
         </ng-template>
   </ngx-datatable-column>
     </ngx-datatable>
+    <div class="paginator" *ngIf="paginatorInfo$ | async as paginator">
+      <app-paginator
+        [total]="paginator.total"
+        [perPage]="paginator.per_page"
+        [currentPage]="paginator.page"
+      ></app-paginator>
+    </div>
   </div>
 </div>

@@ -14,6 +14,7 @@ export interface DataState {
   resultClient: Result;
   messageSuccess: string;
   clients: Client[];
+  client: Client;
   bill: BillResponse;
   bills: BillsResponse;
 }

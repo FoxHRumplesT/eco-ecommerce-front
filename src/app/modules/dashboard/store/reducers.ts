@@ -26,6 +26,7 @@ const initialDataState: DataState = {
   clients: [],
   bill: {},
   bills: {},
+  client: {}
 } as DataState;
 
 const data = createReducer(
@@ -75,6 +76,17 @@ const data = createReducer(
     }
     return ({ ...state, basket: newBasket });
   }),
+
+  on(actions.cleanBasket, (state) => {
+    const newBasket = { ...state.basket };
+    newBasket.products = [];
+    return ({ ...state, basket: newBasket });
+  }),
+
+  on(actions.setClient, (state, { client }) => {
+    return ({ ...state, client });
+  }),
+
   on(actions.calculateTaxesInBasketSuccessAction, (state, { response }) => ({...state, result: response })),
 
   on(actions.createProductSuccessAction, (state, { response }) => ({...state, result: response })),

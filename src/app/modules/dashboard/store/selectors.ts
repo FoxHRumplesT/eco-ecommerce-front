@@ -16,3 +16,4 @@ export const createClientSelector = createSelector(stateSelector, state => state
 export const clientSelector = createSelector(stateSelector, state => state.data.clients);
 export const billSelector = createSelector(stateSelector, state => state.data.bill);
 export const billsSelector = createSelector(stateSelector, state => state.data.bills);
+export const clientBillSelector = createSelector(stateSelector, state => state.data.client);
