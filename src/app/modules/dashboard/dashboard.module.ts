@@ -19,7 +19,6 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { ProductsComponent } from './components/products/products.component';
 import { CurrencyFormatPipe } from '../../pipes/currency-format.pipe';
-import { BillComponent } from './components/bill/bill.component';
 import { DashboardEffects } from './store/effects';
 import { DashboardReducers } from './store/reducers';
 import { DashboardFacade } from './dashboard.facade';
@@ -32,6 +31,8 @@ import { ModalComponent } from './components/modal/modal.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ReportComponent } from './components/report/report.component';
+import { BillManagementComponent } from './components/bill-management/bill-management.component';
+import { BillManagementDetailComponent } from './components/bill-management-detail/bill-management-detail.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ReportComponent } from './components/report/report.component';
     DashboardComponent,
     ProductsComponent,
     CurrencyFormatPipe,
-    BillComponent,
+    BillManagementComponent,
+    BillManagementDetailComponent,
     ProductsCardComponent,
     ProductsBasketCardComponent,
     ProductsManagementComponent,

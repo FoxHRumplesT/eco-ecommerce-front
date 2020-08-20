@@ -1,4 +1,4 @@
-import { Tax, Basket, Result, Client, ProductsResponse } from '../dashboard.entities';
+import { Tax, Basket, Result, Client, ProductsResponse, Bill, BillsResponse } from '../dashboard.entities';
 
 export interface UIState {
   isLoadingProducts: boolean;
@@ -13,6 +13,7 @@ export interface DataState {
   result: Result;
   messageSuccess: string;
   clients: Client[];
+  bills: BillsResponse;
 }
 export interface State {
   ui: UIState;

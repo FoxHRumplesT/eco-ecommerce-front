@@ -56,10 +56,29 @@ export class Client {
   document_type: string;
   number_identification: string;
   name: string;
-  lastname: string;
-  last_name: string;
+  lastname?: string;
+  last_name?: string;
   email: string;
   phone: number;
   new: boolean;
   country_code: string;
+}
+
+export class BillsResponse {
+  page: number;
+  per_page: number;
+  results: Bill[];
+  total: number;
+}
+
+export class Bill {
+  id?: number;
+  products: Product[];
+  client: Client;
+  date: Date;
+  expired_date: Date;
+  total_products?: number;
+  tax?: number;
+  total?: number;
+  paid?: boolean;
 }

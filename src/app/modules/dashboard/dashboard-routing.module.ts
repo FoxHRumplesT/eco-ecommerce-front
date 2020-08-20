@@ -2,13 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { DashboardGuard } from './dashboard.guard';
 import { DashboardComponent } from './dashboard.component';
 import { ProductsComponent } from './components/products/products.component';
-import { BillComponent } from './components/bill/bill.component';
-import { DashboardGuard } from './dashboard.guard';
 import { ProductsManagementComponent } from './components/products-management/products-management.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ReportComponent } from './components/report/report.component';
+import { BillManagementComponent } from './components/bill-management/bill-management.component';
 
 @NgModule({
   declarations: [],
@@ -25,8 +25,12 @@ import { ReportComponent } from './components/report/report.component';
             component: ProductsComponent
           },
           {
-            path: 'productsManagement',
+            path: 'product-management',
             component: ProductsManagementComponent
+          },
+          {
+            path: 'bill-management',
+            component: BillManagementComponent
           },
           {
             path: 'payment',

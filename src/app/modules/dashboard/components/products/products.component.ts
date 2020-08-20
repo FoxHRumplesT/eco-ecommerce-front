@@ -1,12 +1,14 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
+import { map, debounceTime, filter } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable, Subscription } from 'rxjs';
 
 import { DashboardFacade } from '../../dashboard.facade';
-import { Product, Basket, Tax, Result, Client, ProductsResponse } from '../../dashboard.entities';
+import { Product, Basket, Tax, Result, Client, ProductsResponse, Bill } from '../../dashboard.entities';
 import { Constants } from '../../dashboard.constants';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-products',
@@ -17,39 +19,36 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   public stepOne = true;
   public stepTwo = false;
-  public typeDocument = [
+  public documentTypes = [
     { value: 'cc', description: 'Cédula' },
     { value: 'nit', description: 'Nit' },
     { value: 'ce', description: 'Extranjería' },
     { value: 'pp', description: 'Pasaporte' }
   ];
-  public selectetTypeDoc = this.typeDocument[0].value;
-  public formClient: FormGroup;
-  public formSearch: FormGroup;
-  private client = new Client();
-  public newClient = true;
+  public clientForm: FormGroup;
+  public searchForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
 
   constructor(
-    private dashboardFacade: DashboardFacade
+    private dashboardFacade: DashboardFacade,
+    private dialog: MatDialog
   ) {
     const { required, email, minLength, maxLength } = Validators;
-    this.formClient = new FormGroup({
-      number_identification: new FormControl('', [required]),
-      name: new FormControl(this.client.name, [required]),
+    this.clientForm = new FormGroup({
+      documentType: new FormControl(this.documentTypes[0].value, [required]),
+      identificationNumber: new FormControl('', [required]),
+      firstName: new FormControl('', [required]),
+      lastName: new FormControl('', [required]),
       email: new FormControl('', [required, email]),
+      countryCode: new FormControl('+57', [required]),
       phone: new FormControl('', [required, minLength(7), maxLength(10)]),
       billingDate: new FormControl(new Date(), [required]),
       payDate: new FormControl(new Date(), [required]),
-      document_type: new FormControl('', [required]),
-      lastname: new FormControl('', [required]),
-      country_code: new FormControl('+57', [required]),
-      new: new FormControl('true', [required]),
-      last_name: new FormControl('')
+      isNew: new FormControl(true, [required]),
     });
 
-    this.formSearch = new FormGroup({
+    this.searchForm = new FormGroup({
       keyword: new FormControl()
     });
   }
@@ -57,22 +56,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dashboardFacade.fetchProductsInStock(1, '');
     this.subscriptions.push(
-      this.formClient.controls.number_identification.valueChanges.pipe(
-        debounceTime(Constants.debounceTime))
-        .subscribe(
-          value => {
-            this.dashboardFacade.fetchIDNumber(value);
-          }
-        )
+      this.clientForm.controls.identificationNumber.valueChanges.pipe(
+        debounceTime(Constants.debounceTime)
+      ).subscribe(value => this.dashboardFacade.fetchIDNumber(value))
     );
     this.subscriptions.push(
-      this.formSearch.controls.keyword.valueChanges.pipe(
-        debounceTime(Constants.debounceTime))
-        .subscribe(
-          value => {
-            this.dashboardFacade.fetchProductsInStock(1, value);
-          }
-        )
+      this.searchForm.controls.keyword.valueChanges.pipe(
+        debounceTime(Constants.debounceTime)
+      ).subscribe(value => this.dashboardFacade.fetchProductsInStock(1, value))
     );
   }
 
@@ -86,6 +77,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   get products$(): Observable<Product[]> {
     return this.dashboardFacade.products$.pipe(
+      filter(p => !!p),
       map(p => p.results)
     );
   }
@@ -106,6 +98,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
     return this.dashboardFacade.clients$;
   }
 
+  get isBillButtonDisabled(): boolean {
+    return this.stepTwo && this.clientForm.invalid;
+  }
+
+  get showCreateClientButton(): void {
+    return this.clientForm.valid && this.clientForm.get('isNew').value;
+  }
+
   public differentProducts(products: Product[]): Product[] {
     return products.filter((product, index, self) =>
       index === self.findIndex((t) => t.id === product.id)
@@ -123,61 +123,94 @@ export class ProductsComponent implements OnInit, OnDestroy {
     else if (type === 'remove') this.dashboardFacade.removeProductToBasket(product);
     this.basket$.subscribe(x =>
       this.dashboardFacade.calculateTaxesInBasket(x)
-      ).unsubscribe();
+    ).unsubscribe();
   }
 
   public continue(basket: Basket): void {
     if (basket.products.length !== 0) {
-      if (this.stepOne) {
-        this.stepOne = !this.stepOne;
-        this.stepTwo = !this.stepTwo;
-      } else {
-        // TODO create bill
-      }
+      this.stepOne = !this.stepOne;
+      this.stepTwo = !this.stepTwo;
     } else {
       this.dashboardFacade.sendMessage('Debe seleccionar por lo menos un producto.', NgxNotificationStatusMsg.FAILURE);
     }
   }
 
-  public toggleFreeProduct(product: Product): void {
-    this.dashboardFacade.updateProductFromBasket({ ...product, is_free: !product.is_free });
-  }
-
-  public newProductValue(product: Product): void {
-    this.dashboardFacade.updateProductFromBasket(product);
-    this.basket$.subscribe(x =>
-      this.dashboardFacade.calculateTaxesInBasket(x)
-      ).unsubscribe();
-  }
-
-  public createClient() {
-    this.formClient.controls.phone.setValue(Number(this.formClient.controls.phone.value));
-    this.formClient.controls.last_name.setValue(this.formClient.controls.lastname.value);
-    this.dashboardFacade.createClient(this.formClient.value);
-  }
-
-  public displayIDClient(client: Client) {
-    if (client) {
-      return client.number_identification;
-    }
-  }
-  public setClient(client: Client) {
-    this.formClient.controls.name.setValue(client.name);
-    this.formClient.controls.lastname.setValue(client.lastname);
-    this.formClient.controls.email.setValue(client.email);
-    this.dashboardFacade.setEnabledBillButton(true);
-    this.newClient = false;
-  }
-
-  get validateBillButton$(): Observable<boolean> {
-    return this.dashboardFacade.isEnabledBillButton$.pipe(
-      map(isEnabledBillButton =>
-        (this.stepTwo && this.formClient.invalid) ||
-        (this.stepTwo && !isEnabledBillButton)
-      ));
-  }
   public closeBill() {
     this.stepOne = !this.stepOne;
     this.stepTwo = !this.stepTwo;
+  }
+
+  public toggleFreeProduct(product: Product): void {
+    const message = '¿Estás seguro de cambiar el producto?';
+    const dialogRef = this.dialog.open(ModalComponent, {
+      width: '250px',
+      disableClose: true,
+      data: { message }
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dashboardFacade.updateProductFromBasket({ ...product, is_free: !product.is_free });
+        this.basket$.subscribe(x =>
+          this.dashboardFacade.calculateTaxesInBasket(x)
+        ).unsubscribe();
+      }
+    }));
+  }
+
+  public newProductValue(product: Product): void {
+    const message = '¿Estás seguro de cambiar el valor del producto?';
+    const dialogRef = this.dialog.open(ModalComponent, {
+      width: '250px',
+      disableClose: true,
+      data: { message }
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dashboardFacade.updateProductFromBasket(product);
+        this.basket$.subscribe(x =>
+          this.dashboardFacade.calculateTaxesInBasket(x)
+        ).unsubscribe();
+      }
+    }));
+  }
+
+  public setClient(document: string) {
+    this.clients$.subscribe(clients => {
+      const client = clients.find(c => c.number_identification === document);
+      this.clientForm.patchValue({
+        email: client.email,
+        firstName: client.name,
+        lastName: client.lastname,
+        isNew: false
+      });
+    }).unsubscribe();
+  }
+
+  public createBill(): void {
+    this.basket$.subscribe(basket => {
+      const bill: Bill = {
+        client: {
+          country_code: this.clientForm.value.countryCode,
+          document_type: this.clientForm.value.documentType,
+          email: this.clientForm.value.email,
+          last_name: this.clientForm.value.lastName,
+          name: this.clientForm.value.firstName,
+          new: this.clientForm.value.isNew,
+          number_identification: this.clientForm.value.identificationNumber,
+          phone: +this.clientForm.value.phone
+        },
+        products: basket.products,
+        date: this.clientForm.value.payDate,
+        expired_date: this.clientForm.value.billingDate,
+      };
+      this.dashboardFacade.createBill(bill);
+      this.closeBill();
+    }).unsubscribe();
+  }
+
+  public goToPage(page: number): void {
+    this.dashboardFacade.fetchProductsInStock(page, '');
   }
 }

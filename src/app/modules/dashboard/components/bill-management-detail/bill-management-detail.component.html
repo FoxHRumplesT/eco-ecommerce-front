@@ -1,0 +1,13 @@
+<section class="wrapper-bill-management-detail">
+  <h2 class="title">Detalle de factura {{bill?.id}}</h2>
+  <div class="id">ID: {{ bill?.id }}</div>
+  <div class="expired-date">Fecha vencimiento: {{ bill?.expired_date }}</div>
+  <div class="expired-date">Fecha pago: {{ bill?.date }}</div>
+  <div class="expired-date">Cliente: {{ bill?.client.name }} {{ bill?.client.last_name }}</div>
+  <div class="expired-date">Email: {{ bill?.client.email }}</div>
+  <div class="expired-date">Identificacion: {{ bill?.client.number_identification }}</div>
+  <div class="expired-date">Telefono: {{ bill?.client.phone }}</div>
+  <ul class="products">
+    <li *ngFor="let p of products">{{ p.calculateSummary.product.name }}</li>
+  </ul>
+</section>

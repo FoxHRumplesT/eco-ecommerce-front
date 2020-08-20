@@ -2,11 +2,13 @@ import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-
-import { Product, Tax, Basket, Result, Client, ProductsResponse } from './dashboard.entities';
-import { productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector } from './store/selectors';
-import * as actions from './store/actions';
 import { map } from 'rxjs/operators';
+
+import { Product, Tax, Basket, Result, Client, ProductsResponse, BillsResponse, Bill } from './dashboard.entities';
+import {
+  productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector, billsSelector
+} from './store/selectors';
+import * as actions from './store/actions';
 
 @Injectable()
 export class DashboardFacade {
@@ -35,13 +37,13 @@ export class DashboardFacade {
     select(clientSelector)
   );
 
+  public bills$: Observable<BillsResponse> = this.store.pipe(
+    select(billsSelector)
+  );
+
   public isEnabledBillButton$: Observable<boolean> = this.store.pipe(
     select(uiSelector), map(state => state.isEnabledBillButton)
   );
-
-  public setEnabledBillButton(state: boolean): void {
-    this.store.dispatch(actions.setEnableBillButtonAction({ state }));
-  }
 
   public fetchProducts(page: number, keyword: string): void {
     this.store.dispatch(actions.fetchProductsAction({ page, keyword }));
@@ -87,11 +89,23 @@ export class DashboardFacade {
     this.store.dispatch(actions.notificationAction({ msg, status }));
   }
 
-  public createClient(client: Client): void {
-    this.store.dispatch(actions.createClientAction({ client }));
-  }
-
   public fetchIDNumber(idNumber: number): void {
     this.store.dispatch(actions.fetchIDNumberAction({ idNumber }));
+  }
+
+  public fetchBills(page: number): void {
+    this.store.dispatch(actions.fetchBillsAction({ page }));
+  }
+
+  public createBill(bill: Bill): void {
+    this.store.dispatch(actions.createBillAction({ bill }));
+  }
+
+  public deleteBill(bill: Bill): void {
+    this.store.dispatch(actions.deleteBillAction({ bill }));
+  }
+
+  public updateBill(bill: Bill): void {
+    this.store.dispatch(actions.updateBillAction({ bill }));
   }
 }

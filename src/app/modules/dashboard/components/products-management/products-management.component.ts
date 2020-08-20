@@ -3,7 +3,7 @@ import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
+import { map, debounceTime, filter } from 'rxjs/operators';
 
 import { DashboardFacade } from '../../dashboard.facade';
 import { Product, Tax, ProductsResponse } from '../../dashboard.entities';
@@ -58,6 +58,7 @@ export class ProductsManagementComponent implements OnInit, OnDestroy {
 
   get products$(): Observable<Product[]> {
     return this.dashboardFacade.products$.pipe(
+      filter(p => !!p),
       map(p => p.results)
     );
   }

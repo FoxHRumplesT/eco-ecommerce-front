@@ -10,6 +10,8 @@ import { Product, Basket } from '../../dashboard.entities';
 })
 export class ProductsCardComponent {
 
+  public quantity = 1;
+
   @Input() product: Product;
   @Input() basket: Basket;
   @Input() isBasket: boolean;
@@ -18,19 +20,8 @@ export class ProductsCardComponent {
   @Output() setProductToEdit: EventEmitter<Product> = new EventEmitter();
   @Output() openDeleteModal: EventEmitter<Product> = new EventEmitter();
 
-  constructor() { }
-
-  get hasAddedProduct(): boolean {
-    if (this.basket !== undefined)
-      return this.basket.products.some(product => this.product.id === product.id);
-  }
-
-  get quantity(): number {
-    return this.basket.products.find(product => product.id === this.product.id).quantity;
-  }
-
   get enableAddAction(): boolean {
-    return this.quantity < this.product.quantity;
+    return this.quantity <= this.product.quantity;
   }
 
   get enableRemoveAction(): boolean {
@@ -38,11 +29,17 @@ export class ProductsCardComponent {
   }
 
   public addProductToBasket(): void {
-    this.addProduct.emit(this.product);
+    const product = this.basket.products.find(p => p.id === this.product.id);
+    if (!!product && product.quantity === this.product.quantity) return;
+    for (let i = 0; i < this.quantity; i++) {
+      this.addProduct.emit(this.product);
+    }
   }
 
   public removeProductToBasket(): void {
-    this.removeProduct.emit(this.product);
+    for (let i = 0; i < this.quantity; i++) {
+      this.removeProduct.emit(this.product);
+    }
   }
 
 }

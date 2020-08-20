@@ -6,8 +6,11 @@
     <li [routerLink]="['products']" routerLinkActive="active" >
       <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
     </li>
-    <li [routerLink]="['productsManagement']" routerLinkActive="active" >
+    <li [routerLink]="['product-management']" routerLinkActive="active" >
       <fa-icon [icon]="['fas', 'edit']"></fa-icon>
+    </li>
+    <li [routerLink]="['bill-management']" routerLinkActive="active" >
+      <fa-icon [icon]="['fas', 'book']"></fa-icon>
     </li>
     <li [routerLink]="['payment']" routerLinkActive="active" >
       <fa-icon [icon]="['fas', 'money-bill']"></fa-icon>
@@ -16,4 +19,7 @@
       <fa-icon [icon]="['fas', 'table']"></fa-icon>
     </li>
   </ul>
+  <div class="logout" (click)="logout.emit()">
+    <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
+  </div>
 </div>

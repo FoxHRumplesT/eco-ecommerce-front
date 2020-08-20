@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 
 import { Product, Basket, Tax, Result } from '../../dashboard.entities';
 
@@ -8,7 +8,7 @@ import { Product, Basket, Tax, Result } from '../../dashboard.entities';
   styleUrls: ['./products-basket-card.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductsBasketCardComponent implements OnInit {
+export class ProductsBasketCardComponent implements OnChanges {
 
   public isCollapsed = true;
   public isEditing = false;
@@ -21,7 +21,7 @@ export class ProductsBasketCardComponent implements OnInit {
   @Output() newProductValue: EventEmitter<Product> = new EventEmitter();
 
 
-  ngOnInit(): void{
+  ngOnChanges(): void {
     this.newValue = this.product.value;
   }
 
@@ -43,6 +43,11 @@ export class ProductsBasketCardComponent implements OnInit {
 
   }
 
+  public setToEdit(): void {
+    this.isCollapsed = !this.isCollapsed;
+    this.isEditing = !this.isEditing;
+  }
+
   public updateNewProduct(newValue: number): void {
     this.isEditing = !this.isEditing;
     if (!this.isEditing && newValue !== null) {
@@ -55,7 +60,8 @@ export class ProductsBasketCardComponent implements OnInit {
     return tax.value * this.product.value / 100;
   }
 
-  public onToggleIsFree(): void {
+  public onToggleIsFree(e: any): void {
+    e.preventDefault();
     this.toggleIsFree.emit(this.product);
   }
 

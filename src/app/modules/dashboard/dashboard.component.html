@@ -1,6 +1,8 @@
 <div class="wrapper-dashboard">
   <div class="sidebar">
-    <app-sidebar></app-sidebar>
+    <app-sidebar
+      (logout)="logout()">
+    </app-sidebar>
   </div>
   <div class="content">
     <router-outlet></router-outlet>

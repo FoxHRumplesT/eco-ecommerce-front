@@ -9,22 +9,17 @@
   <div class="stock">Código: {{ product.code }}</div>
   <div class="stock">Lote: {{ product.lot }}</div>
   <ng-container *ngIf="isBasket; else options">
-    <ng-container *ngIf="!hasAddedProduct; else counter">
-      <div class="button add" (click)="addProductToBasket()">Agregar</div>
-    </ng-container>
-    <ng-template #counter>
-      <div class="counter">
-        <button class="button" [disabled]="!enableRemoveAction" (click)="removeProductToBasket()">
-          <fa-icon [icon]="['fas', 'minus']"></fa-icon>
-        </button>
-        <div class="number">
-          {{ quantity }}
-        </div>
-        <button class="button" [disabled]="!enableAddAction" (click)="addProductToBasket()">
-          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-        </button>
+    <div class="counter">
+      <button class="button" [disabled]="!enableRemoveAction" (click)="removeProductToBasket()">
+        <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+      </button>
+      <div class="number">
+        <input type="number" [(ngModel)]="quantity">
       </div>
-    </ng-template>
+      <button class="button" [disabled]="!enableAddAction" (click)="addProductToBasket()">
+        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+      </button>
+    </div>
   </ng-container>
   <ng-template #options>
     <div class="grid-container">

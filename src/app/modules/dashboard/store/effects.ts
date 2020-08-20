@@ -129,27 +129,6 @@ export class DashboardEffects {
   );
 
   @Effect()
-  createClient$: Observable<Action> = this.actions$.pipe(
-    ofType(actions.createClientAction),
-    switchMap(({ client }) => this.services.createClient$(client).pipe(
-      map(response => ({ response: response.message, error: null })),
-      catchError(error => of({ error, response: [] })),
-    )),
-    concatMap(({ response, error }) =>
-      error === null ? [actions.createClientSuccessAction({ response }),
-      actions.setEnableBillButtonAction({ state: true }),
-      actions.notificationAction({
-        msg: 'Cliente creado satisfactoriamente.',
-        status: NgxNotificationStatusMsg.SUCCESS
-      })] : [actions.createClientErrorAction(),
-      actions.setEnableBillButtonAction({ state: false }),
-      actions.notificationAction({
-        msg: error.error.message,
-        status: NgxNotificationStatusMsg.FAILURE
-      })])
-  );
-
-  @Effect()
   fetchIDNumber$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchIDNumberAction),
     switchMap(({ idNumber }) => this.services.fetchIDNumber$(idNumber).pipe(
@@ -158,4 +137,65 @@ export class DashboardEffects {
     )),
     map(({ response, error }) => actions.fetchIDNumberSuccessAction({ response }))
   );
+
+  @Effect()
+  fetchBills$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.fetchBillsAction),
+    switchMap(({page}) => this.services.fetchBills$(page).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null })),
+    )),
+    map(({ response, error }) => !error ?
+      actions.fetchBillsSuccessAction({ response }) :
+      actions.fetchBillsErrorAction()
+    )
+  );
+
+  @Effect()
+  createBill$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.createBillAction),
+    switchMap(({ bill }) => bill.client.new ? this.services.createClient$(bill.client).pipe(
+      map(response => ({ bill })),
+      catchError(() => of({ bill }))
+    ) : of(({ bill }))),
+    switchMap(({ bill }) => this.services.createBill$(bill).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: [] })),
+    )),
+    concatMap(({ response, error }) => error === null ? [
+      actions.createBillSuccessAction({ response }),
+      actions.fetchProductsInStockAction({ page: 1, keyword: ''}),
+      actions.resetBasketAction(),
+      actions.notificationAction({
+        msg: 'Factura creada satisfactoriamente.',
+        status: NgxNotificationStatusMsg.SUCCESS
+      }),
+    ] : [
+      actions.createBillErrorAction(),
+      actions.notificationAction({
+        msg: 'Ocurrio un error al generar factura.',
+        status: NgxNotificationStatusMsg.FAILURE
+      })
+    ])
+  );
+
+  @Effect()
+  deleteBill$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.deleteBillAction),
+    switchMap(({ bill }) => this.services.deleteBill$(bill).pipe(
+      map(response => ({ response: response.message, error: null })),
+      catchError(error => of({ error, response: [] })),
+    )),
+
+    concatMap(({ response, error }) => !error ? [
+      actions.deleteBillSuccessAction({ response }),
+      actions.fetchBillsAction({ page: 1 }),
+      actions.notificationAction({ msg: 'Factura eliminada', status: NgxNotificationStatusMsg.SUCCESS })
+    ] : [
+        actions.deleteBillErrorAction(),
+        actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
+      ]
+    )
+  );
+
 }

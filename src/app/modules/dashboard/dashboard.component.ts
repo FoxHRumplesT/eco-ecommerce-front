@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { DashboardFacade } from './dashboard.facade';
 
@@ -10,11 +11,17 @@ import { DashboardFacade } from './dashboard.facade';
 export class DashboardComponent implements OnInit {
 
   constructor(
-    private dashboardFacade: DashboardFacade
+    private dashboardFacade: DashboardFacade,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.dashboardFacade.fetchTaxes();
+  }
+
+  public logout(): void {
+    sessionStorage.removeItem('t');
+    this.router.navigate(['/']);
   }
 
 }
