@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { Product, Tax, Basket, Result, Client, Bill } from './dashboard.entities';
+import { Product, Tax, Basket, Result, Client, Bill, UpdateStock } from './dashboard.entities';
 
 const api = {
   productsInStock: (page: number, keyword: string) => `${environment.api}/ms-e-bill/api/stock?page=${page}&keyword=${keyword}`,
@@ -21,6 +21,7 @@ const api = {
   fetchBillById: (id: number) => `${environment.api}/ms-e-bill/api/bill/${id}`,
   deleteBill: (id: number) => `${environment.api}/ms-e-bill/api/bill/${id}`,
   updateBill: (id: number) => `${environment.api}/ms-e-bill/api/bill/${id}`,
+  updateStockProduct: () => `${environment.api}/ms-e-bill/api/stock/`,
 };
 
 @Injectable()
@@ -88,6 +89,17 @@ export class DashboardServices {
 
   public updateBill$(bill: Bill): Observable<{ isSuccess: boolean, message: string}> {
     return this.http.put<{ isSuccess: boolean, message: string}>(api.updateBill(bill.id), bill);
+  }
+
+  public updateStockProduct$(payload: UpdateStock): Observable<{ isSuccess: boolean, message: string}> {
+    return this.http.post<{ isSuccess: boolean, message: string}>(api.updateStockProduct(), {
+      lot: payload.lot,
+      code_product: payload.codeProduct,
+      quantity: payload.quantity,
+      sale_value: payload.purchaseValue,
+      purchase_value: payload.purchaseValue,
+      date: payload.date
+    });
   }
 
 }

@@ -1,4 +1,7 @@
 <div class="wrapper-products-card">
+  <div class="options">
+    <span (click)="openStockModal.emit(product)">. . .</span>
+  </div>
   <figure>
     <img *ngIf="!!product.url_image; else defaultImage" [src]="product.url_image">
     <ng-template #defaultImage>

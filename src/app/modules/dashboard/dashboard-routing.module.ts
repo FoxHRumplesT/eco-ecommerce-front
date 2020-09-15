@@ -25,6 +25,10 @@ import { BillManagementComponent } from './components/bill-management/bill-manag
             component: ProductsComponent
           },
           {
+            path: 'products/:billId',
+            component: ProductsComponent
+          },
+          {
             path: 'product-management',
             component: ProductsManagementComponent
           },

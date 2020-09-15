@@ -19,6 +19,7 @@ export class ProductsCardComponent {
   @Output() removeProduct: EventEmitter<Product> = new EventEmitter();
   @Output() setProductToEdit: EventEmitter<Product> = new EventEmitter();
   @Output() openDeleteModal: EventEmitter<Product> = new EventEmitter();
+  @Output() openStockModal: EventEmitter<Product> = new EventEmitter();
 
   get enableAddAction(): boolean {
     return this.quantity <= this.product.quantity;

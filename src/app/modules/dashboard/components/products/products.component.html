@@ -11,7 +11,8 @@
       <li *ngFor="let product of products$ | async">
         <app-products-card [product]="product" [basket]="basket" [isBasket]="true"
           (addProduct)="addRemoveProductToBasket('add', $event)"
-          (removeProduct)="addRemoveProductToBasket('remove', $event)">
+          (removeProduct)="addRemoveProductToBasket('remove', $event)"
+          (openStockModal)="openUpdateStockModal($event)">
         </app-products-card>
       </li>
     </ul>
@@ -118,7 +119,7 @@
         <span class="value">{{ (result$ | async).total | currencyFormat }}</span>
       </div>
 
-      <button class="create" (click)="stepOne ? continue(basket) : createBill()" [disabled]="isBillButtonDisabled">
+      <button class="create" (click)="stepOne ? continue(basket) : createBillOrUpdate()" [disabled]="isBillButtonDisabled">
         Crear factura
       </button>
     </div>

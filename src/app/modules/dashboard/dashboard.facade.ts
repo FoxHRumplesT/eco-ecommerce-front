@@ -4,11 +4,12 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 
-import { Product, Tax, Basket, Result, Client, ProductsResponse, BillsResponse, Bill } from './dashboard.entities';
+import { Product, Tax, Basket, Result, Client, ProductsResponse, BillsResponse, Bill, UpdateStock } from './dashboard.entities';
 import {
   productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector, billsSelector
 } from './store/selectors';
 import * as actions from './store/actions';
+import { fetchBillsByIdAction } from './store/actions';
 
 @Injectable()
 export class DashboardFacade {
@@ -107,5 +108,13 @@ export class DashboardFacade {
 
   public updateBill(bill: Bill): void {
     this.store.dispatch(actions.updateBillAction({ bill }));
+  }
+
+  public fetchBillById(id: number): void {
+    this.store.dispatch(actions.fetchBillsByIdAction({ id }));
+  }
+
+  public updateStockOfProduct(c: UpdateStock): void {
+    this.store.dispatch(actions.updateStockProductAction({ payload: c }));
   }
 }

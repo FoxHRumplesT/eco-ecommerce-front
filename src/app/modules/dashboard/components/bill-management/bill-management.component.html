@@ -19,7 +19,7 @@
           <button class="btn-actions" (click)="onBillDetail(row)">
             <fa-icon [icon]="['fas', 'table']"></fa-icon>
           </button>
-          <button class="btn-actions" (click)="onUpdateBill(row)">
+          <button class="btn-actions" [routerLink]="['..', 'products', row.id]">
             <fa-icon [icon]="['fas', 'edit']"></fa-icon>
           </button>
           <button class="btn-actions" (click)="onDeleteBill(row)">

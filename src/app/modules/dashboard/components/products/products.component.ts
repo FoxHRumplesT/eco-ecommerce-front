@@ -4,11 +4,13 @@ import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 import { map, debounceTime, filter } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 import { DashboardFacade } from '../../dashboard.facade';
 import { Product, Basket, Tax, Result, Client, ProductsResponse, Bill } from '../../dashboard.entities';
 import { Constants } from '../../dashboard.constants';
 import { ModalComponent } from '../modal/modal.component';
+import { ProductsUpdateStockComponent } from '../products-update-stock/products-update-stock.component';
 
 @Component({
   selector: 'app-products',
@@ -27,12 +29,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ];
   public clientForm: FormGroup;
   public searchForm: FormGroup;
+  private billId: number;
+  private isUpdatingBill: boolean = false;
   private subscriptions: Subscription[] = [];
 
 
   constructor(
     private dashboardFacade: DashboardFacade,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
     const { required, email, minLength, maxLength } = Validators;
     this.clientForm = new FormGroup({
@@ -65,6 +70,30 @@ export class ProductsComponent implements OnInit, OnDestroy {
         debounceTime(Constants.debounceTime)
       ).subscribe(value => this.dashboardFacade.fetchProductsInStock(1, value))
     );
+    this.route.params.pipe(filter(p => !!p.billId)).subscribe(p => {
+      this.dashboardFacade.bills$.subscribe(b => {
+        const bill: any = b.results.find(_b => _b.id === +p.billId);
+        this.billId = bill.id;
+        this.clientForm.patchValue({
+          isNew: false,
+          email: bill.client.email,
+          firstName: bill.client.name,
+          lastName: bill.client.last_name,
+          identificationNumber: bill.client.number_identification,
+          documentType: bill.client.document_type,
+          countryCode: bill.client.country_code,
+          phone: bill.client.phone
+        });
+        bill.products.summary.forEach(p =>
+          this.dashboardFacade.addProductToBasket({ ...p.calculateSummary.product, quantity: 1, is_free: false })
+        );
+        this.basket$.subscribe(x =>
+          this.dashboardFacade.calculateTaxesInBasket(x)
+        ).unsubscribe();
+      }).unsubscribe();
+      this.isUpdatingBill = true;
+      // this.dashboardFacade.fetchBillById(+p.billId);
+    }).unsubscribe();
   }
 
   ngOnDestroy(): void {
@@ -188,9 +217,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }).unsubscribe();
   }
 
-  public createBill(): void {
+  public createBillOrUpdate(): void {
     this.basket$.subscribe(basket => {
       const bill: Bill = {
+        id: this.billId,
         client: {
           country_code: this.clientForm.value.countryCode,
           document_type: this.clientForm.value.documentType,
@@ -205,12 +235,27 @@ export class ProductsComponent implements OnInit, OnDestroy {
         date: this.clientForm.value.payDate,
         expired_date: this.clientForm.value.billingDate,
       };
-      this.dashboardFacade.createBill(bill);
+      if (this.isUpdatingBill) {
+        this.dashboardFacade.updateBill(bill);
+      } else {
+        this.dashboardFacade.createBill(bill);
+      }
       this.closeBill();
     }).unsubscribe();
   }
 
   public goToPage(page: number): void {
     this.dashboardFacade.fetchProductsInStock(page, '');
+  }
+
+  public openUpdateStockModal(product: Product): void {
+    const dialogRef = this.dialog.open(ProductsUpdateStockComponent, {
+      width: '250px',
+      data: { product }
+    });
+
+    this.subscriptions.push(dialogRef.afterClosed().subscribe(result => {
+      if (result) this.dashboardFacade.updateStockOfProduct(result);
+    }));
   }
 }

@@ -1,12 +1,13 @@
+import { map, switchMap, catchError, concatMap, tap } from 'rxjs/operators';
+import { NgxNotificationStatusMsg, NgxNotificationDirection, NgxNotificationMsgService } from 'ngx-notification-msg';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { map, switchMap, catchError, concatMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { Action } from '@ngrx/store';
 
 import * as actions from './actions';
 import { DashboardServices } from '../dashboard.services';
-import { NgxNotificationStatusMsg, NgxNotificationDirection, NgxNotificationMsgService } from 'ngx-notification-msg';
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class DashboardEffects {
   constructor(
     private actions$: Actions,
     private services: DashboardServices,
+    private router: Router,
     private notificationService: NgxNotificationMsgService
   ) { }
 
@@ -196,6 +198,36 @@ export class DashboardEffects {
         actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
       ]
     )
+  );
+
+  @Effect()
+  updateBill$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.updateBillAction),
+    switchMap(({ bill }) => this.services.updateBill$(bill).pipe(
+      map(response => ({ response: response.message, error: null })),
+      catchError(error => of({ error, response: null })),
+    )),
+    tap(_ => this.router.navigate(['bill-management'])),
+    concatMap(({ response, error }) => !error ? [
+      actions.notificationAction({ msg: 'Factura editada!', status: NgxNotificationStatusMsg.SUCCESS }),
+    ] : [
+      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+    ])
+  );
+
+  @Effect()
+  updateStockProductAction$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.updateStockProductAction),
+    switchMap(({ payload }) => this.services.updateStockProduct$(payload).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null })),
+    )),
+    concatMap(({ response, error }) => !error ? [
+      actions.fetchProductsInStockAction({ page: 1, keyword: ''}),
+      actions.notificationAction({ msg: 'Stock editado!', status: NgxNotificationStatusMsg.SUCCESS }),
+    ] : [
+      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+    ])
   );
 
 }

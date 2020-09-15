@@ -82,3 +82,12 @@ export class Bill {
   total?: number;
   paid?: boolean;
 }
+
+export class UpdateStock {
+  lot: string;
+  codeProduct: string;
+  quantity: number;
+  saleValue: number;
+  purchaseValue: number;
+  date: string;
+}

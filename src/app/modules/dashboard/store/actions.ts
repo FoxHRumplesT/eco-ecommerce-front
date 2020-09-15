@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Product, Basket, Client, Bill } from '../dashboard.entities';
+import { Product, Basket, Client, Bill, UpdateStock } from '../dashboard.entities';
 import { NgxNotificationStatusMsg } from 'ngx-notification-msg';
 
 export const notificationAction = createAction('[Dashboard] notification',
@@ -52,3 +52,4 @@ export const updateBillErrorAction = createAction('[Dashboard] update bill error
 export const deleteBillAction = createAction('[Dashboard] delete bill', props<{ bill: Bill }>());
 export const deleteBillSuccessAction = createAction('[Dashboard] delete bill success', props<{ response: any }>());
 export const deleteBillErrorAction = createAction('[Dashboard] delete bill error');
+export const updateStockProductAction = createAction('[Dashboard] Update stock product', props<{ payload: UpdateStock }>());

@@ -33,6 +33,7 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { ReportComponent } from './components/report/report.component';
 import { BillManagementComponent } from './components/bill-management/bill-management.component';
 import { BillManagementDetailComponent } from './components/bill-management-detail/bill-management-detail.component';
+import { ProductsUpdateStockComponent } from './components/products-update-stock/products-update-stock.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { BillManagementDetailComponent } from './components/bill-management-deta
     PaginatorComponent,
     PaymentComponent,
     ReportComponent,
-    DomSanitizerPipe
+    DomSanitizerPipe,
+    ProductsUpdateStockComponent
   ],
   imports: [
     CommonModule,
