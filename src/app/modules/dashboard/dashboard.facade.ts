@@ -6,10 +6,9 @@ import { map } from 'rxjs/operators';
 
 import { Product, Tax, Basket, Result, Client, ProductsResponse, BillsResponse, Bill, UpdateStock } from './dashboard.entities';
 import {
-  productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector, billsSelector
+  productsSelector, taxesSelector, basketSelector, resultSelector, clientSelector, uiSelector, billsSelector, reportTypesSelector
 } from './store/selectors';
 import * as actions from './store/actions';
-import { fetchBillsByIdAction } from './store/actions';
 
 @Injectable()
 export class DashboardFacade {
@@ -40,6 +39,10 @@ export class DashboardFacade {
 
   public bills$: Observable<BillsResponse> = this.store.pipe(
     select(billsSelector)
+  );
+
+  public reportTypes$: Observable<any> = this.store.pipe(
+    select(reportTypesSelector)
   );
 
   public isEnabledBillButton$: Observable<boolean> = this.store.pipe(
@@ -116,5 +119,17 @@ export class DashboardFacade {
 
   public updateStockOfProduct(c: UpdateStock): void {
     this.store.dispatch(actions.updateStockProductAction({ payload: c }));
+  }
+
+  public fetchReportTypes(): void {
+    this.store.dispatch(actions.fetchReportTypesAction());
+  }
+
+  public generateDatesReport(start: string, end: string): void {
+    this.store.dispatch(actions.generateDatesReportAction({ start, end }));
+  }
+
+  public generateTextReport(text: string): void {
+    this.store.dispatch(actions.generateTextReportAction({ text }));
   }
 }

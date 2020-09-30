@@ -22,6 +22,9 @@ const api = {
   deleteBill: (id: number) => `${environment.api}/ms-e-bill/api/bill/${id}`,
   updateBill: (id: number) => `${environment.api}/ms-e-bill/api/bill/${id}`,
   updateStockProduct: () => `${environment.api}/ms-e-bill/api/stock/`,
+  fetchReportTypes: () => `${environment.api}/ms-e-bill/api/report`,
+  datesReport: (start: string, end: string) =>
+    `https://blitzreport.azurewebsites.net/e-bill/Bill.aspx?startDate=${start}&endDate=${end}`,
 };
 
 @Injectable()
@@ -100,6 +103,14 @@ export class DashboardServices {
       purchase_value: payload.purchaseValue,
       date: payload.date
     });
+  }
+
+  public fetchReportTypes$(): any {
+    return this.http.get<any>(api.fetchReportTypes());
+  }
+
+  public generateDatesReport$(start: string, end: string): Observable<any> {
+    return this.http.get<any>(api.datesReport(start, end));
   }
 
 }

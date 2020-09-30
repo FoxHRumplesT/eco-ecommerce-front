@@ -10,3 +10,4 @@ export const basketSelector = createSelector(stateSelector, state => state.data.
 export const resultSelector = createSelector(stateSelector, state => state.data.result);
 export const clientSelector = createSelector(stateSelector, state => state.data.clients);
 export const billsSelector = createSelector(stateSelector, state => state.data.bills);
+export const reportTypesSelector = createSelector(stateSelector, state => state.data.reportTypes);

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+
+import { DashboardFacade } from '../../dashboard.facade';
 
 @Component({
   selector: 'app-report',
@@ -9,28 +12,50 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class ReportComponent implements OnInit {
 
   public showReport = false;
-  public srcFile: string;
-  public reportForm: FormGroup;
-  public reportType = [
-    { value: '1', description: 'Reporte 1' },
-    { value: '2', description: 'Reporte 2' }
-  ];
+  public selectedType: string;
+  public datesForm: FormGroup;
+  public textForm: FormGroup;
+  public url = '';
 
-  constructor() {
+  constructor(
+    private facade: DashboardFacade
+  ) {
     const { required } = Validators;
-    this.reportForm = new FormGroup({
-      typeReport: new FormControl('', [required]),
+    this.datesForm = new FormGroup({
       startDate: new FormControl('', [required]),
       endDate: new FormControl('', [required])
     });
+    this.textForm = new FormGroup({
+      text: new FormControl('', [required])
+    });
   }
 
-  ngOnInit(): void {
-    this.srcFile = 'https://www2.javerianacali.edu.co/sites/ujc/files/normas_apa_revisada_y_actualizada_mayo_2019.pdf';
+  public ngOnInit(): void {
+    this.facade.fetchReportTypes();
   }
 
-  public generateReport() {
+  get reportTypes$(): Observable<any> {
+    return this.facade.reportTypes$;
+  }
+
+  public changeReportType(e: any): void {
+    this.selectedType = e.type;
+  }
+
+  public generateDatesReport(): void {
+    const { startDate, endDate } = this.datesForm.value;
+    const start = new Date(startDate).toISOString().split('T')[0];
+    const end = new Date(endDate).toISOString().split('T')[0];
+    this.url = `https://blitzreport.azurewebsites.net/e-bill/Bill.aspx?startDate=${start}&endDate=${end}`;
+    console.log("ReportComponent -> generateDatesReport -> this.url", this.url)
     this.showReport = true;
+  }
+
+  public generateTextReport(): void {
+    this.url = `https://blitzreport.azurewebsites.net/e-bill/Bill.aspx?id=${this.textForm.value.text}`;
+    console.log("ReportComponent -> generateTextReport -> this.url", this.url)
+    this.showReport = true;
+    // this.facade.generateTextReport(this.textForm.value.text);
   }
 
   public closeReport() {

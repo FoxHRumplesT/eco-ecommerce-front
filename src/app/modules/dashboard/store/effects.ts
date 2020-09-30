@@ -88,8 +88,8 @@ export class DashboardEffects {
       actions.notificationAction({ msg: 'Producto creado!', status: NgxNotificationStatusMsg.SUCCESS }),
       actions.fetchProductsAction({ page: 1, keyword: '' })
     ] : [
-      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
-    ])
+        actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+      ])
   );
 
   @Effect()
@@ -107,8 +107,8 @@ export class DashboardEffects {
       actions.notificationAction({ msg: 'Producto editado!', status: NgxNotificationStatusMsg.SUCCESS }),
       actions.fetchProductsAction({ page: 1, keyword: '' })
     ] : [
-      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
-    ])
+        actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+      ])
   );
 
   @Effect()
@@ -124,9 +124,9 @@ export class DashboardEffects {
       actions.fetchProductsAction({ page: 1, keyword: '' }),
       actions.notificationAction({ msg: 'Producto eliminado', status: NgxNotificationStatusMsg.SUCCESS })
     ] : [
-      actions.deleteProductErrorAction(),
-      actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
-    ]
+        actions.deleteProductErrorAction(),
+        actions.notificationAction({ msg: 'Ocurrio un error al eliminar', status: NgxNotificationStatusMsg.FAILURE })
+      ]
     )
   );
 
@@ -143,7 +143,7 @@ export class DashboardEffects {
   @Effect()
   fetchBills$: Observable<Action> = this.actions$.pipe(
     ofType(actions.fetchBillsAction),
-    switchMap(({page}) => this.services.fetchBills$(page).pipe(
+    switchMap(({ page }) => this.services.fetchBills$(page).pipe(
       map(response => ({ response, error: null })),
       catchError(error => of({ error, response: null })),
     )),
@@ -166,19 +166,19 @@ export class DashboardEffects {
     )),
     concatMap(({ response, error }) => error === null ? [
       actions.createBillSuccessAction({ response }),
-      actions.fetchProductsInStockAction({ page: 1, keyword: ''}),
+      actions.fetchProductsInStockAction({ page: 1, keyword: '' }),
       actions.resetBasketAction(),
       actions.notificationAction({
         msg: 'Factura creada satisfactoriamente.',
         status: NgxNotificationStatusMsg.SUCCESS
       }),
     ] : [
-      actions.createBillErrorAction(),
-      actions.notificationAction({
-        msg: 'Ocurrio un error al generar factura.',
-        status: NgxNotificationStatusMsg.FAILURE
-      })
-    ])
+        actions.createBillErrorAction(),
+        actions.notificationAction({
+          msg: 'Ocurrio un error al generar factura.',
+          status: NgxNotificationStatusMsg.FAILURE
+        })
+      ])
   );
 
   @Effect()
@@ -211,8 +211,8 @@ export class DashboardEffects {
     concatMap(({ response, error }) => !error ? [
       actions.notificationAction({ msg: 'Factura editada!', status: NgxNotificationStatusMsg.SUCCESS }),
     ] : [
-      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
-    ])
+        actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+      ])
   );
 
   @Effect()
@@ -223,11 +223,37 @@ export class DashboardEffects {
       catchError(error => of({ error, response: null })),
     )),
     concatMap(({ response, error }) => !error ? [
-      actions.fetchProductsInStockAction({ page: 1, keyword: ''}),
+      actions.fetchProductsInStockAction({ page: 1, keyword: '' }),
       actions.notificationAction({ msg: 'Stock editado!', status: NgxNotificationStatusMsg.SUCCESS }),
     ] : [
-      actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
-    ])
+        actions.notificationAction({ msg: 'Ocurrio un error!', status: NgxNotificationStatusMsg.FAILURE }),
+      ])
+  );
+
+  @Effect()
+  fetchReportTypesAction$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.fetchReportTypesAction),
+    switchMap(action => this.services.fetchReportTypes$().pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null }))
+    )),
+    map(({ response, error }) => !error ?
+      actions.fetchReportTypesSuccessAction({ response }) :
+      actions.fetchReportTypesErrorAction()
+    )
+  );
+
+  @Effect()
+  generateDatesReportAction$: Observable<Action> = this.actions$.pipe(
+    ofType(actions.generateDatesReportAction),
+    switchMap(({ start, end }) => this.services.generateDatesReport$(start, end).pipe(
+      map(response => ({ response, error: null })),
+      catchError(error => of({ error, response: null }))
+    )),
+    map(({ response, error }) => !error ?
+      actions.generateDatesReportSuccessAction({ response }) :
+      actions.generateDatesReportErrorAction()
+    )
   );
 
 }

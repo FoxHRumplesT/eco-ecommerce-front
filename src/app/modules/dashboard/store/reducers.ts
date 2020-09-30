@@ -21,7 +21,8 @@ const initialDataState: DataState = {
   basket: { products: [] },
   result: { summary: {} },
   clients: [],
-  bills: {}
+  bills: {},
+  reportTypes: null
 } as DataState;
 
 const data = createReducer(
@@ -78,6 +79,7 @@ const data = createReducer(
   on(actions.deleteProductSuccessAction, (state, { response }) => ({...state, result: response })),
   on(actions.fetchIDNumberSuccessAction, (state, { response }) => ({...state, clients: response })),
   on(actions.fetchBillsSuccessAction, (state, { response }) => ({...state, bills: response })),
+  on(actions.fetchReportTypesSuccessAction, (state, { response }) => ({...state, reportTypes: response })),
 );
 
 export const DashboardReducers = combineReducers({

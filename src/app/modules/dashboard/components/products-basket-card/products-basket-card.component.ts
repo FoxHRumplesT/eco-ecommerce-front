@@ -35,7 +35,7 @@ export class ProductsBasketCardComponent implements OnChanges {
 
   get productTaxes(): Tax[] {
     const key = this.product.code + '_' + this.product.lot;
-    if (this.result.summary[key] !== undefined) {
+    if (this.result && this.result.summary && this.result.summary[key] !== undefined) {
       return this.result.summary[key].tax;
     } else {
       return this.product.tax.map(t => this.taxes.find(_t => _t.id === t));
